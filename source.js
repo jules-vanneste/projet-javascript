@@ -15,6 +15,30 @@ domHelp = {
     }
 };
 
+affichage = {
+    printObjectAsTable : function(objects, properties){
+        var table = document.createElement("table");
+        var tr = document.createElement("tr");
+        var th;
+        var td;
+        table.appendChild(tr);
+        for(i=0; i<properties.length; i++){
+            th = document.createElement("th");
+            tr.appendChild(th);
+            th.appendChild(document.createTextNode(properties[i]));
+        }
+        for(i=0; i<objects.length; i++){
+            tr = document.createElement("tr");
+            table.appendChild(tr);
+            for(j=0; j<properties.length; j++) {
+                td = document.createElement("td");
+                tr.appendChild(td);
+                td.appendChild(document.createTextNode(objects[i][properties[j]]));
+            }
+        }
+    }
+}
+
 window.onload = function () {
 //    var appli = new application.Screen();
 
@@ -28,7 +52,6 @@ window.onload = function () {
         for(var i=0; i<localStorage.length; i++) {
             var user = domHelp.addElement(document.getElementById('content'), "p");
             domHelp.addText(user,localStorage.key(i));
-
         }
     } else {
         alert("localStorage n'est pas supporté");
