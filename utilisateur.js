@@ -1,5 +1,5 @@
 utilisateur = {};
-utilisateur.Personne = function(civilite, nom, prenom, adresse, ville, telephone, mail){
+utilisateur.Personne = function(civilite, nom, prenom, adresse, ville, telephone, mail, role){
     var _civilite = civilite;
     var _nom = nom;
     var _prenom = prenom;
@@ -7,6 +7,7 @@ utilisateur.Personne = function(civilite, nom, prenom, adresse, ville, telephone
     var _ville = ville;
     var _telephone = telephone;
     var _mail = mail;
+    var _role = role;
 
     this.__defineGetter__("civilite", function(){return _civilite;});
     this.__defineSetter__("civilite", function(value){return _civilite = value;});
@@ -22,18 +23,20 @@ utilisateur.Personne = function(civilite, nom, prenom, adresse, ville, telephone
     this.__defineSetter__("telephone", function(value){return _telephone = value;});
     this.__defineGetter__("mail", function(){return _mail;});
     this.__defineSetter__("mail", function(value){return _mail = value;});
+    this.__defineGetter__("role", function(){return _role;});
+    this.__defineSetter__("role", function(value){return _role = value;});
 };
 
 utilisateur.Client = function (civilite, nom, prenom, adresse, ville, telephone, mail, moniteur){
-    utilisateur.Personne.call(civilite, nom, prenom, adresse, ville, telephone, mail);
+    utilisateur.Personne.call(this, civilite, nom, prenom, adresse, ville, telephone, mail, "Client");
     var _moniteur = moniteur;
     this.__defineGetter__("moniteur", function(){return _moniteur;});
     this.__defineSetter__("moniteur", function(value){return _moniteur = value;});
 };
 
 utilisateur.Moniteur = function (civilite, nom, prenom, adresse, ville, telephone, mail){
-    utilisateur.Personne.call(civilite, nom, prenom, adresse, ville, telephone, mail);
+    utilisateur.Personne.call(this, civilite, nom, prenom, adresse, ville, telephone, mail, "Moniteur");
 };
 utilisateur.Secretaire = function (civilite, nom, prenom, adresse, ville, telephone, mail){
-    utilisateur.Personne.call(civilite, nom, prenom, adresse, ville, telephone, mail);
+    utilisateur.Personne.call(this, civilite, nom, prenom, adresse, ville, telephone, mail, "Secrétaire");
 };
