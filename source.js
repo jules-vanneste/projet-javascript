@@ -75,31 +75,75 @@ affichage = {
 
             for (var i=0; i<radios.length; i++) {
                 if (radios[i].checked) {
-                    application.userConnected = radios[i].value;
+                    application.userConnected = application.users[radios[i].value];
+                    view.clear();
+                    if(application.userConnected.role == "Client"){
+                        view.client();
+                    }
+                    else if(application.userConnected.role == "Moniteur"){
+                        view.moniteur();
+                    }
+                    else if(application.userConnected.role == "Secrétaire"){
+                        view.secretaire();
+                    }
                     break;
                 }
             }
         };
         domHelp.addText(button, "Se connecter");
+    },
+
+    printAgenda : function(numSemaine) {
+        var table = domHelp.addElement(document.getElementById('content'), "table", {nomAttribut : "class", valeurAttribute : "table table-bordered"});
+        var tbody = domHelp.addElement(table, "tbody");
+        var tr = domHelp.addElement(tbody,"tr");
+        var th;
+        var td;
+
+        th = domHelp.addElement(tr,"th");
+        domHelp.addText(th, "");
+
+        for(i=0; i<application.semaines[numSemaine].jours.length; i++){
+            th = domHelp.addElement(tr,"th");
+            domHelp.addText(th, application.semaines[i].jours[i].date);
+        }
+        for(i=0; i<application.semaines[numSemaine].jours[0].creneaux.length; i++){
+            tr = domHelp.addElement(tbody, "tr");
+            td = domHelp.addElement(tr,"td");
+            domHelp.addText(td, application.semaines[numSemaine].jours[0].creneau[i]);
+            for(j=0; j<application.semaines[numSemaine].jours.length; j++) {
+                td = domHelp.addElement(tr,"td");
+                td.onclick = function(){
+                    alert(application.semaines[numSemaine].jours[j].date);
+                };
+                domHelp.addText(td, "");
+            }
+        }
     }
 };
 
 window.onload = function () {
-//    var appli = new application.Screen();
-
-    application.addClient("user1", new utilisateur.Client("M.", "Capolino", "Maxime", "150 Rue de Paris", "Annoeullin", "06.92.75.40.42", "maxime.capolino@mail.fr",""));
-    application.addClient("user2", new utilisateur.Client("M.", "Vanneste", "Jules", "9 Rue Beaumarchais", "Arras", "06.84.26.70.39", "jules.vanneste@mail.fr",""));
-    application.addMoniteur("user3", new utilisateur.Moniteur("M.", "Carpentier", "Thomas", "15 Avenue de l'Europe", "Seclin", "06.74.16.27.89", "thomas.carpentier@mail.fr"));
-    application.addSecretaire("user4", new utilisateur.Secretaire("Mme.", "Bouquet", "Juliette", "789 Rue Nationale", "Carvin", "06.56.38.78.99", "juliette.bouquet@mail.fr"));
-
+    dao.addClient("user1", new utilisateur.Client("M.", "Capolino", "Maxime", "150 Rue de Paris", "Annoeullin", "06.92.75.40.42", "maxime.capolino@mail.fr",""));
+    dao.addClient("user2", new utilisateur.Client("M.", "Vanneste", "Jules", "9 Rue Beaumarchais", "Arras", "06.84.26.70.39", "jules.vanneste@mail.fr",""));
+    dao.addMoniteur("user3", new utilisateur.Moniteur("M.", "Carpentier", "Thomas", "15 Avenue de l'Europe", "Seclin", "06.74.16.27.89", "thomas.carpentier@mail.fr"));
+    dao.addSecretaire("user4", new utilisateur.Secretaire("Mme.", "Bouquet", "Juliette", "789 Rue Nationale", "Carvin", "06.56.38.78.99", "juliette.bouquet@mail.fr"));
+    for(var i=0; i<10; i++){
+        dao.addSemaine(("semaine" + i), new calendrier.Semaine(i, new Date(2014, 10, 6), new Date(2014, 10, 12)));
+    }
     if(typeof localStorage!='undefined') {
         // Récupération de la valeur dans web storage
         for(var i=0; i<localStorage.length; i++) {
-            var tmp = JSON.parse(localStorage.getItem(localStorage.key(i)));
-            application.users.push(tmp);
+            var cle = localStorage.key(i);
+            var tmp = JSON.parse(localStorage.getItem(cle));
+            if(cle.startsWith("user")){
+                application.users.push(tmp);
+            }
+            else if(cle.startsWith("semaine")){
+                application.semaines.push(tmp);
+            }
         }
-        affichage.printFormLogin(application.users, ["role", "civilite", "nom", "prenom"]);
     } else {
         alert("localStorage n'est pas supporté");
     }
+    view.accueil();
 };
