@@ -11,7 +11,7 @@ view = {
     client : function() {
         var title = domHelp.addElement(document.getElementById('content'), "h3")
         domHelp.addText(title, "Client")
-        affichage.printAgenda(1);
+        affichage.printAgenda(0);
     },
     moniteur : function() {
         var title = domHelp.addElement(document.getElementById('content'), "h3")

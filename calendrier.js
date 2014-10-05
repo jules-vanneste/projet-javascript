@@ -14,20 +14,11 @@ calendrier.Reservation = function(client, moniteur){
     this.__defineSetter__("moniteur", function(value){return _moniteur = value;});
 }
 
-calendrier.creneau = function(jour, semaine, mois, annee){
-    var _jour = jour;
-    var _semaine = semaine;
-    var _mois = mois;
-    var _annee = annee;
+calendrier.creneau = function(heure){
+    var _heure = heure;
 
-    this.__defineGetter__("jour", function(){return _jour;});
-    this.__defineSetter__("jour", function(value){return _jour = value;});
-    this.__defineGetter__("semaine", function(){return _semaine;});
-    this.__defineSetter__("semaine", function(value){return _semaine = value;});
-    this.__defineGetter__("mois", function(){return _mois;});
-    this.__defineSetter__("mois", function(value){return _mois = value;});
-    this.__defineGetter__("annee", function(){return _annee;});
-    this.__defineSetter__("annee", function(value){return _annee = value;});
+    this.__defineGetter__("heure", function(){return _heure;});
+    this.__defineSetter__("heure", function(value){return _heure = value;});
 };
 
 calendrier.LeconConduite = function(jour, semaine, mois, annee, reservations){
@@ -44,14 +35,11 @@ calendrier.LeconCode = function(jour, semaine, mois, annee, moniteur){
     this.__defineSetter__("moniteur", function(value){return _moniteur = value;});
 };
 
-calendrier.Jour = function(num, date, creneaux, horaires){
-    var _num = num;
+calendrier.Jour = function(date, creneaux, horaires){
     var _date = date;
     var _creneaux = creneaux;
     var _horaires = horaires;
 
-    this.__defineGetter__("num", function(){return _num;});
-    this.__defineSetter__("num", function(value){return _num = value;});
     this.__defineGetter__("date", function(){return _date;});
     this.__defineSetter__("date", function(value){return _date = value;});
     this.__defineGetter__("creneaux", function(){return _creneaux;});
@@ -62,22 +50,20 @@ calendrier.Jour = function(num, date, creneaux, horaires){
 };
 
 calendrier.Semaine = function(num, dateDebut, dateFin){
-    var _num = num;
     var _dateDebut = dateDebut;
     var _dateFin = dateFin;
     var _jours = [];
 
-    for(var i=1; i<(nbJours+1); i++){
+    for(var i=0; i<nbJours+1; i++){
         var creneaux = []
         for(var j=0; j<nbCreneaux; j++){
-            creneaux.push(new calendrier.creneau());
+            creneaux.push(new calendrier.creneau(horaires[j]));
         }
-        var date = new Date((_dateDebut.getMilliseconds() + i*86400000));
-        _jours.push(new calendrier.Jour(i, date, creneaux, horaires));
+        var date = new Date(_dateDebut);
+        date.setDate(date.getDate() + i);
+        _jours.push(new calendrier.Jour(date, creneaux, horaires));
     }
 
-    this.__defineGetter__("num", function(){return _num;});
-    this.__defineSetter__("num", function(value){return _num = value;});
     this.__defineGetter__("dateDebut", function(){return _dateDebut;});
     this.__defineSetter__("dateDebut", function(value){return _dateDebut = value;});
     this.__defineGetter__("dateFin", function(){return _dateFin;});

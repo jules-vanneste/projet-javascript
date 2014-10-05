@@ -96,25 +96,36 @@ affichage = {
     printAgenda : function(numSemaine) {
         var table = domHelp.addElement(document.getElementById('content'), "table", {nomAttribut : "class", valeurAttribute : "table table-bordered"});
         var tbody = domHelp.addElement(table, "tbody");
+        var div = domHelp.addElement(document.getElementById('content'), "div", {nomAttribut : "class", valeurAttribute : "form-dialogue"});
         var tr = domHelp.addElement(tbody,"tr");
         var th;
         var td;
 
+        div.style.display = "none";
         th = domHelp.addElement(tr,"th");
         domHelp.addText(th, "");
 
         for(i=0; i<application.semaines[numSemaine].jours.length; i++){
             th = domHelp.addElement(tr,"th");
-            domHelp.addText(th, application.semaines[i].jours[i].date);
+            var date = new Date(application.semaines[i].jours[i].date);
+            domHelp.addText(th, date.getDate() + "/" + (date.getMonth()+1) + "/" + date.getFullYear());
         }
         for(i=0; i<application.semaines[numSemaine].jours[0].creneaux.length; i++){
             tr = domHelp.addElement(tbody, "tr");
             td = domHelp.addElement(tr,"td");
-            domHelp.addText(td, application.semaines[numSemaine].jours[0].creneau[i]);
-            for(j=0; j<application.semaines[numSemaine].jours.length; j++) {
+            domHelp.addText(td, application.semaines[numSemaine].jours[0].creneaux[i].heure + "h");
+            for(j=0; j<application.semaines[numSemaine].jours.length; j++){
                 td = domHelp.addElement(tr,"td");
                 td.onclick = function(){
-                    alert(application.semaines[numSemaine].jours[j].date);
+                    if(div.style.display == "none"){
+                        div.style.display = "block";
+                    }
+                    else{
+                        div.style.display = "none";
+                    }
+                    var sClient = domHelp.addElement(div, "div", )
+                    input = domHelp.addElement(td, "input", {nomAttribut : "type", valeurAttribute : "radio"}, {nomAttribut : "name", valeurAttribute : "user"}, {nomAttribut : "value", valeurAttribute : i});
+
                 };
                 domHelp.addText(td, "");
             }
@@ -128,7 +139,7 @@ window.onload = function () {
     dao.addMoniteur("user3", new utilisateur.Moniteur("M.", "Carpentier", "Thomas", "15 Avenue de l'Europe", "Seclin", "06.74.16.27.89", "thomas.carpentier@mail.fr"));
     dao.addSecretaire("user4", new utilisateur.Secretaire("Mme.", "Bouquet", "Juliette", "789 Rue Nationale", "Carvin", "06.56.38.78.99", "juliette.bouquet@mail.fr"));
     for(var i=0; i<10; i++){
-        dao.addSemaine(("semaine" + i), new calendrier.Semaine(i, new Date(2014, 10, 6), new Date(2014, 10, 12)));
+        dao.addSemaine(("semaine" + i), new calendrier.Semaine(i, new Date(2014, 9, 6), new Date(2014, 9, 12)));
     }
     if(typeof localStorage!='undefined') {
         // Récupération de la valeur dans web storage
