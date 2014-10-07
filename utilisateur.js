@@ -34,8 +34,11 @@ utilisateur.Client = function (civilite, nom, prenom, adresse, ville, telephone,
     this.__defineSetter__("moniteur", function(value){return _moniteur = value;});
 };
 
-utilisateur.Moniteur = function (civilite, nom, prenom, adresse, ville, telephone, mail){
+utilisateur.Moniteur = function (civilite, nom, prenom, adresse, ville, telephone, mail, couleur){
     utilisateur.Personne.call(this, civilite, nom, prenom, adresse, ville, telephone, mail, "Moniteur");
+    var _couleur = couleur;
+    this.__defineGetter__("couleur", function(){return _couleur;});
+    this.__defineSetter__("couleur", function(value){return _couleur = value;});
 };
 utilisateur.Secretaire = function (civilite, nom, prenom, adresse, ville, telephone, mail){
     utilisateur.Personne.call(this, civilite, nom, prenom, adresse, ville, telephone, mail, "Secrétaire");
