@@ -19,11 +19,13 @@ domHelp = {
         recherche = recherche.toLowerCase();
         var res = [];
         for (var i=0; i<elements.length; i++) {
-            if(elements[i].role == role) {
-                for(var j=0; j<proprietes.length; j++) {
-                    if (elements[i][proprietes[j]].toLowerCase().indexOf(recherche) != -1) {
-                        res.push(i);
-                        break;
+            if(elements[i] != null){
+                if(elements[i].role == role) {
+                    for(var j=0; j<proprietes.length; j++) {
+                        if (elements[i][proprietes[j]].toLowerCase().indexOf(recherche) != -1) {
+                            res.push(i);
+                            break;
+                        }
                     }
                 }
             }
@@ -32,7 +34,7 @@ domHelp = {
     }
 };
 
-affichage = {
+view = {
     printObjectAsTable : function (objects, properties) {
         var table = domHelp.addElement(document.getElementById('content'), "table");
         var tr = domHelp.addElement(table,"tr");
@@ -92,15 +94,15 @@ affichage = {
             for (var i=0; i<radios.length; i++) {
                 if (radios[i].checked) {
                     application.userConnected = application.users[radios[i].value];
-                    view.clear();
+                    page.clear();
                     if(application.userConnected.role == "Client"){
-                        view.client();
+                        page.client();
                     }
                     else if(application.userConnected.role == "Moniteur"){
-                        view.moniteur();
+                        page.moniteur();
                     }
                     else if(application.userConnected.role == "Secrétaire"){
-                        view.secretaire();
+                        page.secretaire();
                     }
                     break;
                 }
@@ -109,7 +111,53 @@ affichage = {
         domHelp.addText(button, "Se connecter");
     },
 
-    printAgenda : function(numSemaine) {
+    printAgendaClient : function(numSemaine) {
+        var table = domHelp.addElement(document.getElementById('content'), "table", {nomAttribut : "class", valeurAttribute : "table table-bordered"});
+        var tbody = domHelp.addElement(table, "tbody");
+        var div = domHelp.addElement(document.getElementById('content'), "div", {nomAttribut : "class", valeurAttribute : "form-dialogue"});
+        var tr = domHelp.addElement(tbody,"tr");
+        var th;
+
+        div.style.display = "none";
+        th = domHelp.addElement(tr,"th");
+        domHelp.addText(th, "");
+
+        for (var i=0; i<application.semaines[numSemaine].jours.length; i++) {
+            th = domHelp.addElement(tr,"th");
+            var date = new Date(application.semaines[i].jours[i].date);
+            domHelp.addText(th, date.getDate() + "/" + (date.getMonth()+1) + "/" + date.getFullYear());
+        }
+        for (var i=0; i<application.semaines[numSemaine].jours[0].creneaux.length; i++) {
+            tr = domHelp.addElement(tbody, "tr");
+            td = domHelp.addElement(tr,"td");
+            domHelp.addText(td, application.semaines[numSemaine].jours[0].creneaux[i].heure + "h");
+            for (var j=0; j<application.semaines[numSemaine].jours.length; j++) {
+                var td = domHelp.addElement(tr,"td", {nomAttribut : "jour", valeurAttribute : j}, {nomAttribut : "creneau", valeurAttribute : i});
+                var tmp = application.semaines[numSemaine].jours[j].creneaux[i];
+                if(tmp instanceof calendrier.LeconConduite){
+                    //td.setAttribute("class", "success");
+                    for(var k=0; k<tmp.reservations.length; k++){
+                        if(tmp.reservations[k].client == application.userConnected){
+                            td.setAttribute("class", "success");
+                            domHelp.addText(td, tmp.reservations[k].moniteur.nom);
+                        }
+                    }
+                }
+                else if(tmp instanceof calendrier.LeconCode){
+                    td.setAttribute("class", "info");
+                }
+                else{
+                    domHelp.addElement(td, "span", {nomAttribut : "class", valeurAttribute : ""});
+                }
+                td.addEventListener("click", function (e) {
+                    var targetElement = e.target || e.srcElement;
+                    view.popupAjoutConduite(div, numSemaine, targetElement);
+                }, false);
+            }
+        }
+    },
+
+    printAgendaMoniteur : function(numSemaine) {
         var table = domHelp.addElement(document.getElementById('content'), "table", {nomAttribut : "class", valeurAttribute : "table table-bordered"});
         var tbody = domHelp.addElement(table, "tbody");
         var div = domHelp.addElement(document.getElementById('content'), "div", {nomAttribut : "class", valeurAttribute : "form-dialogue"});
@@ -148,23 +196,76 @@ affichage = {
                             td.setAttribute("title", res.client.nom + " > " + res.moniteur.nom);
                         }
                     }
-                    td.s
                 }
                 else if(tmp instanceof calendrier.LeconCode){
                     td.setAttribute("class", "info");
                 }
                 else{
-                    domHelp.addElement(td, "span", {nomAttribut : "class", valeurAttribute : "glyphicon glyphicon-plus"});
+                    domHelp.addElement(td, "span", {nomAttribut : "class", valeurAttribute : ""});
                 }
                 td.addEventListener("click", function (e) {
                     var targetElement = e.target || e.srcElement;
-                    affichage.popupAjoutConduite(div, numSemaine, targetElement);
+                    view.popupAjoutConduite(div, numSemaine, targetElement);
                 }, false);
             }
         }
     },
 
-    popupAjoutConduite : function(div, numSemaine, targetElement){
+    printAgendaSecretaire : function(numSemaine) {
+        var table = domHelp.addElement(document.getElementById('content'), "table", {nomAttribut : "class", valeurAttribute : "table table-bordered"});
+        var tbody = domHelp.addElement(table, "tbody");
+        var div = domHelp.addElement(document.getElementById('content'), "div", {nomAttribut : "class", valeurAttribute : "form-dialogue"});
+        var tr = domHelp.addElement(tbody,"tr");
+        var th;
+
+        div.style.display = "none";
+        th = domHelp.addElement(tr,"th");
+        domHelp.addText(th, "");
+
+        for (var i=0; i<application.semaines[numSemaine].jours.length; i++) {
+            th = domHelp.addElement(tr,"th");
+            var date = new Date(application.semaines[i].jours[i].date);
+            domHelp.addText(th, date.getDate() + "/" + (date.getMonth()+1) + "/" + date.getFullYear());
+        }
+        for (var i=0; i<application.semaines[numSemaine].jours[0].creneaux.length; i++) {
+            tr = domHelp.addElement(tbody, "tr");
+            td = domHelp.addElement(tr,"td");
+            domHelp.addText(td, application.semaines[numSemaine].jours[0].creneaux[i].heure + "h");
+            for (var j=0; j<application.semaines[numSemaine].jours.length; j++) {
+                var td = domHelp.addElement(tr,"td", {nomAttribut : "jour", valeurAttribute : j}, {nomAttribut : "creneau", valeurAttribute : i});
+                var tmp = application.semaines[numSemaine].jours[j].creneaux[i];
+                if(tmp instanceof calendrier.LeconConduite){
+                    //td.setAttribute("class", "success");
+                    for(var k=0; k<tmp.reservations.length; k++){
+                        var res = tmp.reservations[k];
+                        var largeur = (100/tmp.reservations.length);
+                        var divM = domHelp.addElement(td, "div");
+
+                        divM.setAttribute("style", "width: " + largeur + "%; height:100%; vertical-align: middle; background-color: " + res.moniteur.couleur + "; float:left;");
+                        domHelp.addText(divM, res.moniteur.nom.substr(0,1).toLocaleUpperCase());
+                        if(td.getAttribute("title") != null){
+                            td.setAttribute("title", td.getAttribute("title") + ", " + res.client.nom + " > " + res.moniteur.nom);
+                        }
+                        else{
+                            td.setAttribute("title", res.client.nom + " > " + res.moniteur.nom);
+                        }
+                    }
+                }
+                else if(tmp instanceof calendrier.LeconCode){
+                    td.setAttribute("class", "info");
+                }
+                else{
+                    domHelp.addElement(td, "span", {nomAttribut : "class", valeurAttribute : ""});
+                }
+                td.addEventListener("click", function (e) {
+                    var targetElement = e.target || e.srcElement;
+                    view.popupAjoutConduiteSecretaire(div, numSemaine, targetElement);
+                }, false);
+            }
+        }
+    },
+
+    popupAjoutConduiteSecretaire : function(div, numSemaine, targetElement){
         var td = targetElement;
         while(td.nodeName != "TD"){
             td = targetElement.parentNode;
@@ -194,13 +295,24 @@ affichage = {
         var sMoniteur =  domHelp.addElement(div_input_moniteur, "select", {nomAttribut : "name", valeurAttribute : "moniteur", nomAttribut : "class", valeurAttribute : "form-control"});
         for (var i=0; i<application.users.length; i++) {
             if (application.users[i].role == "Moniteur") {
-                var oMoniteur = domHelp.addElement(sMoniteur, "option", {nomAttribut: "value", valeurAttribute: i});
-                domHelp.addText(oMoniteur, (application.users[i].civilite + " " + application.users[i].nom + " " + application.users[i].prenom));
+                var ok = true;
+                if (application.semaines[numSemaine].jours[jour].creneaux[creneau] instanceof calendrier.LeconConduite) {
+                    var tab = application.semaines[numSemaine].jours[jour].creneaux[creneau].reservations;
+                    for(var j=0; j<tab.length; j++){
+                        if(tab[j].moniteur == application.users[i]){
+                            ok = false;
+                        }
+                    }
+                }
+                if(ok){
+                    var oMoniteur = domHelp.addElement(sMoniteur, "option", {nomAttribut: "value", valeurAttribute: i});
+                    domHelp.addText(oMoniteur, (application.users[i].civilite + " " + application.users[i].nom + " " + application.users[i].prenom));
+                }
             }
         }
 
         var table = domHelp.addElement(form, "table", {nomAttribut : "class", valeurAttribute : "table table-striped"});
-        sClient.addEventListener("keydown", function(){affichage.choiceClient(5, sClient, table)});
+        sClient.addEventListener("keyup", function(){view.choiceClient(5, sClient, table, application.semaines[numSemaine].jours[jour].creneaux[creneau].reservations)});
 
         var button = domHelp.addElement(form, "button", {nomAttribut : "type", valeurAttribute : "submit"}, {nomAttribut : "class", valeurAttribute : "btn btn-success col-sm-offset-5"});
         button.onclick = function() {
@@ -222,18 +334,43 @@ affichage = {
                     application.semaines[numSemaine].jours[jour].creneaux[creneau] = new calendrier.LeconConduite(application.semaines[numSemaine].jours[jour].creneaux[creneau].heure, new calendrier.Reservation(application.users[idUser], application.users[idMoniteur]));
                 }
             }
-            view.clear();
-            affichage.printAgenda(numSemaine);
+            page.clear();
+            page.secretaireSemaine(numSemaine);
         };
         domHelp.addText(button, "Ajouter");
     },
 
-    choiceClient : function(nbRes, input, conteneurRes){
+    choiceClient : function(nbRes, input, conteneurRes, reservations){
         conteneurRes.innerHTML = "";
         var tbody = domHelp.addElement(conteneurRes, "tbody");
         var tr;
         var td;
-        var res = domHelp.searchUser(input, application.users, "Client", ["nom", "prenom"]);
+
+        if(reservations != null){
+            var tab = [];
+            for (var i=0; i<application.users.length; i++) {
+                var topush = true;
+                if(application.users[i].role != "Client"){
+                    topush = false;
+                }
+                for (var j=0; j<reservations.length; j++) {
+                    if (application.users[i] == reservations[j].client){
+                        topush = false;
+                    }
+                }
+                if(topush){
+                    tab.push(application.users[i]);
+                }
+                else{
+                    tab.push(null);
+                }
+            }
+            var res = domHelp.searchUser(input, tab, "Client", ["nom", "prenom"]);
+        }
+        else{
+            var res = domHelp.searchUser(input, application.users, "Client", ["nom", "prenom"]);
+        }
+
         for (var i=0; i<nbRes && i<res.length; i++) {
             tr = domHelp.addElement(tbody,"tr");
             td = domHelp.addElement(tr, "td");
@@ -272,5 +409,5 @@ window.onload = function () {
     } else {
         alert("localStorage n'est pas supporté");
     }
-    view.accueil();
+    page.accueil();
 };

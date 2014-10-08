@@ -4,22 +4,39 @@ application = {
     userConnected : null
 };
 
-view = {
+page = {
     accueil : function() {
-        affichage.printFormLogin(application.users, ["role", "civilite", "nom", "prenom"]);
+        view.printFormLogin(application.users, ["role", "civilite", "nom", "prenom"]);
     },
     client : function() {
-        var title = domHelp.addElement(document.getElementById('content'), "h3")
-        domHelp.addText(title, "Client")
-        affichage.printAgenda(0);
+        var title = domHelp.addElement(document.getElementById('content'), "h3");
+        domHelp.addText(title, "Client");
+        view.printAgendaClient(0);
+    },
+    clientSemaine : function(semaine) {
+        var title = domHelp.addElement(document.getElementById('content'), "h3");
+        domHelp.addText(title, "Client");
+        view.printAgendaClient(semaine);
     },
     moniteur : function() {
-        var title = domHelp.addElement(document.getElementById('content'), "h3")
+        var title = domHelp.addElement(document.getElementById('content'), "h3");
         domHelp.addText(title, "Moniteur");
+        view.printAgendaMoniteur(0);
+    },
+    moniteurSemaine : function(semaine) {
+        var title = domHelp.addElement(document.getElementById('content'), "h3");
+        domHelp.addText(title, "Moniteur");
+        view.printAgendaMoniteur(semaine);
     },
     secretaire : function() {
-        var title = domHelp.addElement(document.getElementById('content'), "h3")
+        var title = domHelp.addElement(document.getElementById('content'), "h3");
         domHelp.addText(title, "Secrétaire");
+        view.printAgendaSecretaire(0);
+    },
+    secretaireSemaine : function(semaine) {
+        var title = domHelp.addElement(document.getElementById('content'), "h3");
+        domHelp.addText(title, "Secrétaire");
+        view.printAgendaSecretaire(semaine);
     },
     clear : function() {
         this.body=document.getElementById('content').innerHTML = "";
