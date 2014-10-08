@@ -30,3 +30,16 @@ td, th{
     height: 36px;
     vertical-align: middle;
 }
+
+.btn-close{
+    font-size: 20px;
+    margin-bottom: 5px;
+}
+
+.elt-clickable:hover{
+    cursor:  pointer;
+}
+
+.nav-popup{
+    margin-bottom: 25px;
+}

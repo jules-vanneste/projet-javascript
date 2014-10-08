@@ -38,11 +38,6 @@ Creneau
 Creneau -> Leçon de conduite
 Creneau -> Leçon de code
 
-Lecon
-Creneau => Lecon[]
-Lecon -> Leçon de conduite
-Lecon -> Leçon de code
-
 BDD : LocalStorage (fonction stockage dans la page en local)
 
 HEURES FIXES !!!

@@ -4,36 +4,34 @@ var horaires = [9, 10, 11, 12, 13, 14, 15, 16, 17, 18];
 
 calendrier = {};
 
-calendrier.Reservation = function(client, moniteur){
-    var _client = client;
-    var _moniteur = moniteur;
-
-    this.__defineGetter__("client", function(){return _client;});
-    this.__defineSetter__("client", function(value){return _client = value;});
-    this.__defineGetter__("moniteur", function(){return _moniteur;});
-    this.__defineSetter__("moniteur", function(value){return _moniteur = value;});
-}
-
 calendrier.Creneau = function(heure){
     var _heure = heure;
+    var _lecons = [];
+
 
     this.__defineGetter__("heure", function(){return _heure;});
     this.__defineSetter__("heure", function(value){return _heure = value;});
+    this.__defineGetter__("lecons", function(){return _lecons;});
+    this.__defineSetter__("lecons", function(value){return _lecons.push(value);});
 };
 
-calendrier.LeconConduite = function(heure, reservation){
-    calendrier.Creneau.call(this, heure);
-    var _reservations = [];
-    _reservations.push(reservation);
-    this.__defineGetter__("reservations", function(){return _reservations;});
-    this.__defineSetter__("reservations", function(value){return _reservations.push(value);});
-};
-
-calendrier.LeconCode = function(heure, moniteur){
-    calendrier.Creneau.call(this, heure, moniteur);
+calendrier.Lecon= function(moniteur){
     var _moniteur = moniteur;
+
     this.__defineGetter__("moniteur", function(){return _moniteur;});
     this.__defineSetter__("moniteur", function(value){return _moniteur = value;});
+};
+
+calendrier.LeconConduite = function(moniteur, client){
+    calendrier.Lecon.call(this, moniteur);
+    var _client = client;
+
+    this.__defineGetter__("client", function(){return _client;});
+    this.__defineSetter__("client", function(value){return _client = value;});
+};
+
+calendrier.LeconCode = function(moniteur){
+    calendrier.Lecon.call(this, moniteur);
 };
 
 calendrier.Jour = function(date, creneaux, horaires){
@@ -44,9 +42,7 @@ calendrier.Jour = function(date, creneaux, horaires){
     this.__defineGetter__("date", function(){return _date;});
     this.__defineSetter__("date", function(value){return _date = value;});
     this.__defineGetter__("creneaux", function(){return _creneaux;});
-    this.__defineGetter__("creneau", function(i){return _creneaux[i];});
     this.__defineSetter__("creneaux", function(value){return _creneaux.push(value);});
-    this.__defineGetter__("horaire", function(i){return _creneaux[i];});
     this.__defineGetter__("horaires", function(){return _horaires;});
 };
 
@@ -56,7 +52,7 @@ calendrier.Semaine = function(num, dateDebut, dateFin){
     var _jours = [];
 
     for(var i=0; i<nbJours+1; i++){
-        var creneaux = []
+        var creneaux = [];
         for(var j=0; j<nbCreneaux; j++){
             creneaux.push(new calendrier.Creneau(horaires[j]));
         }
@@ -70,6 +66,5 @@ calendrier.Semaine = function(num, dateDebut, dateFin){
     this.__defineGetter__("dateFin", function(){return _dateFin;});
     this.__defineSetter__("dateFin", function(value){return _dateFin = value;});
     this.__defineGetter__("jours", function(){return _jours;});
-    this.__defineGetter__("jour", function(i){return _jours[i];});
     this.__defineSetter__("jours", function(value){return _jours.push(value);});
 }
