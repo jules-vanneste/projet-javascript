@@ -214,7 +214,8 @@ view = {
                     var lecon = creneau.lecons[k];
                     var largeur = (100 / creneau.lecons.length);
                     var divM = domHelp.addElement(td, "div");
-                    if (lecon instanceof calendrier.LeconConduite) {
+                    //if (lecon instanceof calendrier.LeconConduite) {
+                    if(lecon.client!=null){
                         divM.setAttribute("style", "width: " + largeur + "%; height:100%; line-height:35px; display: inline; background-color: " + lecon.moniteur.couleur + "; float:left;");
                         domHelp.addText(divM, lecon.moniteur.nom.substr(0, 1).toLocaleUpperCase());
                         if (td.getAttribute("title") != null) {
@@ -224,7 +225,8 @@ view = {
                             td.setAttribute("title", lecon.client.nom + " > " + lecon.moniteur.nom);
                         }
                     }
-                    else if (lecon instanceof calendrier.LeconCode) {
+                    //else if (lecon instanceof calendrier.LeconCode) {
+                    else{
                         divM.setAttribute("style", "width: " + largeur + "%; height:100%; line-height:35px; display: inline; background-color : #DFF0D8; float:left;");
                         divM.setAttribute("class", "success");
                         domHelp.addText(divM, lecon.moniteur.nom.substr(0, 1).toLocaleUpperCase());
