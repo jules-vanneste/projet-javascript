@@ -1,5 +1,9 @@
+var cptUtilisateurs = 0;
+
 utilisateur = {};
+
 utilisateur.Personne = function(civilite, nom, prenom, adresse, ville, telephone, mail, role){
+    var _cle = "user" + cptUtilisateurs;
     var _civilite = civilite;
     var _nom = nom;
     var _prenom = prenom;
@@ -9,6 +13,10 @@ utilisateur.Personne = function(civilite, nom, prenom, adresse, ville, telephone
     var _mail = mail;
     var _role = role;
 
+    cptUtilisateurs = cptUtilisateurs+1;
+
+    this.__defineGetter__("cle", function(){return _cle;});
+    this.__defineSetter__("cle", function(value){return _cle = value;});
     this.__defineGetter__("civilite", function(){return _civilite;});
     this.__defineSetter__("civilite", function(value){return _civilite = value;});
     this.__defineGetter__("nom", function(){return _nom;});
@@ -30,16 +38,25 @@ utilisateur.Personne = function(civilite, nom, prenom, adresse, ville, telephone
 utilisateur.Client = function (civilite, nom, prenom, adresse, ville, telephone, mail, moniteur){
     utilisateur.Personne.call(this, civilite, nom, prenom, adresse, ville, telephone, mail, "Client");
     var _moniteur = moniteur;
+
     this.__defineGetter__("moniteur", function(){return _moniteur;});
     this.__defineSetter__("moniteur", function(value){return _moniteur = value;});
+
+    dao.setUtilisateur(this.cle, this);
 };
 
 utilisateur.Moniteur = function (civilite, nom, prenom, adresse, ville, telephone, mail, couleur){
     utilisateur.Personne.call(this, civilite, nom, prenom, adresse, ville, telephone, mail, "Moniteur");
     var _couleur = couleur;
+
     this.__defineGetter__("couleur", function(){return _couleur;});
     this.__defineSetter__("couleur", function(value){return _couleur = value;});
+
+    dao.setUtilisateur(this.cle, this);
 };
+
 utilisateur.Secretaire = function (civilite, nom, prenom, adresse, ville, telephone, mail){
     utilisateur.Personne.call(this, civilite, nom, prenom, adresse, ville, telephone, mail, "Secrétaire");
+
+    dao.setUtilisateur(this.cle, this);
 };

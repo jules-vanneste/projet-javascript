@@ -66,7 +66,7 @@ view = {
     },
 
     printFormLogin : function(objects, properties){
-        var form = domHelp.addElement(document.getElementById('content'), "form");
+        var form = domHelp.addElement(document.getElementById('content'), "form", {nomAttribut : "onSubmit", valeurAttribute : "return false;"});
         var table = domHelp.addElement(form, "table", {nomAttribut : "class", valeurAttribute : "table table-striped"});
         var tbody = domHelp.addElement(table, "tbody");
         var tr = domHelp.addElement(tbody,"tr");
@@ -122,93 +122,67 @@ view = {
         th = domHelp.addElement(tr,"th");
         domHelp.addText(th, "");
 
-        for (var i=0; i<application.semaines[numSemaine].jours.length; i++) {
+        var semaine = application.semaines[numSemaine];
+        for (var i=0; i<semaine.jours.length; i++) {
             th = domHelp.addElement(tr,"th");
-            var date = new Date(application.semaines[i].jours[i].date);
+            var date = new Date(semaine.jours[i].date);
             domHelp.addText(th, date.getDate() + "/" + (date.getMonth()+1) + "/" + date.getFullYear());
         }
-        for (var i=0; i<application.semaines[numSemaine].jours[0].creneaux.length; i++) {
+        for (var i=0; i<semaine.jours[0].creneaux.length; i++) {
             tr = domHelp.addElement(tbody, "tr");
             td = domHelp.addElement(tr,"td");
             domHelp.addText(td, application.semaines[numSemaine].jours[0].creneaux[i].heure + "h");
-            for (var j=0; j<application.semaines[numSemaine].jours.length; j++) {
-                var td = domHelp.addElement(tr,"td", {nomAttribut : "jour", valeurAttribute : j}, {nomAttribut : "creneau", valeurAttribute : i}, {nomAttribut : "class", valeurAttribute : "elt-clickable"});
-                var tmp = application.semaines[numSemaine].jours[j].creneaux[i];
-                if(tmp instanceof calendrier.LeconConduite){
-                    //td.setAttribute("class", "success");
-                    for(var k=0; k<tmp.reservations.length; k++){
-                        if(tmp.reservations[k].client == application.userConnected){
-                            td.setAttribute("class", "success");
-                            domHelp.addText(td, tmp.reservations[k].moniteur.nom);
-                        }
+            for (var j=0; j<semaine.jours.length; j++) {
+                var td = domHelp.addElement(tr, "td", {nomAttribut: "jour", valeurAttribute: j}, {nomAttribut: "creneau", valeurAttribute: i}, {nomAttribut: "class", valeurAttribute: "elt-clickable"});
+                var creneau = semaine.jours[j].creneaux[i];
+                var nblecon = 0;
+                for (var k = 0; k < creneau.lecons.length; k++) {
+                    var lecon = creneau.lecons[k];
+                    if(lecon instanceof calendrier.LeconConduite && lecon.client == application.userConnected) {
+                        nblecon = nblecon+1;
+                    }
+                    else if(lecon instanceof calendrier.LeconCode){
+                        nblecon = nblecon+1;
                     }
                 }
-                else if(tmp instanceof calendrier.LeconCode){
-                    td.setAttribute("class", "info");
+                for (var k = 0; k < creneau.clientsDisponibles.length; k++) {
+                    if(creneau.clientsDisponibles[k] == application.userConnected){
+                        nblecon = nblecon+1;
+                        var largeur = (100 / nblecon);
+                        var divM = domHelp.addElement(td, "div");
+                        divM.setAttribute("style", "width: " + largeur + "%; height:100%; line-height:35px; display: inline; background-color: #D9EDF7; float:left;");
+                    }
                 }
-                else{
-                    domHelp.addElement(td, "span", {nomAttribut : "class", valeurAttribute : ""});
+                for (var k = 0; k < creneau.lecons.length; k++) {
+                    var lecon = creneau.lecons[k];
+                    var largeur = (100 / nblecon);
+                    var divM = domHelp.addElement(td, "div");
+                    if (lecon instanceof calendrier.LeconConduite && lecon.client == application.userConnected) {
+                        divM.setAttribute("style", "width: " + largeur + "%; height:100%; line-height:35px; display: inline; background-color: #FCF8E3; float:left;");
+                        domHelp.addText(divM, lecon.moniteur.nom.substr(0, 1).toLocaleUpperCase());
+                        divM.setAttribute("title", "Leçon de conduite avec : " + lecon.moniteur.prenom + " " + lecon.moniteur.nom);
+                    }
+                    else if (lecon instanceof calendrier.LeconCode) {
+                        divM.setAttribute("style", "width: " + largeur + "%; height:100%; line-height:35px; display: inline; background-color : #DFF0D8; float:left;");
+                        divM.setAttribute("title", "Leçon de code tenue par : " + lecon.moniteur.prenom + " " + lecon.moniteur.nom);
+                    }
                 }
-                td.addEventListener("click", function (e) {
-                    var targetElement = e.target || e.srcElement;
-                    view.popupAjoutConduite(div, numSemaine, targetElement);
-                }, false);
             }
+            td.addEventListener("click", function (e) {
+                var targetElement = e.target || e.srcElement;
+                var td = targetElement;
+                while(td.nodeName != "TD"){
+                    td = targetElement.parentNode;
+                }
+                var jour = td.getAttribute("jour");
+                var creneau = td.getAttribute("creneau");
+                application.semaines[numSemaine].jours[jour].creneaux[creneau].clientsDisponibles.push(application.userConnected);
+                dao.setSemaine(application.semaines[numSemaine].cle, application.semaines[numSemaine]);
+            }, false);
         }
     },
 
     printAgendaMoniteur : function(numSemaine) {
-        var table = domHelp.addElement(document.getElementById('content'), "table", {nomAttribut : "class", valeurAttribute : "table table-bordered"});
-        var tbody = domHelp.addElement(table, "tbody");
-        var div = domHelp.addElement(document.getElementById('content'), "div", {nomAttribut : "class", valeurAttribute : "form-dialogue"});
-        var tr = domHelp.addElement(tbody,"tr");
-        var th;
-
-        div.style.display = "none";
-        th = domHelp.addElement(tr,"th");
-        domHelp.addText(th, "");
-
-        for (var i=0; i<application.semaines[numSemaine].jours.length; i++) {
-            th = domHelp.addElement(tr,"th");
-            var date = new Date(application.semaines[i].jours[i].date);
-            domHelp.addText(th, date.getDate() + "/" + (date.getMonth()+1) + "/" + date.getFullYear());
-        }
-        for (var i=0; i<application.semaines[numSemaine].jours[0].creneaux.length; i++) {
-            tr = domHelp.addElement(tbody, "tr");
-            td = domHelp.addElement(tr,"td");
-            domHelp.addText(td, application.semaines[numSemaine].jours[0].creneaux[i].heure + "h");
-            for (var j=0; j<application.semaines[numSemaine].jours.length; j++) {
-                var td = domHelp.addElement(tr,"td", {nomAttribut : "jour", valeurAttribute : j}, {nomAttribut : "creneau", valeurAttribute : i}, {nomAttribut : "class", valeurAttribute : "elt-clickable"});
-                var tmp = application.semaines[numSemaine].jours[j].creneaux[i];
-                if(tmp instanceof calendrier.LeconConduite){
-                    //td.setAttribute("class", "success");
-                    for(var k=0; k<tmp.reservations.length; k++){
-                        var res = tmp.reservations[k];
-                        var largeur = (100/tmp.reservations.length);
-                        var divM = domHelp.addElement(td, "div");
-
-                        divM.setAttribute("style", "width: " + largeur + "%; height:100%; vertical-align: middle; background-color: " + res.moniteur.couleur + "; float:left;");
-                        domHelp.addText(divM, res.moniteur.nom.substr(0,1).toLocaleUpperCase());
-                        if(td.getAttribute("title") != null){
-                            td.setAttribute("title", td.getAttribute("title") + ", " + res.client.nom + " > " + res.moniteur.nom);
-                        }
-                        else{
-                            td.setAttribute("title", res.client.nom + " > " + res.moniteur.nom);
-                        }
-                    }
-                }
-                else if(tmp instanceof calendrier.LeconCode){
-                    td.setAttribute("class", "info");
-                }
-                else{
-                    domHelp.addElement(td, "span", {nomAttribut : "class", valeurAttribute : ""});
-                }
-                td.addEventListener("click", function (e) {
-                    var targetElement = e.target || e.srcElement;
-                    view.popupAjoutConduite(div, numSemaine, targetElement);
-                }, false);
-            }
-        }
     },
 
     printAgendaSecretaire : function(numSemaine) {
@@ -310,23 +284,19 @@ view = {
 };
 
 window.onload = function () {
-    dao.addClient("user1", new utilisateur.Client("M.", "Capolino", "Maxime", "150 Rue de Paris", "Annoeullin", "06.92.75.40.42", "maxime.capolino@mail.fr",""));
-    dao.addClient("user2", new utilisateur.Client("M.", "Vanneste", "Jules", "9 Rue Beaumarchais", "Arras", "06.84.26.70.39", "jules.vanneste@mail.fr",""));
-    dao.addMoniteur("user3", new utilisateur.Moniteur("M.", "Carpentier", "Thomas", "15 Avenue de l'Europe", "Seclin", "06.74.16.27.89", "thomas.carpentier@mail.fr", "#D9EDF7"));
-    dao.addMoniteur("user4", new utilisateur.Moniteur("Mme.", "Zimny", "Francine", "43 rue de la France", "Oppy", "06.41.61.73.90", "francine.zimny@mail.fr", "#FCF8E3"));
-    dao.addSecretaire("user5", new utilisateur.Secretaire("Mme.", "Bouquet", "Juliette", "789 Rue Nationale", "Carvin", "06.56.38.78.99", "juliette.bouquet@mail.fr"));
-    for (var i=0; i<10; i++) {
-        dao.addSemaine(("semaine" + i), new calendrier.Semaine(i, new Date(2014, 9, 6), new Date(2014, 9, 12)));
-    }
+    var cle;
+    application.semaines = [];
+    application.users = [];
     if (typeof localStorage!='undefined') {
         // Récupération de la valeur dans web storage
         for (var i=0; i<localStorage.length; i++) {
-            var cle = localStorage.key(i);
-            var tmp = JSON.parse(localStorage.getItem(cle));
-            if(cle.startsWith("user")){
+            cle = localStorage.key(i);
+            if(cle.indexOf("user") != -1){
+                var tmp = JSON.parse(localStorage.getItem(cle));
                 application.users.push(tmp);
             }
-            else if(cle.startsWith("semaine")){
+            else{
+                var tmp = JSON.parse(localStorage.getItem(cle));
                 application.semaines.push(tmp);
             }
         }

@@ -15,8 +15,8 @@ popup = {
 
         var close = domHelp.addElement(div,"span", {nomAttribut : "class", valeurAttribute : "glyphicon glyphicon-remove-circle col-sm-offset-11 btn-close elt-clickable"});
         close.addEventListener("click", function () {
-            div.style.display = "none";
-            div.innerHTML="";
+            page.clear();
+            page.secretaireSemaine(numSemaine);
         }, false);
 
         var nav = domHelp.addElement(div,"div", {nomAttribut : "class", valeurAttribute : "btn-group btn-group-justified nav-popup"});
@@ -75,6 +75,7 @@ popup = {
         button.onclick = function() {
             var idMoniteur = sMoniteur.options[sMoniteur.selectedIndex].value;
             application.semaines[numSemaine].jours[jour].creneaux[creneau].lecons.push(new calendrier.LeconCode(application.users[idMoniteur]));
+            dao.setSemaine(application.semaines[numSemaine].cle, application.semaines[numSemaine]);
             page.clear();
             page.secretaireSemaine(numSemaine);
         };
@@ -126,6 +127,7 @@ popup = {
             }
             if(idUser != -1){
                 application.semaines[numSemaine].jours[jour].creneaux[creneau].lecons.push(new calendrier.LeconConduite(application.users[idMoniteur], application.users[idUser]));
+                dao.setSemaine(application.semaines[numSemaine].cle, application.semaines[numSemaine]);
             }
             page.clear();
             page.secretaireSemaine(numSemaine);
@@ -138,26 +140,96 @@ popup = {
         var lecons = application.semaines[numSemaine].jours[jour].creneaux[creneau].lecons;
         var table = domHelp.addElement(form, "table", {nomAttribut : "class", valeurAttribute : "table table-striped"});
         var tbody = domHelp.addElement(table, "tbody");
-        var tr, td;
+        var tr, td, th, span;
+        tr = domHelp.addElement(tbody,"tr");
+        th = domHelp.addElement(tr, "th");
+        domHelp.addText(th, "Type");
+        th = domHelp.addElement(tr, "th");
+        domHelp.addText(th, "Moniteur");
+        th = domHelp.addElement(tr, "th");
+        domHelp.addText(th, "Client");
+        th = domHelp.addElement(tr, "th");
+        domHelp.addText(th, "Suppr");
         for (var i=0; i<lecons.length; i++) {
             tr = domHelp.addElement(tbody,"tr");
             if(lecons[i] instanceof calendrier.LeconConduite){
                 td = domHelp.addElement(tr, "td");
-                domHelp.addText(td, lecons[i].client.nom + lecons[i].client.prenom);
+                domHelp.addText(td, "Leçon de conduite");
                 td = domHelp.addElement(tr, "td");
-                domHelp.addText(td, lecons[i].moniteur.nom + lecons[i].moniteur.prenom);
+                var select =  domHelp.addElement(td, "select", {nomAttribut : "name", valeurAttribute : "moniteur"}, {nomAttribut : "class", valeurAttribute : "form-control"}, {nomAttribut : "idLecon", valeurAttribute : i});
+                for (var j=0; j<application.users.length; j++) {
+                    if (application.users[j].role == "Moniteur") {
+                        var option = domHelp.addElement(select, "option", {nomAttribut: "value", valeurAttribute: j});
+                        domHelp.addText(option, application.users[j].nom + " " + application.users[j].prenom);
+                        if(application.users[j] == lecons[i].moniteur) {
+                            option.setAttribute("selected", "selected");
+                        }
+                    }
+                }
+                select.addEventListener("change", function(e){
+                    alert("OK1");
+                    var targetElement = e.target || e.srcElement;
+                    var sel = targetElement;
+                    while(sel.nodeName != "SELECT"){
+                        sel = targetElement.parentNode;
+                    }
+                    var idMoniteur = sel.options[sel.selectedIndex].value;
+                    var idLecon = sel.getAttribute("idLecon");
+                    lecons[idLecon].moniteur = application.users[idMoniteur];
+                    dao.setSemaine(application.semaines[numSemaine].cle, application.semaines[numSemaine]);
+                    div.innerHTML = "";
+                    popup.contentGestionLecons(div,numSemaine,jour,creneau);
+                });
                 td = domHelp.addElement(tr, "td");
-                domHelp.addText(td, "delete");
+                domHelp.addText(td, lecons[i].client.nom + " " + lecons[i].client.prenom);
+                td = domHelp.addElement(tr, "td", {nomAttribut : "class", valeurAttribute : "elt-clickable"}, {nomAttribut : "idLecon", valeurAttribute : i});
+                domHelp.addElement(td, "span", {nomAttribut : "class", valeurAttribute : "glyphicon glyphicon-remove-sign"});
             }
             else{
                 td = domHelp.addElement(tr, "td");
+                domHelp.addText(td, "Leçon de code")
+                td = domHelp.addElement(tr, "td");
+                var select =  domHelp.addElement(td, "select", {nomAttribut : "name", valeurAttribute : "moniteur"}, {nomAttribut : "class", valeurAttribute : "form-control"}, {nomAttribut : "idLecon", valeurAttribute : i});
+                for (var j=0; j<application.users.length; j++) {
+                    if (application.users[j].role == "Moniteur") {
+                        var option = domHelp.addElement(select, "option", {nomAttribut: "value", valeurAttribute: j});
+                        domHelp.addText(option, application.users[j].nom + " " + application.users[j].prenom);
+                        if(application.users[j] == lecons[i].moniteur) {
+                            option.setAttribute("selected", "selected");
+                        }
+                    }
+                }
+                select.addEventListener("change", function(e){
+                    alert("OK2");
+                    var targetElement = e.target || e.srcElement;
+                    var sel = targetElement;
+                    while(sel.nodeName != "SELECT"){
+                        sel = targetElement.parentNode;
+                    }
+                    var idMoniteur = sel.options[sel.selectedIndex].value;
+                    var idLecon = sel.getAttribute("idLecon");
+                    lecons[idLecon].moniteur = application.users[idMoniteur];
+                    dao.setSemaine(application.semaines[numSemaine].cle, application.semaines[numSemaine]);
+                    div.innerHTML = "";
+                    popup.contentGestionLecons(div,numSemaine,jour,creneau);
+                });
+                td = domHelp.addElement(tr, "td");
                 domHelp.addText(td, "");
-                td = domHelp.addElement(tr, "td");
-                domHelp.addText(td, lecons[i].moniteur.nom + lecons[i].moniteur.prenom);
-                td = domHelp.addElement(tr, "td");
-                domHelp.addText(td, "delete");
+                td = domHelp.addElement(tr, "td", {nomAttribut : "class", valeurAttribute : "elt-clickable"}, {nomAttribut : "idLecon", valeurAttribute : i});
+                domHelp.addElement(td, "span", {nomAttribut : "class", valeurAttribute : "glyphicon glyphicon-remove-sign"});
             }
+            td.addEventListener("click", function(e){
+                var targetElement = e.target || e.srcElement;
+                var td = targetElement;
+                while(td.nodeName != "TD"){
+                    td = targetElement.parentNode;
+                }
+                alert("Suppression de " + td.getAttribute("idLecon"));
+                lecons.splice(td.getAttribute("idLecon"), 1);
+                dao.setSemaine(application.semaines[numSemaine].cle, application.semaines[numSemaine]);
+                div.innerHTML = "";
+                popup.contentGestionLecons(div,numSemaine,jour,creneau);
+            }, false);
         }
-        domHelp.addText(button, "Supprimer");
     }
 }
