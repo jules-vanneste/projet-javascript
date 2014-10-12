@@ -48,12 +48,10 @@ calendrier.Jour = function(date, creneaux, horaires){
 };
 
 calendrier.Semaine = function(dateDebut, dateFin){
-    var _cle = "semaine" + cptSemaines;
+    var _cle;
     var _dateDebut = dateDebut;
     var _dateFin = dateFin;
     var _jours = [];
-
-    cptSemaines = cptSemaines+1;
 
     for(var i=0; i<nbJours+1; i++){
         var creneaux = [];
@@ -73,6 +71,9 @@ calendrier.Semaine = function(dateDebut, dateFin){
     this.__defineSetter__("dateFin", function(value){return _dateFin = value;});
     this.__defineGetter__("jours", function(){return _jours;});
     this.__defineSetter__("jours", function(value){return _jours = value;});
-
-    dao.setSemaine(this.cle, this);
+    function addInDAO () {
+        this._cle = "semaine" + cptSemaines;
+        dao.setSemaine(this.cle, this);
+        cptSemaines = cptSemaines+1;
+    };
 }

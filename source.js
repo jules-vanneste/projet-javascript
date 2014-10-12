@@ -214,8 +214,9 @@ view = {
                     var lecon = creneau.lecons[k];
                     var largeur = (100 / creneau.lecons.length);
                     var divM = domHelp.addElement(td, "div");
-                    //if (lecon instanceof calendrier.LeconConduite) {
-                    if(lecon.client!=null){
+                    alert(typeof lecon.prototype);
+                    if (typeof lecon == calendrier.LeconConduite) {
+                    //if(lecon.client!=null){
                         divM.setAttribute("style", "width: " + largeur + "%; height:100%; line-height:35px; display: inline; background-color: " + lecon.moniteur.couleur + "; float:left;");
                         domHelp.addText(divM, lecon.moniteur.nom.substr(0, 1).toLocaleUpperCase());
                         if (td.getAttribute("title") != null) {
@@ -225,8 +226,8 @@ view = {
                             td.setAttribute("title", lecon.client.nom + " > " + lecon.moniteur.nom);
                         }
                     }
-                    //else if (lecon instanceof calendrier.LeconCode) {
-                    else{
+                    else if (typeof lecon == calendrier.LeconCode) {
+                    //else{
                         divM.setAttribute("style", "width: " + largeur + "%; height:100%; line-height:35px; display: inline; background-color : #DFF0D8; float:left;");
                         divM.setAttribute("class", "success");
                         domHelp.addText(divM, lecon.moniteur.nom.substr(0, 1).toLocaleUpperCase());
@@ -294,12 +295,16 @@ window.onload = function () {
         for (var i=0; i<localStorage.length; i++) {
             cle = localStorage.key(i);
             if(cle.indexOf("user") != -1){
-                var tmp = JSON.parse(localStorage.getItem(cle));
-                application.users.push(tmp);
+                var objet;
+                objet = JSON.parse(localStorage.getItem(cle), Reviver);
+                application.users.push(objet);
             }
             else{
-                var tmp = JSON.parse(localStorage.getItem(cle));
-                application.semaines.push(tmp);
+                //var tmp;
+                /*tmp = JSON.parse(localStorage.getItem(cle), function(key, value) {
+                    return new calendrier.Semaine(value);
+                });*/
+                //application.semaines.push(tmp);
             }
         }
     } else {
