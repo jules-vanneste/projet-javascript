@@ -1,6 +1,3 @@
-var cptUtilisateurs = 0;
-utilisateur = {};
-
 // A generic "smart reviver" function.
 // Looks for object values with a `ctor` property and
 // a `data` property. If it finds them, and finds a matching
@@ -22,6 +19,14 @@ function Reviver(key, value) {
 }
 Reviver.constructors = {}; // A list of constructors the smart reviver should know about
 
+// A generic "toJSON" function that creates the data expected
+// by Reviver.
+// `ctorName`  The name of the constructor to use to revive it
+// `obj`       The object being serialized
+// `keys`      (Optional) Array of the properties to serialize,
+//             if not given then all of the objects "own" properties
+//             that don't have function values will be serialized.
+//             (Note: If you list a property in `keys`, it will be serialized
 //             regardless of whether it's an "own" property.)
 // Returns:    The structure (which will then be turned into a string
 //             as part of the JSON.stringify algorithm)
@@ -57,6 +62,9 @@ function Generic_fromJSON(ctor, data) {
     return obj;
 }
 
+utilisateur = {};
+utilisateur.cptUtilisateurs = 0;
+
 utilisateur.Personne = function(civilite, nom, prenom, adresse, ville, telephone, mail, role){
     var _cle;
     var _civilite = civilite;
@@ -88,35 +96,12 @@ utilisateur.Personne = function(civilite, nom, prenom, adresse, ville, telephone
     this.__defineSetter__("role", function(value){return _role = value;});
 };
 
-utilisateur.Client = function (){
-    function singleParamConstructor(client){
-        utilisateur.Personne.call(this, client.civilite, client.nom, client.prenom, client.adresse, client.ville, client.telephone, client.mail, "Client");
-        var _moniteur = client.moniteur;
+utilisateur.Client = function (civilite, nom, prenom, adresse, ville, telephone, mail, moniteur){
+    utilisateur.Personne.call(this, civilite, nom, prenom, adresse, ville, telephone, mail, "Client");
+    var _moniteur = moniteur;
 
-        this.__defineGetter__("moniteur", function(){return _moniteur;});
-        this.__defineSetter__("moniteur", function(value){return _moniteur = value;});
-    }
-    function someParamConstructor(civilite, nom, prenom, adresse, ville, telephone, mail, moniteur) {
-        utilisateur.Personne.call(this, civilite, nom, prenom, adresse, ville, telephone, mail, "Client");
-        var _moniteur = moniteur;
-
-        this.__defineGetter__("moniteur", function(){return _moniteur;});
-        this.__defineSetter__("moniteur", function(value){return _moniteur = value;});
-    }
-    this.addInDAO = function () {
-        this._cle = "user" + cptSemaines;
-        dao.setUtilisateur(this._cle, this);
-        cptUtilisateurs = cptUtilisateurs+1;
-    }
-
-    switch (arguments.length) {
-        case 1 :
-            singleParamConstructor(arguments[0]);
-            break;
-        default :
-            someParamConstructor(arguments[0], arguments[1], arguments[2], arguments[3], arguments[4], arguments[5], arguments[6], arguments[7]);
-            break;
-    }
+    this.__defineGetter__("moniteur", function(){return _moniteur;});
+    this.__defineSetter__("moniteur", function(value){return _moniteur = value;});
 };
 utilisateur.Client.prototype.toJSON = function() {
     return Generic_toJSON("Cli", this);
@@ -124,37 +109,14 @@ utilisateur.Client.prototype.toJSON = function() {
 utilisateur.Client.fromJSON = function(value) {
     return Generic_fromJSON(utilisateur.Client, value.data);
 };
-Reviver.constructors.utilisateur.Client = utilisateur.Client;
+Reviver.constructors.Client = utilisateur.Client;
 
-utilisateur.Moniteur = function (){
-    function singleParamConstructor(moniteur){
-        utilisateur.Personne.call(this, moniteur.civilite, moniteur.nom, moniteur.prenom, moniteur.adresse, moniteur.ville, moniteur.telephone, moniteur.mail, "Moniteur");
-        var _couleur = moniteur.couleur;
+utilisateur.Moniteur = function (civilite, nom, prenom, adresse, ville, telephone, mail, couleur){
+    utilisateur.Personne.call(this, civilite, nom, prenom, adresse, ville, telephone, mail, "Moniteur");
+    var _couleur = couleur;
 
-        this.__defineGetter__("couleur", function(){return _couleur;});
-        this.__defineSetter__("couleur", function(value){return _couleur = value;});
-    }
-    function someParamConstructor(civilite, nom, prenom, adresse, ville, telephone, mail, couleur) {
-        utilisateur.Personne.call(this, civilite, nom, prenom, adresse, ville, telephone, mail, "Moniteur");
-        var _couleur = couleur;
-
-        this.__defineGetter__("couleur", function () {return _couleur;});
-        this.__defineSetter__("couleur", function (value) {return _couleur = value;});
-    }
-    this.addInDAO = function () {
-        this._cle = "user" + cptSemaines;
-        dao.setUtilisateur(this._cle, this);
-        cptUtilisateurs = cptUtilisateurs+1;
-    }
-
-    switch (arguments.length) {
-        case 1 :
-            singleParamConstructor(arguments[0]);
-            break;
-        default :
-            someParamConstructor(arguments[0], arguments[1], arguments[2], arguments[3], arguments[4], arguments[5], arguments[6], arguments[7]);
-            break;
-    }
+    this.__defineGetter__("couleur", function () {return _couleur;});
+    this.__defineSetter__("couleur", function (value) {return _couleur = value;});
 };
 utilisateur.Moniteur.prototype.toJSON = function() {
     return Generic_toJSON("Mon", this);
@@ -162,29 +124,10 @@ utilisateur.Moniteur.prototype.toJSON = function() {
 utilisateur.Moniteur.fromJSON = function(value) {
     return Generic_fromJSON(utilisateur.Moniteur, value.data);
 };
-Reviver.constructors.utilisateur.Moniteur = utilisateur.Moniteur;
+Reviver.constructors.Moniteur = utilisateur.Moniteur;
 
-utilisateur.Secretaire = function (){
-    function singleParamConstructor(secretaire){
-        utilisateur.Personne.call(this, secretaire.civilite, secretaire.nom, secretaire.prenom, secretaire.adresse, secretaire.ville, secretaire.telephone, secretaire.mail, "Secrétaire");
-    }
-    function someParamConstructor(civilite, nom, prenom, adresse, ville, telephone, mail) {
-        utilisateur.Personne.call(this, civilite, nom, prenom, adresse, ville, telephone, mail, "Secrétaire");
-    }
-    this.addInDAO = function () {
-        this._cle = "user" + cptSemaines;
-        dao.setUtilisateur(this._cle, this);
-        cptUtilisateurs = cptUtilisateurs+1;
-    }
-
-    switch (arguments.length) {
-        case 1 :
-            singleParamConstructor(arguments[0]);
-            break;
-        default :
-            someParamConstructor(arguments[0], arguments[1], arguments[2], arguments[3], arguments[4], arguments[5], arguments[6]);
-            break;
-    }
+utilisateur.Secretaire = function (civilite, nom, prenom, adresse, ville, telephone, mail){
+    utilisateur.Personne.call(this, civilite, nom, prenom, adresse, ville, telephone, mail, "Secrétaire");
 };
 utilisateur.Secretaire.prototype.toJSON = function() {
     return Generic_toJSON("Sec", this);
@@ -192,4 +135,4 @@ utilisateur.Secretaire.prototype.toJSON = function() {
 utilisateur.Secretaire.fromJSON = function(value) {
     return Generic_fromJSON(utilisateur.Secretaire, value.data);
 };
-Reviver.constructors.utilisateur.Secretaire = utilisateur.Secretaire;
+Reviver.constructors.Secretaire = utilisateur.Secretaire;

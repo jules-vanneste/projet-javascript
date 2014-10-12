@@ -1,9 +1,9 @@
 var nbJours = 5;
 var nbCreneaux = 10;
 var horaires = [9, 10, 11, 12, 13, 14, 15, 16, 17, 18];
-var cptSemaines = 0;
 
 calendrier = {};
+calendrier.cptSemaines = 0;
 
 calendrier.Creneau = function(heure){
     var _heure = heure;
@@ -71,9 +71,11 @@ calendrier.Semaine = function(dateDebut, dateFin){
     this.__defineSetter__("dateFin", function(value){return _dateFin = value;});
     this.__defineGetter__("jours", function(){return _jours;});
     this.__defineSetter__("jours", function(value){return _jours = value;});
-    function addInDAO () {
-        this._cle = "semaine" + cptSemaines;
-        dao.setSemaine(this.cle, this);
-        cptSemaines = cptSemaines+1;
-    };
 }
+calendrier.Semaine.prototype.toJSON = function() {
+    return Generic_toJSON("Sem", this);
+};
+calendrier.Semaine.fromJSON = function(value) {
+    return Generic_fromJSON(calendrier.Semaine, value.data);
+};
+Reviver.constructors.Semaine = calendrier.Semaine;

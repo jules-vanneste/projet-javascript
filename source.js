@@ -214,8 +214,7 @@ view = {
                     var lecon = creneau.lecons[k];
                     var largeur = (100 / creneau.lecons.length);
                     var divM = domHelp.addElement(td, "div");
-                    alert(typeof lecon.prototype);
-                    if (typeof lecon == calendrier.LeconConduite) {
+                    if (lecon instanceof calendrier.LeconConduite) {
                     //if(lecon.client!=null){
                         divM.setAttribute("style", "width: " + largeur + "%; height:100%; line-height:35px; display: inline; background-color: " + lecon.moniteur.couleur + "; float:left;");
                         domHelp.addText(divM, lecon.moniteur.nom.substr(0, 1).toLocaleUpperCase());
@@ -226,7 +225,7 @@ view = {
                             td.setAttribute("title", lecon.client.nom + " > " + lecon.moniteur.nom);
                         }
                     }
-                    else if (typeof lecon == calendrier.LeconCode) {
+                    else if (lecon instanceof calendrier.LeconCode) {
                     //else{
                         divM.setAttribute("style", "width: " + largeur + "%; height:100%; line-height:35px; display: inline; background-color : #DFF0D8; float:left;");
                         divM.setAttribute("class", "success");
@@ -295,8 +294,21 @@ window.onload = function () {
         for (var i=0; i<localStorage.length; i++) {
             cle = localStorage.key(i);
             if(cle.indexOf("user") != -1){
-                var objet;
-                objet = JSON.parse(localStorage.getItem(cle), Reviver);
+                //var tmp = localStorage.getItem(cle);
+                //var objet = JSON.parse(tmp);
+                //var objet = JSON.parse(tmp, Reviver);
+                var objet = JSON.parse(localStorage.getItem(cle), function() {
+                    var value = JSON.parse(localStorage.getItem(cle));
+                    if (value.ctor === "Cli") {
+                        return new utilisateur.Client(value.data.civilite, value.data.nom, value.data.prenom, value.data.adresse, value.data.ville, value.data.telephone, value.data.mail, value.data.moniteur);
+                    }
+                    else if (value.ctor === "Mon") {
+                        return new utilisateur.Moniteur(value.data.civilite, value.data.nom, value.data.prenom, value.data.adresse, value.data.ville, value.data.telephone, value.data.mail, value.data.couleur);
+                    }
+                    else{
+                        return new utilisateur.Secretaire(value.data.civilite, value.data.nom, value.data.prenom, value.data.adresse, value.data.ville, value.data.telephone, value.data.mail);
+                    }
+                });
                 application.users.push(objet);
             }
             else{
@@ -305,6 +317,27 @@ window.onload = function () {
                     return new calendrier.Semaine(value);
                 });*/
                 //application.semaines.push(tmp);
+                var objet = JSON.parse(localStorage.getItem(cle), function() {
+                    var value = JSON.parse(localStorage.getItem(cle));
+                    var semaine =  new calendrier.Semaine(value.data.dateDebut, value.data.dateFin);
+                    for(var i=0; i<value.data.jours.length; i++){
+                        for(var j=0; j<value.data.jours[i].creneaux.length; j++) {
+                            for(var k=0; j<value.data.jours[i].creneaux[j].clientsDisponibles.length; k++){
+                                semaine.jours[i].creneaux[j].clientsDisponibles.push(value.data.jours[i].creneaux[j].clientsDisponibles[k]);
+                            }
+                            for(var k=0; j<value.data.jours[i].creneaux[j].lecons.length; k++){
+                                if(value.data.jours[i].creneaux[j].lecons[k].hasOwnProperty("client")){
+                                    semaine.jours[i].creneaux[j].lecons.push(new calendrier.LeconConduite(value.data.jours[i].creneaux[j].lecons[k].moniteur, value.data.jours[i].creneaux[j].lecons[k].client));
+                                }
+                                else{
+                                    semaine.jours[i].creneaux[j].lecons.push(new calendrier.LeconCode(value.data.jours[i].creneaux[j].lecons[k].moniteur));
+                                }
+                            }
+                        }
+                    }
+                    return semaine;
+                });
+                application.semaines.push(objet);
             }
         }
     } else {
