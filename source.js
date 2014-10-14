@@ -31,6 +31,24 @@ domHelp = {
             }
         }
         return res;
+    },
+
+    getUserIfExist : function (nom, prenom) {
+        for (var i=0; i<application.users.length; i++) {
+            if((application.users[i].nom == nom) && (application.users[i].prenom == prenom)){
+                return application.users[i];
+            }
+        }
+        return null;
+    },
+
+    getIndexOfUserIfExist : function (nom, prenom) {
+        for (var i=0; i<application.users.length; i++) {
+            if((application.users[i].nom == nom) && (application.users[i].prenom == prenom)){
+                return i;
+            }
+        }
+        return null;
     }
 };
 
@@ -117,6 +135,7 @@ view = {
         var div = domHelp.addElement(document.getElementById('content'), "div", {nomAttribut : "class", valeurAttribute : "form-dialogue"});
         var tr = domHelp.addElement(tbody,"tr");
         var th;
+        var aLeconConduite = false;
 
         div.style.display = "none";
         th = domHelp.addElement(tr,"th");
@@ -133,6 +152,7 @@ view = {
             td = domHelp.addElement(tr,"td");
             domHelp.addText(td, application.semaines[numSemaine].jours[0].creneaux[i].heure + "h");
             for (var j=0; j<semaine.jours.length; j++) {
+                aLeconConduite = false;
                 var td = domHelp.addElement(tr, "td", {nomAttribut: "jour", valeurAttribute: j}, {nomAttribut: "creneau", valeurAttribute: i}, {nomAttribut: "class", valeurAttribute: "elt-clickable"});
                 var creneau = semaine.jours[j].creneaux[i];
                 var nblecon = 0;
@@ -150,6 +170,8 @@ view = {
                         nblecon = nblecon+1;
                         var largeur = (100 / nblecon);
                         var divM = domHelp.addElement(td, "div");
+                        domHelp.addText(divM, "Dispo");
+                        //domHelp.addElement(divM, "span", { nomAttribut : "class", valeurAttribute : "glyphicon glyphicon-ok"});
                         divM.setAttribute("style", "width: " + largeur + "%; height:100%; line-height:35px; display: inline; background-color: #D9EDF7; float:left;");
                     }
                 }
@@ -158,41 +180,54 @@ view = {
                     var largeur = (100 / nblecon);
                     var divM = domHelp.addElement(td, "div");
                     if (lecon instanceof calendrier.LeconConduite && lecon.client == application.userConnected) {
-                        divM.setAttribute("style", "width: " + largeur + "%; height:100%; line-height:35px; display: inline; background-color: #FCF8E3; float:left;");
-                        domHelp.addText(divM, lecon.moniteur.nom.substr(0, 1).toLocaleUpperCase());
+                        aLeconConduite = true;
+                        divM.setAttribute("style", "width: " + largeur + "%; height:100%; display: inline; background-color: #FCF8E3; float:left;");
+                        //domHelp.addText(divM, lecon.moniteur.nom.substr(0, 1).toLocaleUpperCase());
+                        domHelp.addElement(divM, "span", { nomAttribut : "class", valeurAttribute : "glyphicon glyphicon-road"});
                         divM.setAttribute("title", "Leçon de conduite avec : " + lecon.moniteur.prenom + " " + lecon.moniteur.nom);
                     }
                     else if (lecon instanceof calendrier.LeconCode) {
-                        divM.setAttribute("style", "width: " + largeur + "%; height:100%; line-height:35px; display: inline; background-color : #DFF0D8; float:left;");
+                        divM.setAttribute("style", "width: " + largeur + "%; height:100%; display: inline; background-color : #DFF0D8; float:left;");
+                        //domHelp.addText(divM, "Code");
+                        domHelp.addElement(divM, "span", { nomAttribut : "class", valeurAttribute : "glyphicon glyphicon-pencil"});
                         divM.setAttribute("title", "Leçon de code tenue par : " + lecon.moniteur.prenom + " " + lecon.moniteur.nom);
                     }
                 }
-            }
-            td.addEventListener("click", function (e) {
-                var targetElement = e.target || e.srcElement;
-                var td = targetElement;
-                while(td.nodeName != "TD"){
-                    td = targetElement.parentNode;
+                if(!aLeconConduite) {
+                    td.addEventListener("click", function (e) {
+                        var targetElement = e.target || e.srcElement;
+                        var td = targetElement;
+                        while (td.nodeName != "TD") {
+                            td = targetElement.parentNode;
+                        }
+                        var jour = td.getAttribute("jour");
+                        var idCreneau = td.getAttribute("creneau");
+                        var creneau = application.semaines[numSemaine].jours[jour].creneaux[idCreneau];
+                        var clientPresent = false;
+                        for (var i = 0; i < creneau.clientsDisponibles.length; i++) {
+                            if (creneau.clientsDisponibles[i] == application.userConnected) {
+                                creneau.clientsDisponibles.splice(i, 1);
+                                clientPresent = true;
+                            }
+                        }
+                        if (!clientPresent) {
+                            creneau.clientsDisponibles.push(application.userConnected);
+                        }
+                        dao.setSemaine(application.semaines[numSemaine].cle, application.semaines[numSemaine]);
+                        page.clear();
+                        page.clientSemaine(numSemaine);
+                    }, false);
                 }
-                var jour = td.getAttribute("jour");
-                var creneau = td.getAttribute("creneau");
-                application.semaines[numSemaine].jours[jour].creneaux[creneau].clientsDisponibles.push(application.userConnected);
-                dao.setSemaine(application.semaines[numSemaine].cle, application.semaines[numSemaine]);
-            }, false);
+            }
         }
     },
 
     printAgendaMoniteur : function(numSemaine) {
-    },
-
-    printAgendaSecretaire : function(numSemaine) {
         var table = domHelp.addElement(document.getElementById('content'), "table", {nomAttribut : "class", valeurAttribute : "table table-bordered"});
         var tbody = domHelp.addElement(table, "tbody");
-        var div = domHelp.addElement(document.getElementById('content'), "div", {nomAttribut : "class", valeurAttribute : "form-dialogue"});
         var tr = domHelp.addElement(tbody,"tr");
         var th;
 
-        div.style.display = "none";
         th = domHelp.addElement(tr,"th");
         domHelp.addText(th, "");
 
@@ -208,7 +243,51 @@ view = {
             td = domHelp.addElement(tr,"td");
             domHelp.addText(td, jour.creneaux[i].heure + "h");
             for (var j=0; j<semaine.jours.length; j++) {
-                var td = domHelp.addElement(tr, "td", {nomAttribut: "jour", valeurAttribute: j}, {nomAttribut: "creneau", valeurAttribute: i}, {nomAttribut: "class", valeurAttribute: "elt-clickable"});
+                var td = domHelp.addElement(tr, "td", {nomAttribut: "jour", valeurAttribute: j}, {nomAttribut: "creneau", valeurAttribute: i}, {nomAttribut: "class", valeurAttribute: "elt-clickable"}, {nomAttribut: "data-toggle", valeurAttribute: "modal"}, {nomAttribut: "data-target", valeurAttribute: "#myPopUp"});
+                var creneau = semaine.jours[j].creneaux[i];
+                for (var k = 0; k < creneau.lecons.length; k++) {
+                    var lecon = creneau.lecons[k];
+                    var largeur = (100 / creneau.lecons.length);
+                    var divM = domHelp.addElement(td, "div");
+                    if (lecon instanceof calendrier.LeconConduite && lecon.moniteur == application.userConnected) {
+                        divM.setAttribute("style", "width: " + largeur + "%; height:100%; line-height:35px; display: inline; background-color: #FCF8E3; float:left;");
+                        td.setAttribute("title", "Leçon de conduite avec : " + lecon.client.nom);
+                    }
+                    else if (lecon instanceof calendrier.LeconCode && lecon.moniteur == application.userConnected) {
+                        divM.setAttribute("style", "width: " + largeur + "%; height:100%; line-height:35px; display: inline; background-color : #DFF0D8; float:left;");
+                        td.setAttribute("title", "Leçon de code");
+                    }
+                }
+                td.addEventListener("click", function (e) {
+                    var targetElement = e.target || e.srcElement;
+                    popup.ajoutByMoniteur(numSemaine, targetElement);
+                }, false);
+            }
+        }
+    },
+
+    printAgendaSecretaire : function(numSemaine) {
+        var table = domHelp.addElement(document.getElementById('content'), "table", {nomAttribut : "class", valeurAttribute : "table table-bordered"});
+        var tbody = domHelp.addElement(table, "tbody");
+        var tr = domHelp.addElement(tbody,"tr");
+        var th;
+
+        th = domHelp.addElement(tr,"th");
+        domHelp.addText(th, "");
+
+        var semaine = application.semaines[numSemaine];
+        for (var i=0; i<semaine.jours.length; i++) {
+            th = domHelp.addElement(tr,"th");
+            var date = new Date(semaine.jours[i].date);
+            domHelp.addText(th, date.getDate() + "/" + (date.getMonth()+1) + "/" + date.getFullYear());
+        }
+        var jour = semaine.jours[0];
+        for (var i=0; i<jour.creneaux.length; i++) {
+            tr = domHelp.addElement(tbody, "tr");
+            td = domHelp.addElement(tr,"td");
+            domHelp.addText(td, jour.creneaux[i].heure + "h");
+            for (var j=0; j<semaine.jours.length; j++) {
+                var td = domHelp.addElement(tr, "td", {nomAttribut: "jour", valeurAttribute: j}, {nomAttribut: "creneau", valeurAttribute: i}, {nomAttribut: "class", valeurAttribute: "elt-clickable"}, {nomAttribut: "data-toggle", valeurAttribute: "modal"}, {nomAttribut: "data-target", valeurAttribute: "#myPopUp"});
                 var creneau = semaine.jours[j].creneaux[i];
                 for (var k = 0; k < creneau.lecons.length; k++) {
                     var lecon = creneau.lecons[k];
@@ -228,19 +307,18 @@ view = {
                     else if (lecon instanceof calendrier.LeconCode) {
                     //else{
                         divM.setAttribute("style", "width: " + largeur + "%; height:100%; line-height:35px; display: inline; background-color : #DFF0D8; float:left;");
-                        divM.setAttribute("class", "success");
                         domHelp.addText(divM, lecon.moniteur.nom.substr(0, 1).toLocaleUpperCase());
                     }
                 }
                 td.addEventListener("click", function (e) {
                     var targetElement = e.target || e.srcElement;
-                    popup.ajoutBySecretaire(div, numSemaine, targetElement);
+                    popup.ajoutBySecretaire(numSemaine, targetElement);
                 }, false);
             }
         }
     },
 
-    choiceClient : function(nbRes, input, conteneurRes, lecons){
+    choiceClient : function(nbRes, input, conteneurRes, lecons, creneau){
         conteneurRes.innerHTML = "";
         var tbody = domHelp.addElement(conteneurRes, "tbody");
         var tr;
@@ -281,6 +359,19 @@ view = {
             domHelp.addText(td, application.users[res[i]].nom);
             td = domHelp.addElement(tr, "td");
             domHelp.addText(td, application.users[res[i]].prenom);
+            td = domHelp.addElement(tr, "td");
+            var isDispo = false;
+            for(var i=0; i<creneau.clientsDisponibles.length; i++){
+                if(application.users[res[i]] == creneau.clientsDisponibles[i]){
+                    isDispo = true;
+                }
+            }
+            if(isDispo){
+                domHelp.addElement(td, "span", {nomAttribut : "class", valeurAttribute : "glyphicon glyphicon-ok"});
+            }
+            else{
+                td = domHelp.addElement(tr, "");
+            }
         }
     }
 };
@@ -290,13 +381,11 @@ window.onload = function () {
     application.semaines = [];
     application.users = [];
     if (typeof localStorage!='undefined') {
-        // Récupération de la valeur dans web storage
+        // Récupération de la valeur dans web storage :
         for (var i=0; i<localStorage.length; i++) {
             cle = localStorage.key(i);
+            //On charge les entités des utilisateurs (Client, Moniteur, Secretaire) :
             if(cle.indexOf("user") != -1){
-                //var tmp = localStorage.getItem(cle);
-                //var objet = JSON.parse(tmp);
-                //var objet = JSON.parse(tmp, Reviver);
                 var objet = JSON.parse(localStorage.getItem(cle), function() {
                     var value = JSON.parse(localStorage.getItem(cle));
                     if (value.ctor === "Cli") {
@@ -311,26 +400,28 @@ window.onload = function () {
                 });
                 application.users.push(objet);
             }
+            //On charge les entités des Semaines avec leurs contenu et les références vers les clients qu'elles contiennent :
             else{
-                //var tmp;
-                /*tmp = JSON.parse(localStorage.getItem(cle), function(key, value) {
-                    return new calendrier.Semaine(value);
-                });*/
-                //application.semaines.push(tmp);
                 var objet = JSON.parse(localStorage.getItem(cle), function() {
                     var value = JSON.parse(localStorage.getItem(cle));
-                    var semaine =  new calendrier.Semaine(value.data.dateDebut, value.data.dateFin);
+                    var semaine =  new calendrier.Semaine(new Date(value.data.dateDebut));
+                    semaine.cle = value.data.cle;
                     for(var i=0; i<value.data.jours.length; i++){
                         for(var j=0; j<value.data.jours[i].creneaux.length; j++) {
-                            for(var k=0; j<value.data.jours[i].creneaux[j].clientsDisponibles.length; k++){
-                                semaine.jours[i].creneaux[j].clientsDisponibles.push(value.data.jours[i].creneaux[j].clientsDisponibles[k]);
+                            for(var k=0; k<value.data.jours[i].creneaux[j].clientsDisponibles.length; k++){
+                                var client = domHelp.getUserIfExist(value.data.jours[i].creneaux[j].clientsDisponibles[k].data.nom, value.data.jours[i].creneaux[j].clientsDisponibles[k].data.prenom);
+                                semaine.jours[i].creneaux[j].clientsDisponibles.push(client);
                             }
-                            for(var k=0; j<value.data.jours[i].creneaux[j].lecons.length; k++){
-                                if(value.data.jours[i].creneaux[j].lecons[k].hasOwnProperty("client")){
-                                    semaine.jours[i].creneaux[j].lecons.push(new calendrier.LeconConduite(value.data.jours[i].creneaux[j].lecons[k].moniteur, value.data.jours[i].creneaux[j].lecons[k].client));
+                            for(var k=0; k<value.data.jours[i].creneaux[j].lecons.length; k++){
+                                var lecon = value.data.jours[i].creneaux[j].lecons[k];
+                                if(value.data.jours[i].creneaux[j].lecons[k].ctor === "Con") {
+                                    var moniteur = domHelp.getUserIfExist(lecon.data.moniteur.data.nom, lecon.data.moniteur.data.prenom);
+                                    var client = domHelp.getUserIfExist(lecon.data.client.data.nom, lecon.data.client.data.prenom);
+                                    semaine.jours[i].creneaux[j].lecons.push(new calendrier.LeconConduite(moniteur, client));
                                 }
-                                else{
-                                    semaine.jours[i].creneaux[j].lecons.push(new calendrier.LeconCode(value.data.jours[i].creneaux[j].lecons[k].moniteur));
+                                else if(value.data.jours[i].creneaux[j].lecons[k].ctor === "Cod"){
+                                    var moniteur = domHelp.getUserIfExist(lecon.data.moniteur.data.nom, lecon.data.moniteur.data.prenom);
+                                    semaine.jours[i].creneaux[j].lecons.push(new calendrier.LeconCode(moniteur));
                                 }
                             }
                         }
@@ -343,5 +434,24 @@ window.onload = function () {
     } else {
         alert("localStorage n'est pas supporté");
     }
+
+    var dateDebutSemaineCourante = new Date(2014, 9, 12);
+    var ajouter = true;
+    dateDebutSemaineCourante.setDate(dateDebutSemaineCourante.getDate() - (dateDebutSemaineCourante.getDay() - 1));
+    for(var i=0; i<application.semaines.length; i++){
+        if((application.semaines[i].dateDebut.getDate() == dateDebutSemaineCourante.getDate())
+            && (application.semaines[i].dateDebut.getMonth() == dateDebutSemaineCourante.getMonth())
+            && (application.semaines[i].dateDebut.getFullYear() == dateDebutSemaineCourante.getFullYear())) {
+            application.semaineCourante = application.semaines[i];
+            ajouter = false;
+        }
+    }
+    if(ajouter){
+        var semaine = new calendrier.Semaine(dateDebutSemaineCourante);
+        application.semaines.push(semaine);
+        dao.addSemaine(semaine);
+        application.semaineCourante = semaine;
+    }
+
     page.accueil();
 };

@@ -43,3 +43,16 @@ td, th{
 .nav-popup{
     margin-bottom: 25px;
 }
+
+.form-horizontal .check-form {
+    margin-bottom: 10px;
+}
+
+.glyphicon{
+    vertical-align: bottom;
+    top: 10px;
+}
+
+.btn-close{
+    top: 0px;
+}

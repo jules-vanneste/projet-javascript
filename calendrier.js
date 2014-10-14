@@ -32,10 +32,24 @@ calendrier.LeconConduite = function(moniteur, client){
     this.__defineGetter__("client", function(){return _client;});
     this.__defineSetter__("client", function(value){return _client = value;});
 };
+calendrier.LeconConduite.prototype.toJSON = function() {
+    return Generic_toJSON("Con", this);
+};
+calendrier.LeconConduite.fromJSON = function(value) {
+    return Generic_fromJSON(calendrier.LeconConduite, value.data);
+};
+Reviver.constructors.LeconConduite = calendrier.LeconConduite;
 
 calendrier.LeconCode = function(moniteur){
     calendrier.Lecon.call(this, moniteur);
 };
+calendrier.LeconCode.prototype.toJSON = function() {
+    return Generic_toJSON("Cod", this);
+};
+calendrier.LeconCode.fromJSON = function(value) {
+    return Generic_fromJSON(calendrier.LeconCode, value.data);
+};
+Reviver.constructors.LeconCode = calendrier.LeconCode;
 
 calendrier.Jour = function(date, creneaux, horaires){
     var _date = date;
@@ -47,11 +61,13 @@ calendrier.Jour = function(date, creneaux, horaires){
     this.__defineSetter__("creneaux", function(value){return _creneaux = value;});
 };
 
-calendrier.Semaine = function(dateDebut, dateFin){
+calendrier.Semaine = function(date){
     var _cle;
-    var _dateDebut = dateDebut;
-    var _dateFin = dateFin;
+    var _dateDebut;
     var _jours = [];
+
+    _dateDebut = new Date(date);
+    _dateDebut.setDate(date.getDate() - (date.getDay() - 1));
 
     for(var i=0; i<nbJours+1; i++){
         var creneaux = [];
@@ -67,8 +83,6 @@ calendrier.Semaine = function(dateDebut, dateFin){
     this.__defineSetter__("cle", function(value){return _cle = value;});
     this.__defineGetter__("dateDebut", function(){return _dateDebut;});
     this.__defineSetter__("dateDebut", function(value){return _dateDebut = value;});
-    this.__defineGetter__("dateFin", function(){return _dateFin;});
-    this.__defineSetter__("dateFin", function(value){return _dateFin = value;});
     this.__defineGetter__("jours", function(){return _jours;});
     this.__defineSetter__("jours", function(value){return _jours = value;});
 }
