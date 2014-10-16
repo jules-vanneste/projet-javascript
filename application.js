@@ -1,40 +1,25 @@
 application = {
     users : [],
     semaines : [],
-    userConnected : null,
-    semaineCourante : null
+    userConnected : 0,
+    semaineCourante : 0
 };
 
 page = {
     accueil : function() {
         view.printFormLogin(application.users, ["role", "civilite", "nom", "prenom"]);
     },
-    client : function() {
-        var title = domHelp.addElement(document.getElementById('content'), "h3");
-        domHelp.addText(title, "Client");
-        view.printAgendaClient(0);
-    },
-    clientSemaine : function(semaine) {
+    client : function(semaine) {
         var title = domHelp.addElement(document.getElementById('content'), "h3");
         domHelp.addText(title, "Client");
         view.printAgendaClient(semaine);
     },
-    moniteur : function() {
-        var title = domHelp.addElement(document.getElementById('content'), "h3");
-        domHelp.addText(title, "Moniteur");
-        view.printAgendaMoniteur(0);
-    },
-    moniteurSemaine : function(semaine) {
+    moniteur : function(semaine) {
         var title = domHelp.addElement(document.getElementById('content'), "h3");
         domHelp.addText(title, "Moniteur");
         view.printAgendaMoniteur(semaine);
     },
-    secretaire : function() {
-        var title = domHelp.addElement(document.getElementById('content'), "h3");
-        domHelp.addText(title, "Secrétaire");
-        view.printAgendaSecretaire(0);
-    },
-    secretaireSemaine : function(semaine) {
+    secretaire : function(semaine) {
         var title = domHelp.addElement(document.getElementById('content'), "h3");
         domHelp.addText(title, "Secrétaire");
         view.printAgendaSecretaire(semaine);

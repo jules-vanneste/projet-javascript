@@ -34,6 +34,7 @@ td, th{
 .btn-close{
     font-size: 20px;
     margin-bottom: 5px;
+    top: 0px;
 }
 
 .elt-clickable:hover{
@@ -48,11 +49,19 @@ td, th{
     margin-bottom: 10px;
 }
 
-.glyphicon{
+td .glyphicon{
     vertical-align: bottom;
     top: 10px;
 }
 
-.btn-close{
-    top: 0px;
+.btn-deco{
+    font-size: 20px;
+}
+
+.float-right{
+    float: right;
+}
+
+.div-conteneur{
+    margin-bottom: 10px;
 }
