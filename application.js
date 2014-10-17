@@ -12,16 +12,19 @@ page = {
     client : function(semaine) {
         var title = domHelp.addElement(document.getElementById('content'), "h3");
         domHelp.addText(title, "Client");
+        view.printFlechesChgtSemaine(page.client, semaine);
         view.printAgendaClient(semaine);
     },
     moniteur : function(semaine) {
         var title = domHelp.addElement(document.getElementById('content'), "h3");
         domHelp.addText(title, "Moniteur");
+        view.printFlechesChgtSemaine(page.moniteur, semaine);
         view.printAgendaMoniteur(semaine);
     },
     secretaire : function(semaine) {
         var title = domHelp.addElement(document.getElementById('content'), "h3");
         domHelp.addText(title, "Secrétaire");
+        view.printFlechesChgtSemaine(page.secretaire, semaine);
         view.printAgendaSecretaire(semaine);
     },
     clear : function() {
