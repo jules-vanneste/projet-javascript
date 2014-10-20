@@ -1,6 +1,6 @@
 popup = {
     ajoutBySecretaire : function(numSemaine, targetElement){
-        var td, jour, creneau, div, divDialog, divModal, divBody, close,
+        var td, jour, creneau, div, divDialog, divModal, divBody, close, lecons, ajoutCode,
             nav, navCode, boutonCode, navConduite, boutonConduite, navGestion, boutonGestion, contentPopup;
 
         td = targetElement;
@@ -33,8 +33,22 @@ popup = {
         boutonGestion = domHelp.addElement(navGestion, "button", {nomAttribut : "type", valeurAttribute : "button"}, {nomAttribut : "class", valeurAttribute : "btn btn-default"});
         domHelp.addText(boutonGestion, "Gestion des leçons");
 
+        ajoutCode = true;
+        lecons = application.semaines[numSemaine].jours[jour].creneaux[creneau].lecons;
+        for(var i=0; i<lecons.length; i++){
+            if(lecons[i] instanceof calendrier.LeconCode){
+                boutonCode.setAttribute("disabled", "disabled");
+                ajoutCode = false;
+            }
+        }
+
         contentPopup = domHelp.addElement(divBody, "div");
-        popup.contentAjoutCodeBySecretaire(contentPopup,numSemaine,jour,creneau);
+        if(ajoutCode) {
+            popup.contentAjoutCodeBySecretaire(contentPopup, numSemaine, jour, creneau);
+        }
+        else{
+            popup.contentAjoutConduiteBySecretaire(contentPopup, numSemaine, jour, creneau);
+        }
         boutonCode.addEventListener("click", function () {
             contentPopup.innerHTML="";
             popup.contentAjoutCodeBySecretaire(contentPopup,numSemaine,jour,creneau);
@@ -51,7 +65,7 @@ popup = {
     },
 
     ajoutByMoniteur : function(numSemaine, targetElement){
-        var td, jour, creneau, div, divDialog, divModal, divBody, close,
+        var td, jour, creneau, div, divDialog, divModal, divBody, close, lecons, ajoutCode, ajoutConduite,
             nav, navCode, boutonCode, navConduite, boutonConduite, navGestion, boutonGestion, contentPopup;
 
         td = targetElement;
@@ -83,8 +97,30 @@ popup = {
         boutonGestion = domHelp.addElement(navGestion, "button", {nomAttribut : "type", valeurAttribute : "button"}, {nomAttribut : "class", valeurAttribute : "btn btn-default"});
         domHelp.addText(boutonGestion, "Gestion des leçons");
 
+        ajoutCode = true;
+        ajoutConduite = true;
+        lecons = application.semaines[numSemaine].jours[jour].creneaux[creneau].lecons;
+        for(var i=0; i<lecons.length; i++){
+            if(lecons[i] instanceof calendrier.LeconCode){
+                boutonCode.setAttribute("disabled", "disabled");
+                ajoutCode = false;
+            }
+            else if(lecons[i] instanceof calendrier.LeconConduite && lecons[i].moniteur == application.users[application.userConnected].cle){
+                boutonConduite.setAttribute("disabled", "disabled");
+                ajoutConduite = false;
+            }
+        }
+
         contentPopup = domHelp.addElement(divBody, "div");
-        popup.contentAjoutCodeByMoniteur(contentPopup,numSemaine,jour,creneau);
+        if(ajoutCode) {
+            popup.contentAjoutCodeByMoniteur(contentPopup, numSemaine, jour, creneau);
+        }
+        else if(ajoutConduite) {
+            popup.contentAjoutConduiteByMoniteur(contentPopup, numSemaine, jour, creneau);
+        }
+        else{
+            popup.contentGestionLeconsByMoniteur(contentPopup, numSemaine, jour, creneau);
+        }
         boutonCode.addEventListener("click", function () {
             contentPopup.innerHTML="";
             popup.contentAjoutCodeByMoniteur(contentPopup,numSemaine,jour,creneau);
@@ -101,7 +137,7 @@ popup = {
     },
 
     contentAjoutCodeBySecretaire : function(div, numSemaine, jour, creneau){
-        var form, divMoniteur, labelMoniteur, divInputMoniteur, selectMoniteur, optionMoniteur, button, aLecon, lecons;
+        var form, divMoniteur, labelMoniteur, divInputMoniteur, selectMoniteur, optionMoniteur, button, aLecon, lecons, moniteur;
 
         form = domHelp.addElement(div, "form", {nomAttribut : "class", valeurAttribute : "form-horizontal"}, {nomAttribut : "onSubmit", valeurAttribute : "return false;"});
 
@@ -115,7 +151,8 @@ popup = {
                 aLecon = false;
                 lecons = application.semaines[numSemaine].jours[jour].creneaux[creneau].lecons;
                 for(var j=0; j<lecons.length; j++){
-                    if(lecons[j].moniteur == application.users[i]){
+                    moniteur = tools.getUserIfExist(lecons[j].moniteur);
+                    if(moniteur == application.users[i]){
                         aLecon = true;
                     }
                 }
@@ -129,7 +166,8 @@ popup = {
         button = domHelp.addElement(form, "button", {nomAttribut : "type", valeurAttribute : "submit"}, {nomAttribut : "class", valeurAttribute : "btn btn-success col-sm-offset-5"}, {nomAttribut : "data-dismiss", valeurAttribute : "modal"});
         button.onclick = function() {
             var idMoniteur = selectMoniteur.options[selectMoniteur.selectedIndex].value;
-            application.semaines[numSemaine].jours[jour].creneaux[creneau].lecons.push(new calendrier.LeconCode(application.users[idMoniteur]));
+            lecons = application.semaines[numSemaine].jours[jour].creneaux[creneau].lecons;
+            lecons.push(new calendrier.LeconCode(application.users[idMoniteur].cle));
             dao.setSemaine(application.semaines[numSemaine].cle, application.semaines[numSemaine]);
             page.clear();
             page.secretaire(numSemaine);
@@ -142,19 +180,20 @@ popup = {
 
         form = domHelp.addElement(div, "form", {nomAttribut : "class", valeurAttribute : "form-horizontal"}, {nomAttribut : "onSubmit", valeurAttribute : "return false;"});
 
-        button = domHelp.addElement(form, "button", {nomAttribut : "type", valeurAttribute : "submit"}, {nomAttribut : "class", valeurAttribute : "btn btn-success col-sm-offset-5"}, {nomAttribut : "data-dismiss", valeurAttribute : "modal"});
+        button = domHelp.addElement(form, "button", {nomAttribut : "type", valeurAttribute : "submit"}, {nomAttribut : "class", valeurAttribute : "btn btn-success col-sm-offset-4"}, {nomAttribut : "data-dismiss", valeurAttribute : "modal"});
         button.onclick = function() {
-            application.semaines[numSemaine].jours[jour].creneaux[creneau].lecons.push(new calendrier.LeconCode(application.users[application.userConnected]));
+            var lecons = application.semaines[numSemaine].jours[jour].creneaux[creneau].lecons;
+            lecons.push(new calendrier.LeconCode(application.users[application.userConnected].cle));
             dao.setSemaine(application.semaines[numSemaine].cle, application.semaines[numSemaine]);
             page.clear();
             page.moniteur(numSemaine);
         };
-        domHelp.addText(button, "Ajouter leçon de code");
+        domHelp.addText(button, "Ajouter une leçon de code");
     },
 
     contentAjoutConduiteBySecretaire : function(div, numSemaine, numJour, numCreneau){
         var form, divCheckBox, labelCheckBox, checkBoxClientDispo, divClient, labelClient, divInputClient, selectClient, clientsDispo, optionClient,
-            divMoniteur, labelMoniteur, divInputMoniteur, selectMoniteur, aLecon, optionMoniteur, table, button;
+            divMoniteur, labelMoniteur, divInputMoniteur, selectMoniteur, aLecon, optionMoniteur, table, button, lecons, moniteur, client;
 
         form = domHelp.addElement(div, "form", {nomAttribut : "class", valeurAttribute : "form-horizontal"}, {nomAttribut : "onSubmit", valeurAttribute : "return false;"});
 
@@ -178,8 +217,9 @@ popup = {
                 clientsDispo = application.semaines[numSemaine].jours[numJour].creneaux[numCreneau].clientsDisponibles;
                 selectClient = domHelp.addElement(divInputClient, "select", {nomAttribut : "type", valeurAttribute : "search"}, {nomAttribut : "name", valeurAttribute : "sClient"}, {nomAttribut : "id", valeurAttribute : "user"}, {nomAttribut : "placeholder", valeurAttribute : "Nom client"}, {nomAttribut : "class", valeurAttribute : "form-control"});
                 for(var i=0; i<clientsDispo.length; i++){
+                    client = tools.getUserIfExist(clientsDispo[i]);
                     optionClient = domHelp.addElement(selectClient, "option", {nomAttribut: "value", valeurAttribute: i});
-                    domHelp.addText(optionClient, clientsDispo[i].nom + " " + clientsDispo[i].prenom);
+                    domHelp.addText(optionClient, client.nom + " " + client.prenom);
                 }
             }
         }, false);
@@ -192,9 +232,10 @@ popup = {
         for (var i=0; i<application.users.length; i++) {
             if (application.users[i].role == "Moniteur") {
                 aLecon = false;
-                var lecons = application.semaines[numSemaine].jours[numJour].creneaux[numCreneau].lecons;
+                lecons = application.semaines[numSemaine].jours[numJour].creneaux[numCreneau].lecons;
                 for(var j=0; j<lecons.length; j++){
-                    if(lecons[j].moniteur == application.users[i]){
+                    moniteur = tools.getUserIfExist(lecons[j].moniteur);
+                    if(moniteur == application.users[i]){
                         aLecon = true;
                     }
                 }
@@ -218,7 +259,7 @@ popup = {
             creneau = application.semaines[numSemaine].jours[numJour].creneaux[numCreneau];
             if(checkBoxClientDispo.checked){
                 idSelect = document.getElementById('user').value;
-                idUser = domHelp.getIndexOfUserIfExist(creneau.clientsDisponibles[idSelect].nom, creneau.clientsDisponibles[idSelect].prenom);
+                idUser = domHelp.getIndexOfUserIfExist(creneau.clientsDisponibles[idSelect]);
                 creneau.clientsDisponibles.splice(idSelect, 1);
             }
             else{
@@ -230,7 +271,7 @@ popup = {
                 }
             }
             if(idUser != -1){
-                creneau.lecons.push(new calendrier.LeconConduite(application.users[idMoniteur], application.users[idUser]));
+                creneau.lecons.push(new calendrier.LeconConduite(application.users[idMoniteur].cle, application.users[idUser].cle));
                 dao.setSemaine(application.semaines[numSemaine].cle, application.semaines[numSemaine]);
             }
             page.clear();
@@ -242,7 +283,7 @@ popup = {
 
     contentAjoutConduiteByMoniteur : function(div, numSemaine, numJour, numCreneau){
         var form, divCheckBox, labelCheckBox, checkBoxClientDispo, divClient, labelClient, divInputClient, selectClient,
-            clientsDispo, optionClient, table, button;
+            clientsDispo, optionClient, table, button, client;
 
         form = domHelp.addElement(div, "form", {nomAttribut : "class", valeurAttribute : "form-horizontal"}, {nomAttribut : "onSubmit", valeurAttribute : "return false;"});
 
@@ -266,8 +307,9 @@ popup = {
                 clientsDispo = application.semaines[numSemaine].jours[numJour].creneaux[numCreneau].clientsDisponibles;
                 selectClient = domHelp.addElement(divInputClient, "select", {nomAttribut : "type", valeurAttribute : "search"}, {nomAttribut : "name", valeurAttribute : "sClient"}, {nomAttribut : "id", valeurAttribute : "user"}, {nomAttribut : "placeholder", valeurAttribute : "Nom client"}, {nomAttribut : "class", valeurAttribute : "form-control"});
                 for(var i=0; i<clientsDispo.length; i++){
+                    client = tools.getUserIfExist(clientsDispo[i])
                     optionClient = domHelp.addElement(selectClient, "option", {nomAttribut: "value", valeurAttribute: i});
-                    domHelp.addText(optionClient, clientsDispo[i].nom + " " + clientsDispo[i].prenom);
+                    domHelp.addText(optionClient, client.nom + " " + client.prenom);
                 }
             }
         }, false);
@@ -284,7 +326,7 @@ popup = {
             creneau = application.semaines[numSemaine].jours[numJour].creneaux[numCreneau];
             if(checkBoxClientDispo.checked){
                 idSelect = document.getElementById('user').value;
-                idUser = domHelp.getIndexOfUserIfExist(creneau.clientsDisponibles[idSelect].nom, creneau.clientsDisponibles[idSelect].prenom);
+                idUser = domHelp.getIndexOfUserIfExist(creneau.clientsDisponibles[idSelect].cle);
                 creneau.clientsDisponibles.splice(idSelect, 1);
             }
             else{
@@ -296,7 +338,7 @@ popup = {
                 }
             }
             if(idUser != -1){
-                creneau.lecons.push(new calendrier.LeconConduite(application.users[application.userConnected], application.users[idUser]));
+                creneau.lecons.push(new calendrier.LeconConduite(application.users[application.userConnected].cle, application.users[idUser].cle));
                 dao.setSemaine(application.semaines[numSemaine].cle, application.semaines[numSemaine]);
             }
             page.clear();
@@ -307,7 +349,7 @@ popup = {
     },
 
     contentGestionLeconsBySecretaire : function(div, numSemaine, jour, creneau){
-        var form, lecons, table, tbody, tr, td, th, span, select, option;
+        var form, lecons, table, tbody, tr, td, th, span, select, option, moniteur, client;
 
         form = domHelp.addElement(div, "form", {nomAttribut : "class", valeurAttribute : "form-horizontal"}, {nomAttribut : "onSubmit", valeurAttribute : "return false;"});
         lecons = application.semaines[numSemaine].jours[jour].creneaux[creneau].lecons;
@@ -323,8 +365,10 @@ popup = {
         th = domHelp.addElement(tr, "th");
         domHelp.addText(th, "Suppr");
         for (var i=0; i<lecons.length; i++) {
+            moniteur = tools.getUserIfExist(lecons[i].moniteur);
             tr = domHelp.addElement(tbody,"tr");
             if(lecons[i] instanceof calendrier.LeconConduite){
+                client = tools.getUserIfExist(lecons[i].client);
                 td = domHelp.addElement(tr, "td");
                 domHelp.addText(td, "Leçon de conduite");
                 td = domHelp.addElement(tr, "td");
@@ -333,7 +377,7 @@ popup = {
                     if (application.users[j].role == "Moniteur") {
                         option = domHelp.addElement(select, "option", {nomAttribut: "value", valeurAttribute: j});
                         domHelp.addText(option, application.users[j].nom + " " + application.users[j].prenom);
-                        if(application.users[j] == lecons[i].moniteur) {
+                        if(application.users[j] == moniteur) {
                             option.setAttribute("selected", "selected");
                         }
                     }
@@ -350,14 +394,14 @@ popup = {
 
                     idMoniteur = nodeSelect.options[nodeSelect.selectedIndex].value;
                     idLecon = nodeSelect.getAttribute("idLecon");
-                    lecons[idLecon].moniteur = application.users[idMoniteur];
+                    lecons[idLecon].moniteur = application.users[idMoniteur].cle;
                     dao.setSemaine(application.semaines[numSemaine].cle, application.semaines[numSemaine]);
                     div.innerHTML = "";
                     popup.contentGestionLeconsBySecretaire(div,numSemaine,jour,creneau);
                 });
 
                 td = domHelp.addElement(tr, "td");
-                domHelp.addText(td, lecons[i].client.nom + " " + lecons[i].client.prenom);
+                domHelp.addText(td, client.nom + " " + client.prenom);
                 td = domHelp.addElement(tr, "td", {nomAttribut : "class", valeurAttribute : "elt-clickable"}, {nomAttribut : "idLecon", valeurAttribute : i});
                 domHelp.addElement(td, "span", {nomAttribut : "class", valeurAttribute : "glyphicon glyphicon-remove-sign"});
             }
@@ -370,7 +414,7 @@ popup = {
                     if (application.users[j].role == "Moniteur") {
                         option = domHelp.addElement(select, "option", {nomAttribut: "value", valeurAttribute: j});
                         domHelp.addText(option, application.users[j].nom + " " + application.users[j].prenom);
-                        if(application.users[j] == lecons[i].moniteur) {
+                        if(application.users[j] == moniteur) {
                             option.setAttribute("selected", "selected");
                         }
                     }
@@ -387,7 +431,7 @@ popup = {
 
                     idMoniteur = nodeSelect.options[nodeSelect.selectedIndex].value;
                     idLecon = nodeSelect.getAttribute("idLecon");
-                    lecons[idLecon].moniteur = application.users[idMoniteur];
+                    lecons[idLecon].moniteur = application.users[idMoniteur].cle;
                     dao.setSemaine(application.semaines[numSemaine].cle, application.semaines[numSemaine]);
                     div.innerHTML = "";
                     popup.contentGestionLecons(div,numSemaine,jour,creneau);
@@ -416,7 +460,7 @@ popup = {
     },
 
     contentGestionLeconsByMoniteur : function(div, numSemaine, jour, creneau){
-        var form, lecons, table, tbody, tr, td, th, span, select, option;
+        var form, lecons, table, tbody, tr, td, th, span, select, option, moniteur, client;
 
         form = domHelp.addElement(div, "form", {nomAttribut : "class", valeurAttribute : "form-horizontal"}, {nomAttribut : "onSubmit", valeurAttribute : "return false;"});
         lecons = application.semaines[numSemaine].jours[jour].creneaux[creneau].lecons;
@@ -432,8 +476,10 @@ popup = {
         th = domHelp.addElement(tr, "th");
         domHelp.addText(th, "Suppr");
         for (var i=0; i<lecons.length; i++) {
+            moniteur = tools.getUserIfExist(lecons[i].moniteur);
             tr = domHelp.addElement(tbody,"tr");
-            if(lecons[i] instanceof calendrier.LeconConduite && lecons[i].moniteur == application.users[application.userConnected]){
+            if(lecons[i] instanceof calendrier.LeconConduite){
+                client = tools.getUserIfExist(lecons[i].client);
                 td = domHelp.addElement(tr, "td");
                 domHelp.addText(td, "Leçon de conduite");
                 td = domHelp.addElement(tr, "td");
@@ -458,17 +504,17 @@ popup = {
 
                     idMoniteur = nodeSelect.options[nodeSelect.selectedIndex].value;
                     idLecon = nodeSelect.getAttribute("idLecon");
-                    lecons[idLecon].moniteur = application.users[idMoniteur];
+                    lecons[idLecon].moniteur = application.users[idMoniteur].cle;
                     dao.setSemaine(application.semaines[numSemaine].cle, application.semaines[numSemaine]);
                     div.innerHTML = "";
                     popup.contentGestionLeconsByMoniteur(div,numSemaine,jour,creneau);
                 });
                 td = domHelp.addElement(tr, "td");
-                domHelp.addText(td, lecons[i].client.nom + " " + lecons[i].client.prenom);
+                domHelp.addText(td, client.nom + " " + client.prenom);
                 td = domHelp.addElement(tr, "td", {nomAttribut : "class", valeurAttribute : "elt-clickable"}, {nomAttribut : "idLecon", valeurAttribute : i});
                 domHelp.addElement(td, "span", {nomAttribut : "class", valeurAttribute : "glyphicon glyphicon-remove-sign"});
             }
-            else if(lecons[i] instanceof calendrier.LeconCode && lecons[i].moniteur == application.users[application.userConnected]){
+            else if(lecons[i] instanceof calendrier.LeconCode){
                 td = domHelp.addElement(tr, "td");
                 domHelp.addText(td, "Leçon de code")
                 td = domHelp.addElement(tr, "td");
@@ -477,7 +523,7 @@ popup = {
                     if (application.users[j].role == "Moniteur") {
                         option = domHelp.addElement(select, "option", {nomAttribut: "value", valeurAttribute: j});
                         domHelp.addText(option, application.users[j].nom + " " + application.users[j].prenom);
-                        if(application.users[j] == lecons[i].moniteur) {
+                        if(application.users[j] == moniteur) {
                             option.setAttribute("selected", "selected");
                         }
                     }
@@ -493,7 +539,7 @@ popup = {
 
                     idMoniteur = nodeSelect.options[nodeSelect.selectedIndex].value;
                     idLecon = nodeSelect.getAttribute("idLecon");
-                    lecons[idLecon].moniteur = application.users[idMoniteur];
+                    lecons[idLecon].moniteur = application.users[idMoniteur].cle;
                     dao.setSemaine(application.semaines[numSemaine].cle, application.semaines[numSemaine]);
                     div.innerHTML = "";
                     popup.contentGestionLeconsByMoniteur(div,numSemaine,jour,creneau);

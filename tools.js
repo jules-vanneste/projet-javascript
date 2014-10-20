@@ -31,24 +31,6 @@ domHelp = {
             }
         }
         return res;
-    },
-
-    getUserIfExist : function (nom, prenom) {
-        for (var i=0; i<application.users.length; i++) {
-            if((application.users[i].nom == nom) && (application.users[i].prenom == prenom)){
-                return application.users[i];
-            }
-        }
-        return null;
-    },
-
-    getIndexOfUserIfExist : function (nom, prenom) {
-        for (var i=0; i<application.users.length; i++) {
-            if((application.users[i].nom == nom) && (application.users[i].prenom == prenom)){
-                return i;
-            }
-        }
-        return null;
     }
 };
 
@@ -68,7 +50,7 @@ tools = {
             }
             var semaine = new calendrier.Semaine(dateDebutSemaine);
             application.semaines.push(semaine);
-            dao.addSemaine(semaine);
+            dao.createSemaine(semaine);
             page.clear()
             nomPage(application.semaines.length-1);
         }
@@ -139,6 +121,35 @@ tools = {
             }
             else{
                 td = domHelp.addElement(tr, "");
+            }
+        }
+    },
+
+    getUserIfExist : function (cle) {
+        for (var i=0; i<application.users.length; i++) {
+            if(application.users[i].cle == cle){
+                return application.users[i];
+            }
+        }
+        return null;
+    },
+
+    getIndexOfUserIfExist : function (cle) {
+        for (var i=0; i<application.users.length; i++) {
+            if(application.users[i].cle){
+                return i;
+            }
+        }
+        return null;
+    },
+
+    printLegendeMoniteur : function(){
+        var legende = domHelp.addElement(document.getElementById('content'), "div");
+        for(var i=0; i<application.users.length; i++){
+            if(application.users[i] instanceof utilisateur.Moniteur){
+                var divMoniteur = domHelp.addElement(legende, "div", {nomAttribut : "style", valeurAttribute : "border: 1px solid black; display: inline-block; width: 75px; height:30px; background-color: " + application.users[i].couleur});
+                var texteMoniteur = domHelp.addElement(legende, "span", {nomAttribut : "style", valeurAttribute : "display: inline; margin-left: 5px; vertical-align: top; margin-right : 10px;"});
+                domHelp.addText(texteMoniteur, application.users[i].nom + " " + application.users[i].prenom);
             }
         }
     }

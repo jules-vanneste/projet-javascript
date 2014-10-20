@@ -69,10 +69,10 @@ view = {
         var button = domHelp.addElement(form, "button", {nomAttribut : "type", valeurAttribute : "submit"}, {nomAttribut : "class", valeurAttribute : "btn btn-success col-sm-offset-5"});
         button.onclick = function(){
             var radios = document.getElementsByName('user');
-            document.getElementById("btnDeco").innerHTML = "<li><a href=\"#\" onclick=\"page.clear(); page.accueil(); document.getElementById('btnDeco').innerHTML='';\"><span class=\"glyphicon glyphicon-off btn-deco\"></span></a></li>";
             for (var i=0; i<radios.length; i++) {
                 if (radios[i].checked) {
                     application.userConnected = radios[i].value;
+                    document.getElementById("btnDeco").innerHTML = "<li><a href=\"#\" onclick=\"page.clear(); page.accueil(); document.getElementById('btnDeco').innerHTML='';\"><span class=\"nameUserConnected\">" + application.users[application.userConnected].prenom + " " + application.users[application.userConnected].nom + " " + "</span><span class=\"glyphicon glyphicon-off btn-deco\"></span></a></li>";
                     page.clear();
                     if(application.users[application.userConnected].role == "Client"){
                         page.client(application.semaineCourante);
@@ -94,7 +94,7 @@ view = {
         var table = domHelp.addElement(document.getElementById('content'), "table", {nomAttribut : "class", valeurAttribute : "table table-bordered"});
         var tbody = domHelp.addElement(table, "tbody");
         var tr = domHelp.addElement(tbody,"tr");
-        var th, td, semaine, creneau, lecon, nbLecon, aLeconConduite, largeur, divLecon;
+        var th, td, semaine, creneau, lecon, nbLecon, aLeconConduite, largeur, divLecon, moniteur;
 
         th = domHelp.addElement(tr,"th");
         domHelp.addText(th, "");
@@ -116,7 +116,7 @@ view = {
                 nbLecon = 0;
                 for (var k = 0; k < creneau.lecons.length; k++) {
                     lecon = creneau.lecons[k];
-                    if(lecon instanceof calendrier.LeconConduite && lecon.client == application.users[application.userConnected]) {
+                    if(lecon instanceof calendrier.LeconConduite && lecon.client == application.users[application.userConnected].cle) {
                         nbLecon = nbLecon+1;
                     }
                     else if(lecon instanceof calendrier.LeconCode){
@@ -124,7 +124,7 @@ view = {
                     }
                 }
                 for (var k = 0; k < creneau.clientsDisponibles.length; k++) {
-                    if(creneau.clientsDisponibles[k] == application.users[application.userConnected]){
+                    if(creneau.clientsDisponibles[k] == application.users[application.userConnected].cle){
                         nbLecon = nbLecon+1;
                         largeur = (100 / nbLecon);
                         divLecon = domHelp.addElement(td, "div");
@@ -136,16 +136,17 @@ view = {
                     lecon = creneau.lecons[k];
                     largeur = (100 / nbLecon);
                     divLecon = domHelp.addElement(td, "div");
-                    if (lecon instanceof calendrier.LeconConduite && lecon.client == application.users[application.userConnected]) {
+                    moniteur = tools.getUserIfExist(lecon.moniteur);
+                    if (lecon instanceof calendrier.LeconConduite && lecon.client == application.users[application.userConnected].cle) {
                         aLeconConduite = true;
                         divLecon.setAttribute("style", "width: " + largeur + "%; height:100%; display: inline; background-color: #FCF8E3; float:left;");
                         domHelp.addElement(divLecon, "span", { nomAttribut : "class", valeurAttribute : "glyphicon glyphicon-road"});
-                        divLecon.setAttribute("title", "Leçon de conduite avec : " + lecon.moniteur.prenom + " " + lecon.moniteur.nom);
+                        divLecon.setAttribute("title", "Leçon de conduite avec : " + moniteur.prenom + " " + moniteur.nom);
                     }
                     else if (lecon instanceof calendrier.LeconCode) {
                         divLecon.setAttribute("style", "width: " + largeur + "%; height:100%; display: inline; background-color : #DFF0D8; float:left;");
                         domHelp.addElement(divLecon, "span", { nomAttribut : "class", valeurAttribute : "glyphicon glyphicon-pencil"});
-                        divLecon.setAttribute("title", "Leçon de code tenue par : " + lecon.moniteur.prenom + " " + lecon.moniteur.nom);
+                        divLecon.setAttribute("title", "Leçon de code tenue par : " + moniteur.prenom + " " + moniteur.nom);
                     }
                 }
                 if(!aLeconConduite) {
@@ -163,13 +164,13 @@ view = {
                         creneau = application.semaines[numSemaine].jours[jour].creneaux[idCreneau];
                         clientPresent = false;
                         for (var i = 0; i < creneau.clientsDisponibles.length; i++) {
-                            if (creneau.clientsDisponibles[i] == application.users[application.userConnected]) {
+                            if (creneau.clientsDisponibles[i] == application.users[application.userConnected].cle) {
                                 creneau.clientsDisponibles.splice(i, 1);
                                 clientPresent = true;
                             }
                         }
                         if (!clientPresent) {
-                            creneau.clientsDisponibles.push(application.users[application.userConnected]);
+                            creneau.clientsDisponibles.push(application.users[application.userConnected].cle);
                         }
 
                         dao.setSemaine(application.semaines[numSemaine].cle, application.semaines[numSemaine]);
@@ -185,7 +186,7 @@ view = {
         var table = domHelp.addElement(document.getElementById('content'), "table", {nomAttribut : "class", valeurAttribute : "table table-bordered"});
         var tbody = domHelp.addElement(table, "tbody");
         var tr = domHelp.addElement(tbody,"tr");
-        var th, td, date, jour, creneau, lecon, largeur, divLecon;
+        var th, td, date, jour, creneau, lecon, largeur, divLecon, moniteur, client, nbLecon;
 
         th = domHelp.addElement(tr,"th");
         domHelp.addText(th, "");
@@ -204,16 +205,28 @@ view = {
             for (var j=0; j<semaine.jours.length; j++) {
                 td = domHelp.addElement(tr, "td", {nomAttribut: "jour", valeurAttribute: j}, {nomAttribut: "creneau", valeurAttribute: i}, {nomAttribut: "class", valeurAttribute: "elt-clickable"}, {nomAttribut: "data-toggle", valeurAttribute: "modal"}, {nomAttribut: "data-target", valeurAttribute: "#myPopUp"});
                 creneau = semaine.jours[j].creneaux[i];
+                nbLecon = 0;
                 for (var k = 0; k < creneau.lecons.length; k++) {
                     lecon = creneau.lecons[k];
-                    largeur = (100 / creneau.lecons.length);
-                    divLecon = domHelp.addElement(td, "div");
-                    if (lecon instanceof calendrier.LeconConduite && lecon.moniteur == application.users[application.userConnected]) {
-                        divLecon.setAttribute("style", "width: " + largeur + "%; height:100%; line-height:35px; display: inline; background-color: #FCF8E3; float:left;");
-                        td.setAttribute("title", "Leçon de conduite avec : " + lecon.client.nom);
+                    moniteur = tools.getUserIfExist(lecon.moniteur);
+                    if (moniteur == application.users[application.userConnected]) {
+                        nbLecon = nbLecon + 1;
                     }
-                    else if (lecon instanceof calendrier.LeconCode && lecon.moniteur == application.users[application.userConnected]) {
+                }
+                for (var k = 0; k < creneau.lecons.length; k++) {
+                    lecon = creneau.lecons[k];
+                    largeur = (100 / nbLecon);
+                    divLecon = domHelp.addElement(td, "div");
+                    moniteur = tools.getUserIfExist(lecon.moniteur);
+                    if (lecon instanceof calendrier.LeconConduite && moniteur == application.users[application.userConnected]) {
+                        client = tools.getUserIfExist(lecon.client);
+                        divLecon.setAttribute("style", "width: " + largeur + "%; height:100%; line-height:35px; display: inline; background-color: #FCF8E3; float:left;");
+                        domHelp.addElement(divLecon, "span", { nomAttribut : "class", valeurAttribute : "glyphicon glyphicon-road"});
+                        td.setAttribute("title", "Leçon de conduite avec : " + client.nom + " " + client.prenom);
+                    }
+                    else if (lecon instanceof calendrier.LeconCode && moniteur == application.users[application.userConnected]) {
                         divLecon.setAttribute("style", "width: " + largeur + "%; height:100%; line-height:35px; display: inline; background-color : #DFF0D8; float:left;");
+                        domHelp.addElement(divLecon, "span", { nomAttribut : "class", valeurAttribute : "glyphicon glyphicon-pencil"});
                         td.setAttribute("title", "Leçon de code");
                     }
                 }
@@ -229,7 +242,7 @@ view = {
         var table = domHelp.addElement(document.getElementById('content'), "table", {nomAttribut : "class", valeurAttribute : "table table-bordered"});
         var tbody = domHelp.addElement(table, "tbody");
         var tr = domHelp.addElement(tbody,"tr");
-        var th, td, semaine, date, jour, creneau, lecon, largeur, divLecon;
+        var th, td, semaine, date, jour, creneau, lecon, largeur, divLecon, moniteur, client;
 
         th = domHelp.addElement(tr,"th");
         domHelp.addText(th, "");
@@ -253,18 +266,17 @@ view = {
                     largeur = (100 / creneau.lecons.length);
                     divLecon = domHelp.addElement(td, "div");
                     if (lecon instanceof calendrier.LeconConduite) {
-                        divLecon.setAttribute("style", "width: " + largeur + "%; height:100%; line-height:35px; display: inline; background-color: " + lecon.moniteur.couleur + "; float:left;");
-                        domHelp.addText(divLecon, lecon.moniteur.nom.substr(0, 1).toLocaleUpperCase());
-                        if (td.getAttribute("title") != null) {
-                            td.setAttribute("title", td.getAttribute("title") + ", " + lecon.client.nom + " > " + lecon.moniteur.nom);
-                        }
-                        else {
-                            td.setAttribute("title", lecon.client.nom + " > " + lecon.moniteur.nom);
-                        }
+                        moniteur = tools.getUserIfExist(lecon.moniteur);
+                        client = tools.getUserIfExist(lecon.client);
+                        divLecon.setAttribute("style", "width: " + largeur + "%; height:100%; line-height:35px; display: inline; background-color: " + moniteur.couleur + "; float:left;");
+                        domHelp.addElement(divLecon, "span", { nomAttribut : "class", valeurAttribute : "glyphicon glyphicon-road"});
+                        divLecon.setAttribute("title", "Lecon de conduite de " + moniteur.nom + " " + moniteur.prenom + " avec " + client.nom + " " + client.prenom);
                     }
                     else if (lecon instanceof calendrier.LeconCode) {
-                        divLecon.setAttribute("style", "width: " + largeur + "%; height:100%; line-height:35px; display: inline; background-color : #DFF0D8; float:left;");
-                        domHelp.addText(divLecon, lecon.moniteur.nom.substr(0, 1).toLocaleUpperCase());
+                        moniteur = tools.getUserIfExist(lecon.moniteur);
+                        divLecon.setAttribute("style", "width: " + largeur + "%; height:100%; line-height:35px; display: inline; background-color: " + moniteur.couleur + "; float:left;");
+                        domHelp.addElement(divLecon, "span", { nomAttribut : "class", valeurAttribute : "glyphicon glyphicon-pencil"});
+                        divLecon.setAttribute("title", "Lecon de code tenue par " + moniteur.nom + " " + moniteur.prenom);
                     }
                 }
                 td.addEventListener("click", function (e) {
