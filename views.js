@@ -281,7 +281,12 @@ view = {
                 }
                 td.addEventListener("click", function (e) {
                     var targetElement = e.target || e.srcElement;
-                    popup.ajoutBySecretaire(numSemaine, targetElement);
+                    var tdElement = targetElement;
+                    while(tdElement.nodeName != "TD"){
+                        tdElement = tdElement.parentNode;
+                    }
+
+                    popup.ajoutBySecretaire(numSemaine, tdElement);
                 }, false);
             }
         }

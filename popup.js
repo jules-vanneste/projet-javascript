@@ -4,10 +4,6 @@ popup = {
             nav, navCode, boutonCode, navConduite, boutonConduite, navGestion, boutonGestion, contentPopup;
 
         td = targetElement;
-        while(td.nodeName != "TD"){
-            td = targetElement.parentNode;
-        }
-
         jour = td.getAttribute("jour");
         creneau = td.getAttribute("creneau");
 
@@ -212,6 +208,7 @@ popup = {
             divInputClient.innerHTML = "";
             if(!checkBoxClientDispo.checked){
                 selectClient = domHelp.addElement(divInputClient, "input", {nomAttribut : "type", valeurAttribute : "search"}, {nomAttribut : "name", valeurAttribute : "sClient"}, {nomAttribut : "placeholder", valeurAttribute : "Nom client"}, {nomAttribut : "class", valeurAttribute : "form-control"});
+                selectClient.addEventListener("keyup", function(){tools.choiceClient(3, selectClient, table, application.semaines[numSemaine].jours[numJour].creneaux[numCreneau].lecons, application.semaines[numSemaine].jours[numJour].creneaux[numCreneau])});
             }
             else {
                 clientsDispo = application.semaines[numSemaine].jours[numJour].creneaux[numCreneau].clientsDisponibles;
@@ -259,7 +256,7 @@ popup = {
             creneau = application.semaines[numSemaine].jours[numJour].creneaux[numCreneau];
             if(checkBoxClientDispo.checked){
                 idSelect = document.getElementById('user').value;
-                idUser = domHelp.getIndexOfUserIfExist(creneau.clientsDisponibles[idSelect]);
+                idUser = tools.getIndexOfUserIfExist(creneau.clientsDisponibles[idSelect]);
                 creneau.clientsDisponibles.splice(idSelect, 1);
             }
             else{
@@ -302,6 +299,7 @@ popup = {
             divInputClient.innerHTML = "";
             if(!checkBoxClientDispo.checked){
                 selectClient = domHelp.addElement(divInputClient, "input", {nomAttribut : "type", valeurAttribute : "search"}, {nomAttribut : "name", valeurAttribute : "sClient"}, {nomAttribut : "placeholder", valeurAttribute : "Nom client"}, {nomAttribut : "class", valeurAttribute : "form-control"});
+                selectClient.addEventListener("keyup", function(){tools.choiceClient(3, selectClient, table, application.semaines[numSemaine].jours[numJour].creneaux[numCreneau].lecons, application.semaines[numSemaine].jours[numJour].creneaux[numCreneau])});
             }
             else {
                 clientsDispo = application.semaines[numSemaine].jours[numJour].creneaux[numCreneau].clientsDisponibles;
@@ -326,7 +324,7 @@ popup = {
             creneau = application.semaines[numSemaine].jours[numJour].creneaux[numCreneau];
             if(checkBoxClientDispo.checked){
                 idSelect = document.getElementById('user').value;
-                idUser = domHelp.getIndexOfUserIfExist(creneau.clientsDisponibles[idSelect].cle);
+                idUser = tools.getIndexOfUserIfExist(creneau.clientsDisponibles[idSelect].cle);
                 creneau.clientsDisponibles.splice(idSelect, 1);
             }
             else{
@@ -375,8 +373,17 @@ popup = {
                 select =  domHelp.addElement(td, "select", {nomAttribut : "name", valeurAttribute : "moniteur"}, {nomAttribut : "class", valeurAttribute : "form-control"}, {nomAttribut : "idLecon", valeurAttribute : i});
                 for (var j=0; j<application.users.length; j++) {
                     if (application.users[j].role == "Moniteur") {
-                        option = domHelp.addElement(select, "option", {nomAttribut: "value", valeurAttribute: j});
-                        domHelp.addText(option, application.users[j].nom + " " + application.users[j].prenom);
+                        aLecon = false;
+                        for(var k=0; k<lecons.length; k++){
+                            moniteur = tools.getUserIfExist(lecons[k].moniteur);
+                            if(lecons[k].moniteur == application.users[j].cle && i!=k){
+                                aLecon = true;
+                            }
+                        }
+                        if(!aLecon){
+                            option = domHelp.addElement(select, "option", {nomAttribut: "value", valeurAttribute: j});
+                            domHelp.addText(option, application.users[j].nom + " " + application.users[j].prenom);
+                        }
                         if(application.users[j] == moniteur) {
                             option.setAttribute("selected", "selected");
                         }
@@ -412,8 +419,17 @@ popup = {
                 select =  domHelp.addElement(td, "select", {nomAttribut : "name", valeurAttribute : "moniteur"}, {nomAttribut : "class", valeurAttribute : "form-control"}, {nomAttribut : "idLecon", valeurAttribute : i});
                 for (var j=0; j<application.users.length; j++) {
                     if (application.users[j].role == "Moniteur") {
-                        option = domHelp.addElement(select, "option", {nomAttribut: "value", valeurAttribute: j});
-                        domHelp.addText(option, application.users[j].nom + " " + application.users[j].prenom);
+                        aLecon = false;
+                        for(var k=0; k<lecons.length; k++){
+                            moniteur = tools.getUserIfExist(lecons[k].moniteur);
+                            if(moniteur == application.users[j] && lecons[i]!=lecons[k]){
+                                aLecon = true;
+                            }
+                        }
+                        if(!aLecon){
+                            option = domHelp.addElement(select, "option", {nomAttribut: "value", valeurAttribute: j});
+                            domHelp.addText(option, application.users[j].nom + " " + application.users[j].prenom);
+                        }
                         if(application.users[j] == moniteur) {
                             option.setAttribute("selected", "selected");
                         }

@@ -39,6 +39,7 @@ dao = {
         this.createUtilisateur(new utilisateur.Client("M.", "Vanneste", "Jules", "9 Rue Beaumarchais", "Arras", "06.84.26.70.39", "jules.vanneste@mail.fr",""));
         this.createUtilisateur(new utilisateur.Moniteur("M.", "Carpentier", "Thomas", "15 Avenue de l'Europe", "Seclin", "06.74.16.27.89", "thomas.carpentier@mail.fr", "#D9EDF7"));
         this.createUtilisateur(new utilisateur.Moniteur("Mme.", "Zimny", "Francine", "43 rue de la France", "Oppy", "06.41.61.73.90", "francine.zimny@mail.fr", "#FCF8E3"));
+        this.createUtilisateur(new utilisateur.Moniteur("Mme.", "Jacquart", "Jocelyne", "21 rue du plat pays", "Lille", "06.41.67.74.92", "jocelyne.jacquart@mail.fr", "#BAF8E3"));
         this.createUtilisateur(new utilisateur.Secretaire("Mme.", "Bouquet", "Juliette", "789 Rue Nationale", "Carvin", "06.56.38.78.99", "juliette.bouquet@mail.fr"));
     },
     addUtilisateur : function(user) {
