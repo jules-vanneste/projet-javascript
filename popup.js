@@ -208,7 +208,8 @@ popup = {
             divInputClient.innerHTML = "";
             if(!checkBoxClientDispo.checked){
                 selectClient = domHelp.addElement(divInputClient, "input", {nomAttribut : "type", valeurAttribute : "search"}, {nomAttribut : "name", valeurAttribute : "sClient"}, {nomAttribut : "placeholder", valeurAttribute : "Nom client"}, {nomAttribut : "class", valeurAttribute : "form-control"});
-                selectClient.addEventListener("keyup", function(){tools.choiceClient(3, selectClient, table, application.semaines[numSemaine].jours[numJour].creneaux[numCreneau].lecons, application.semaines[numSemaine].jours[numJour].creneaux[numCreneau])});
+                tools.choiceClient(3, selectClient, table, application.semaines[numSemaine].jours[numJour].creneaux[numCreneau].lecons, application.semaines[numSemaine].jours[numJour].creneaux[numCreneau], application.users[selectMoniteur.options[selectMoniteur.selectedIndex].value].cle);
+                selectClient.addEventListener("keyup", function(){tools.choiceClient(3, selectClient, table, application.semaines[numSemaine].jours[numJour].creneaux[numCreneau].lecons, application.semaines[numSemaine].jours[numJour].creneaux[numCreneau], application.users[selectMoniteur.options[selectMoniteur.selectedIndex].value].cle)});
             }
             else {
                 clientsDispo = application.semaines[numSemaine].jours[numJour].creneaux[numCreneau].clientsDisponibles;
@@ -226,6 +227,9 @@ popup = {
         domHelp.addText(labelMoniteur, "Nom du moniteur :");
         divInputMoniteur = domHelp.addElement(divMoniteur, "div", {nomAttribut : "class", valeurAttribute : "col-sm-8"});
         selectMoniteur =  domHelp.addElement(divInputMoniteur, "select", {nomAttribut : "name", valeurAttribute : "moniteur", nomAttribut : "class", valeurAttribute : "form-control"});
+        selectMoniteur.addEventListener("change", function(){
+            tools.choiceClient(3, selectClient, table, application.semaines[numSemaine].jours[numJour].creneaux[numCreneau].lecons, application.semaines[numSemaine].jours[numJour].creneaux[numCreneau], application.users[selectMoniteur.options[selectMoniteur.selectedIndex].value].cle);
+        });
         for (var i=0; i<application.users.length; i++) {
             if (application.users[i].role == "Moniteur") {
                 aLecon = false;
@@ -244,7 +248,8 @@ popup = {
         }
 
         table = domHelp.addElement(form, "table", {nomAttribut : "class", valeurAttribute : "table table-striped"});
-        selectClient.addEventListener("keyup", function(){tools.choiceClient(3, selectClient, table, application.semaines[numSemaine].jours[numJour].creneaux[numCreneau].lecons, application.semaines[numSemaine].jours[numJour].creneaux[numCreneau])});
+        tools.choiceClient(3, selectClient, table, application.semaines[numSemaine].jours[numJour].creneaux[numCreneau].lecons, application.semaines[numSemaine].jours[numJour].creneaux[numCreneau], application.users[selectMoniteur.options[selectMoniteur.selectedIndex].value].cle);
+        selectClient.addEventListener("keyup", function(){tools.choiceClient(3, selectClient, table, application.semaines[numSemaine].jours[numJour].creneaux[numCreneau].lecons, application.semaines[numSemaine].jours[numJour].creneaux[numCreneau], application.users[selectMoniteur.options[selectMoniteur.selectedIndex].value].cle)});
 
         button = domHelp.addElement(form, "button", {nomAttribut : "type", valeurAttribute : "submit"}, {nomAttribut : "class", valeurAttribute : "btn btn-success col-sm-offset-5"}, {nomAttribut : "data-dismiss", valeurAttribute : "modal"});
         button.onclick = function() {
@@ -299,7 +304,8 @@ popup = {
             divInputClient.innerHTML = "";
             if(!checkBoxClientDispo.checked){
                 selectClient = domHelp.addElement(divInputClient, "input", {nomAttribut : "type", valeurAttribute : "search"}, {nomAttribut : "name", valeurAttribute : "sClient"}, {nomAttribut : "placeholder", valeurAttribute : "Nom client"}, {nomAttribut : "class", valeurAttribute : "form-control"});
-                selectClient.addEventListener("keyup", function(){tools.choiceClient(3, selectClient, table, application.semaines[numSemaine].jours[numJour].creneaux[numCreneau].lecons, application.semaines[numSemaine].jours[numJour].creneaux[numCreneau])});
+                tools.choiceClient(3, selectClient, table, application.semaines[numSemaine].jours[numJour].creneaux[numCreneau].lecons, application.semaines[numSemaine].jours[numJour].creneaux[numCreneau], application.users[application.userConnected].cle);
+                selectClient.addEventListener("keyup", function(){tools.choiceClient(3, selectClient, table, application.semaines[numSemaine].jours[numJour].creneaux[numCreneau].lecons, application.semaines[numSemaine].jours[numJour].creneaux[numCreneau], application.users[application.userConnected].cle)});
             }
             else {
                 clientsDispo = application.semaines[numSemaine].jours[numJour].creneaux[numCreneau].clientsDisponibles;
@@ -313,7 +319,8 @@ popup = {
         }, false);
 
         table = domHelp.addElement(form, "table", {nomAttribut : "class", valeurAttribute : "table table-striped"});
-        selectClient.addEventListener("keyup", function(){tools.choiceClient(3, selectClient, table, application.semaines[numSemaine].jours[numJour].creneaux[numCreneau].lecons, application.semaines[numSemaine].jours[numJour].creneaux[numCreneau])});
+        selectClient.addEventListener("keyup", function(){tools.choiceClient(3, selectClient, table, application.semaines[numSemaine].jours[numJour].creneaux[numCreneau].lecons, application.semaines[numSemaine].jours[numJour].creneaux[numCreneau], application.users[application.userConnected].cle)});
+        tools.choiceClient(3, selectClient, table, application.semaines[numSemaine].jours[numJour].creneaux[numCreneau].lecons, application.semaines[numSemaine].jours[numJour].creneaux[numCreneau], application.users[application.userConnected].cle);
 
         button = domHelp.addElement(form, "button", {nomAttribut : "type", valeurAttribute : "submit"}, {nomAttribut : "class", valeurAttribute : "btn btn-success col-sm-offset-5"}, {nomAttribut : "data-dismiss", valeurAttribute : "modal"});
         button.onclick = function() {

@@ -68,7 +68,7 @@ tools = {
         }
     },
 
-    choiceClient : function(nbRes, input, conteneurRes, lecons, creneau){
+    choiceClient : function(nbRes, input, conteneurRes, lecons, creneau, moniteur){
         conteneurRes.innerHTML = "";
         var tbody = domHelp.addElement(conteneurRes, "tbody");
         var tr;
@@ -111,16 +111,19 @@ tools = {
             domHelp.addText(td, application.users[res[i]].prenom);
             td = domHelp.addElement(tr, "td");
             var isDispo = false;
-            for(var i=0; i<creneau.clientsDisponibles.length; i++){
-                if(application.users[res[i]] == creneau.clientsDisponibles[i]){
+            for(var j=0; j<creneau.clientsDisponibles.length; j++){
+                if(application.users[res[i]].cle == creneau.clientsDisponibles[j]){
                     isDispo = true;
                 }
             }
+            if(moniteur == application.users[res[i]].moniteur){
+                domHelp.addElement(td, "span", {nomAttribut : "class", valeurAttribute : "glyphicon glyphicon-star"}, {nomAttribut : "title", valeurAttribute : "Eleve du moniteur"});
+            }
             if(isDispo){
-                domHelp.addElement(td, "span", {nomAttribut : "class", valeurAttribute : "glyphicon glyphicon-ok"});
+                domHelp.addElement(td, "span", {nomAttribut : "class", valeurAttribute : "glyphicon glyphicon-ok"}, {nomAttribut : "title", valeurAttribute : "Est disponible"});
             }
             else{
-                td = domHelp.addElement(tr, "");
+                domHelp.addElement(td, "span");
             }
         }
     },
@@ -136,7 +139,7 @@ tools = {
 
     getIndexOfUserIfExist : function (cle) {
         for (var i=0; i<application.users.length; i++) {
-            if(application.users[i].cle){
+            if(application.users[i].cle == cle){
                 return i;
             }
         }
@@ -147,8 +150,11 @@ tools = {
         var legende = domHelp.addElement(document.getElementById('content'), "div");
         for(var i=0; i<application.users.length; i++){
             if(application.users[i] instanceof utilisateur.Moniteur){
-                var divMoniteur = domHelp.addElement(legende, "div", {nomAttribut : "style", valeurAttribute : "border: 1px solid black; display: inline-block; width: 75px; height:30px; background-color: " + application.users[i].couleur});
-                var texteMoniteur = domHelp.addElement(legende, "span", {nomAttribut : "style", valeurAttribute : "display: inline; margin-left: 5px; vertical-align: top; margin-right : 10px;"});
+                var div = domHelp.addElement(legende, "div", {nomAttribut : "class", valeurAttribute : "panel panel-default"}, {nomAttribut : "style", valeurAttribute : "display:inline-block;"});
+                domHelp.addElement(div, "div", {nomAttribut : "class", valeurAttribute : "panel-heading"}, {nomAttribut : "style", valeurAttribute : "background-color: " + application.users[i].couleur});
+                var texteMoniteur = domHelp.addElement(div, "div", {nomAttribut : "class", valeurAttribute : "panel-body"}, {nomAttribut : "style", valeurAttribute : "padding:5px;"});
+                //var divMoniteur = domHelp.addElement(legende, "div", {nomAttribut : "style", valeurAttribute : "border: 1px solid black; display: inline-block; width: 75px; height:30px; background-color: " + application.users[i].couleur});
+                //var texteMoniteur = domHelp.addElement(legende, "span", {nomAttribut : "style", valeurAttribute : "display: inline; margin-left: 5px; vertical-align: top; margin-right : 10px;"});
                 domHelp.addText(texteMoniteur, application.users[i].nom + " " + application.users[i].prenom);
             }
         }
