@@ -44,6 +44,14 @@ view = {
     },
 
     printFormLogin : function(objects, properties){
+        var conteneurPlus = domHelp.addElement(document.getElementById('content'), "div", {nomAttribut : "style", valeurAttribute : "width:100%; text-align: right; margin-bottom: 10px;"});
+        var plus = domHelp.addElement(conteneurPlus, "button", {nomAttribut : "class", valeurAttribute : "btn btn-default"});
+        domHelp.addElement(plus, "span", {nomAttribut : "class", valeurAttribute: "glyphicon glyphicon-plus"});
+        plus.addEventListener("click", function(){
+            page.clear();
+            page.ajoutUtilisateur();
+        }, false);
+
         var form = domHelp.addElement(document.getElementById('content'), "form", {nomAttribut : "onSubmit", valeurAttribute : "return false;"});
         var table = domHelp.addElement(form, "table", {nomAttribut : "class", valeurAttribute : "table table-striped"});
         var tbody = domHelp.addElement(table, "tbody");
@@ -88,6 +96,133 @@ view = {
             }
         };
         domHelp.addText(button, "Se connecter");
+    },
+
+    printAjoutUtilisateur : function(){
+        var form, divGroup, divInput, labelType, inputType, optionType, labelCiv, inputCiv, optionCiv, labelNom, inputNom, labelPrenom, inputPrenom,
+            labelAdresse, inputAdresse, labelVille, inputVille, labelTel, inputTel, labelMail, inputMail,
+            div, labelCouleur, inputCouleur, labelMoniteur, inputMoniteur, optionMoniteur, inputBouton;
+
+        form = domHelp.addElement(document.getElementById('content'), "form", {nomAttribut : "class", valeurAttribute: "form-horizontal"}, {nomAttribut : "onSubmit", valeurAttribute : "return false;"});
+
+        divGroup = domHelp.addElement(form, "div", {nomAttribut : "class", valeurAttribute: "form-group"});
+        labelType = domHelp.addElement(divGroup, "label", {nomAttribut : "class", valeurAttribute: "col-sm-2 control-label"}, {nomAttribut : "for", valeurAttribute: "type"});
+        domHelp.addText(labelType, "Type");
+        divInput = domHelp.addElement(divGroup, "div", {nomAttribut : "class", valeurAttribute: "col-sm-10"});
+        inputType = domHelp.addElement(divInput, "select", {nomAttribut : "class", valeurAttribute: "form-control"}, {nomAttribut : "id", valeurAttribute: "type"});
+        optionType = domHelp.addElement(inputType, "option", {nomAttribut : "value", valeurAttribute: 0});
+        domHelp.addText(optionType, "Moniteur");
+        optionType = domHelp.addElement(inputType, "option", {nomAttribut : "value", valeurAttribute: 1});
+        domHelp.addText(optionType, "Client");
+
+        divGroup = domHelp.addElement(form, "div", {nomAttribut : "class", valeurAttribute: "form-group"});
+        labelCiv = domHelp.addElement(divGroup, "label", {nomAttribut : "class", valeurAttribute: "col-sm-2 control-label"}, {nomAttribut : "for", valeurAttribute: "civ"});
+        domHelp.addText(labelCiv, "Civilite");
+        divInput = domHelp.addElement(divGroup, "div", {nomAttribut : "class", valeurAttribute: "col-sm-10"});
+        inputCiv = domHelp.addElement(divInput, "select", {nomAttribut : "class", valeurAttribute: "form-control"}, {nomAttribut : "id", valeurAttribute: "civ"});
+        optionCiv = domHelp.addElement(inputCiv, "option", {nomAttribut : "value", valeurAttribute: "M."});
+        domHelp.addText(optionCiv, "M.");
+        optionCiv = domHelp.addElement(inputCiv, "option", {nomAttribut : "value", valeurAttribute: "Mme."});
+        domHelp.addText(optionCiv, "Mme.");
+
+        divGroup = domHelp.addElement(form, "div", {nomAttribut : "class", valeurAttribute: "form-group"});
+        labelNom = domHelp.addElement(divGroup, "label", {nomAttribut : "class", valeurAttribute: "col-sm-2 control-label"}, {nomAttribut : "for", valeurAttribute: "nom"});
+        domHelp.addText(labelNom, "Nom");
+        divInput = domHelp.addElement(divGroup, "div", {nomAttribut : "class", valeurAttribute: "col-sm-10"});
+        inputNom = domHelp.addElement(divInput, "input", {nomAttribut : "class", valeurAttribute: "form-control"}, {nomAttribut : "placeholder", valeurAttribute: "Nom"}, {nomAttribut : "id", valeurAttribute: "nom"});
+
+        divGroup = domHelp.addElement(form, "div", {nomAttribut : "class", valeurAttribute: "form-group"});
+        labelPrenom = domHelp.addElement(divGroup, "label", {nomAttribut : "class", valeurAttribute: "col-sm-2 control-label"}, {nomAttribut : "for", valeurAttribute: "prenom"});
+        domHelp.addText(labelPrenom, "Prenom");
+        divInput = domHelp.addElement(divGroup, "div", {nomAttribut : "class", valeurAttribute: "col-sm-10"});
+        inputPrenom = domHelp.addElement(divInput, "input", {nomAttribut : "class", valeurAttribute: "form-control"}, {nomAttribut : "placeholder", valeurAttribute: "Prenom"}, {nomAttribut : "id", valeurAttribute: "prenom"});
+
+        divGroup = domHelp.addElement(form, "div", {nomAttribut : "class", valeurAttribute: "form-group"});
+        labelAdresse = domHelp.addElement(divGroup, "label", {nomAttribut : "class", valeurAttribute: "col-sm-2 control-label"}, {nomAttribut : "for", valeurAttribute: "adresse"});
+        domHelp.addText(labelAdresse, "Adresse");
+        divInput = domHelp.addElement(divGroup, "div", {nomAttribut : "class", valeurAttribute: "col-sm-10"});
+        inputAdresse = domHelp.addElement(divInput, "input", {nomAttribut : "class", valeurAttribute: "form-control"}, {nomAttribut : "placeholder", valeurAttribute: "Adresse"}, {nomAttribut : "id", valeurAttribute: "adresse"});
+
+        divGroup = domHelp.addElement(form, "div", {nomAttribut : "class", valeurAttribute: "form-group"});
+        labelVille = domHelp.addElement(divGroup, "label", {nomAttribut : "class", valeurAttribute: "col-sm-2 control-label"}, {nomAttribut : "for", valeurAttribute: "ville"});
+        domHelp.addText(labelVille, "Ville");
+        divInput = domHelp.addElement(divGroup, "div", {nomAttribut : "class", valeurAttribute: "col-sm-10"});
+        inputVille = domHelp.addElement(divInput, "input", {nomAttribut : "class", valeurAttribute: "form-control"}, {nomAttribut : "placeholder", valeurAttribute: "Ville"}, {nomAttribut : "id", valeurAttribute: "ville"});
+
+        divGroup = domHelp.addElement(form, "div", {nomAttribut : "class", valeurAttribute: "form-group"});
+        labelTel = domHelp.addElement(divGroup, "label", {nomAttribut : "class", valeurAttribute: "col-sm-2 control-label"}, {nomAttribut : "for", valeurAttribute: "tel"});
+        domHelp.addText(labelTel, "Telephone");
+        divInput = domHelp.addElement(divGroup, "div", {nomAttribut : "class", valeurAttribute: "col-sm-10"});
+        inputTel = domHelp.addElement(divInput, "input", {nomAttribut : "class", valeurAttribute: "form-control"}, {nomAttribut : "placeholder", valeurAttribute: "Telephone"}, {nomAttribut : "id", valeurAttribute: "tel"});
+
+        divGroup = domHelp.addElement(form, "div", {nomAttribut : "class", valeurAttribute: "form-group"});
+        labelMail = domHelp.addElement(divGroup, "label", {nomAttribut : "class", valeurAttribute: "col-sm-2 control-label"}, {nomAttribut : "for", valeurAttribute: "mail"});
+        domHelp.addText(labelMail, "Mail");
+        divInput = domHelp.addElement(divGroup, "div", {nomAttribut : "class", valeurAttribute: "col-sm-10"});
+        inputMail = domHelp.addElement(divInput, "input", {nomAttribut : "class", valeurAttribute: "form-control"}, {nomAttribut : "placeholder", valeurAttribute: "Mail"}, {nomAttribut : "id", valeurAttribute: "mail"});
+
+        div = domHelp.addElement(form, "div");
+        divGroup = domHelp.addElement(div, "div", {nomAttribut : "class", valeurAttribute: "form-group"});
+        labelCouleur = domHelp.addElement(divGroup, "label", {nomAttribut : "class", valeurAttribute: "col-sm-2 control-label"}, {nomAttribut : "for", valeurAttribute: "couleur"});
+        domHelp.addText(labelCouleur, "Couleur");
+        divInput = domHelp.addElement(divGroup, "div", {nomAttribut : "class", valeurAttribute: "col-sm-10"});
+        inputCouleur = domHelp.addElement(divInput, "input", {nomAttribut : "type", valeurAttribute: "color"}, {nomAttribut : "value", valeurAttribute: "#fad345"}, {nomAttribut : "id", valeurAttribute: "couleur"});
+
+        divGroup = domHelp.addElement(form, "div", {nomAttribut : "class", valeurAttribute: "form-group"});
+        divInput = domHelp.addElement(divGroup, "div", {nomAttribut : "class", valeurAttribute: ""});
+        inputBouton = domHelp.addElement(divInput, "button", {nomAttribut : "class", valeurAttribute: "btn btn-default col-sm-offset-6"});
+        domHelp.addText(inputBouton, "Ajouter");
+
+        inputType.addEventListener("change", function(){
+            var idSelect;
+            idSelect = inputType.value;
+            div.innerHTML = "";
+            if(idSelect == 0){
+                divGroup = domHelp.addElement(div, "div", {nomAttribut : "class", valeurAttribute: "form-group"});
+                labelCouleur = domHelp.addElement(divGroup, "label", {nomAttribut : "class", valeurAttribute: "col-sm-2 control-label"}, {nomAttribut : "for", valeurAttribute: "couleur"});
+                domHelp.addText(labelCouleur, "Couleur");
+                divInput = domHelp.addElement(divGroup, "div", {nomAttribut : "class", valeurAttribute: "col-sm-10"});
+                inputCouleur = domHelp.addElement(divInput, "input", {nomAttribut : "type", valeurAttribute: "color"}, {nomAttribut : "id", valeurAttribute: "couleur"});
+            }
+            else{
+                divGroup = domHelp.addElement(div, "div", {nomAttribut : "class", valeurAttribute: "form-group"});
+                labelMoniteur = domHelp.addElement(divGroup, "label", {nomAttribut : "class", valeurAttribute: "col-sm-2 control-label"}, {nomAttribut : "for", valeurAttribute: "moniteur"});
+                domHelp.addText(labelMoniteur, "Moniteur");
+                divInput = domHelp.addElement(divGroup, "div", {nomAttribut : "class", valeurAttribute: "col-sm-10"});
+                inputMoniteur = domHelp.addElement(divInput, "select", {nomAttribut : "class", valeurAttribute: "form-control"}, {nomAttribut : "id", valeurAttribute: "moniteur"});
+                for(var i=0; i<application.users.length; i++){
+                    if(application.users[i] instanceof utilisateur.Moniteur){
+                        optionMoniteur = domHelp.addElement(inputMoniteur, "option", {nomAttribut : "value", valeurAttribute: application.users[i].cle});
+                        domHelp.addText(optionMoniteur, (application.users[i].nom + " " + application.users[i].prenom));
+                    }
+                }
+            }
+        });
+
+        inputBouton.addEventListener("click", function(){
+            var user, couleur, moniteur;
+            var idSelect = inputType.value;
+            var civ = inputCiv.value;
+            var nom = inputNom.value;
+            var prenom = inputPrenom.value;
+            var adresse = inputAdresse.value;
+            var ville = inputVille.value;
+            var tel = inputTel.value;
+            var mail = inputMail.value;
+            if(idSelect == 0){
+                couleur = inputCouleur.value;
+                user = new utilisateur.Moniteur(civ, nom, prenom, adresse, ville, tel, mail, couleur);
+            }
+            else{
+                moniteur = inputMoniteur.value;
+                //alert("new utilisateur.Client(" + nom + "," +  prenom + "," + adresse + "," + ville + "," + tel + "," + mail +"," + moniteur + ")");
+                user = new utilisateur.Client(civ, nom, prenom, adresse, ville, tel, mail, moniteur);
+            }
+            dao.createUtilisateur(user);
+            application.users.push(user);
+            page.clear();
+            page.accueil();
+        });
     },
 
     printAgendaClient : function(numSemaine) {

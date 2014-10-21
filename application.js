@@ -9,6 +9,11 @@ page = {
     accueil : function() {
         view.printFormLogin(application.users, ["role", "civilite", "nom", "prenom"]);
     },
+    ajoutUtilisateur : function() {
+        var title = domHelp.addElement(document.getElementById('content'), "h3");
+        domHelp.addText(title, "Ajouter un utilisateur");
+        view.printAjoutUtilisateur();
+    },
     client : function(semaine) {
         var title = domHelp.addElement(document.getElementById('content'), "h3");
         domHelp.addText(title, "Client");
