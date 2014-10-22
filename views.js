@@ -237,7 +237,7 @@ view = {
         var table = domHelp.addElement(document.getElementById('content'), "table", {nomAttribut : "class", valeurAttribute : "table table-bordered"});
         var tbody = domHelp.addElement(table, "tbody");
         var tr = domHelp.addElement(tbody,"tr");
-        var th, td, semaine, creneau, lecon, nbLecon, aLeconConduite, largeur, divLecon, moniteur;
+        var th, td, semaine, creneau, lecon, nbLecon, aLecon, largeur, divLecon, moniteur;
 
         th = domHelp.addElement(tr,"th");
         domHelp.addText(th, "");
@@ -253,7 +253,7 @@ view = {
             td = domHelp.addElement(tr,"td");
             domHelp.addText(td, application.semaines[numSemaine].jours[0].creneaux[i].heure + "h");
             for (var j=0; j<semaine.jours.length; j++) {
-                aLeconConduite = false;
+                aLecon = false;
                 td = domHelp.addElement(tr, "td", {nomAttribut: "jour", valeurAttribute: j}, {nomAttribut: "creneau", valeurAttribute: i}, {nomAttribut: "class", valeurAttribute: "elt-clickable"});
                 creneau = semaine.jours[j].creneaux[i];
                 nbLecon = 0;
@@ -281,7 +281,7 @@ view = {
                     divLecon = domHelp.addElement(td, "div");
                     moniteur = tools.getUserIfExist(lecon.moniteur);
                     if (lecon instanceof calendrier.LeconConduite && lecon.client == application.users[application.userConnected].cle) {
-                        aLeconConduite = true;
+                        aLecon = true;
                         divLecon.setAttribute("style", "width: " + largeur + "%; height:100%; display: inline; background-color: #FCF8E3; float:left;");
                         domHelp.addElement(divLecon, "span", { nomAttribut : "class", valeurAttribute : "glyphicon glyphicon-road"});
                         divLecon.setAttribute("title", "Leçon de conduite avec : " + moniteur.prenom + " " + moniteur.nom);
@@ -292,18 +292,18 @@ view = {
                         divLecon.setAttribute("title", "Leçon de code tenue par : " + moniteur.prenom + " " + moniteur.nom);
                     }
                 }
-                if(!aLeconConduite) {
+                if(!aLecon) {
                     td.addEventListener("click", function (e) {
                         var targetElement, idCreneau, jour, creneau, clientPresent;
 
                         targetElement = e.target || e.srcElement;
-                        td = targetElement;
-                        while (td.nodeName != "TD") {
-                            td = targetElement.parentNode;
+                        var tdElement = targetElement;
+                        while (tdElement.nodeName != "TD") {
+                            tdElement = tdElement.parentNode;
                         }
 
-                        jour = td.getAttribute("jour");
-                        idCreneau = td.getAttribute("creneau");
+                        jour = tdElement.getAttribute("jour");
+                        idCreneau = tdElement.getAttribute("creneau");
                         creneau = application.semaines[numSemaine].jours[jour].creneaux[idCreneau];
                         clientPresent = false;
                         for (var i = 0; i < creneau.clientsDisponibles.length; i++) {
@@ -376,7 +376,13 @@ view = {
                 }
                 td.addEventListener("click", function (e) {
                     var targetElement = e.target || e.srcElement;
-                    popup.ajoutByMoniteur(numSemaine, targetElement);
+
+                    var tdElement = targetElement;
+                    while(tdElement.nodeName != "TD"){
+                        tdElement = tdElement.parentNode;
+                    }
+
+                    popup.ajoutByMoniteur(numSemaine, tdElement);
                 }, false);
             }
         }
