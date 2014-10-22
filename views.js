@@ -190,7 +190,7 @@ view = {
                 labelCouleur = domHelp.addElement(divGroup, "label", {nomAttribut : "class", valeurAttribute: "col-sm-2 control-label"}, {nomAttribut : "for", valeurAttribute: "couleur"});
                 domHelp.addText(labelCouleur, "Couleur");
                 divInput = domHelp.addElement(divGroup, "div", {nomAttribut : "class", valeurAttribute: "col-sm-10"});
-                inputCouleur = domHelp.addElement(divInput, "input", {nomAttribut : "type", valeurAttribute: "color"}, {nomAttribut : "id", valeurAttribute: "couleur"});
+                inputCouleur = domHelp.addElement(divInput, "input", {nomAttribut : "type", valeurAttribute: "color"}, {nomAttribut : "value", valeurAttribute: "#fad345"}, {nomAttribut : "id", valeurAttribute: "couleur"});
             }
             else{
                 divGroup = domHelp.addElement(div, "div", {nomAttribut : "class", valeurAttribute: "form-group"});
