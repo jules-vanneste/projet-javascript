@@ -1,6 +1,17 @@
+/*
+ Package utilisateur
+ Contient les différentes classes des utilisateurs :
+ - Personne
+ - Personne > Client
+ - Personne > Moniteur
+ - Personne > Secretaire
+ */
+
 utilisateur = {};
+// Represente le compteur des utilisateurs permettant la generation des cles
 utilisateur.cptUtilisateurs = 0;
 
+// Classe representant une Personne
 utilisateur.Personne = function(civilite, nom, prenom, adresse, ville, telephone, mail, role){
     var _cle;
     var _civilite = civilite;
@@ -32,6 +43,7 @@ utilisateur.Personne = function(civilite, nom, prenom, adresse, ville, telephone
     this.__defineSetter__("role", function(value){return _role = value;});
 };
 
+// Classe representant un Client
 utilisateur.Client = function (civilite, nom, prenom, adresse, ville, telephone, mail, moniteur){
     utilisateur.Personne.call(this, civilite, nom, prenom, adresse, ville, telephone, mail, "Client");
     var _moniteur = moniteur;
@@ -47,6 +59,7 @@ utilisateur.Client.fromJSON = function(value) {
 };
 Reviver.constructors.Client = utilisateur.Client;
 
+// Classe representant un Moniteur
 utilisateur.Moniteur = function (civilite, nom, prenom, adresse, ville, telephone, mail, couleur){
     utilisateur.Personne.call(this, civilite, nom, prenom, adresse, ville, telephone, mail, "Moniteur");
     var _couleur = couleur;
@@ -62,6 +75,7 @@ utilisateur.Moniteur.fromJSON = function(value) {
 };
 Reviver.constructors.Moniteur = utilisateur.Moniteur;
 
+// Classe representant une Secretaire
 utilisateur.Secretaire = function (civilite, nom, prenom, adresse, ville, telephone, mail){
     utilisateur.Personne.call(this, civilite, nom, prenom, adresse, ville, telephone, mail, "Secrétaire");
 };

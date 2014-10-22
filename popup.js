@@ -1,4 +1,9 @@
+/*
+ Contient le code de chacunes des popups de l'application.
+ Une popup est une fenêtre modale.
+ */
 popup = {
+    // Popup d'ajout de lecons par une secretaire
     ajoutBySecretaire : function(numSemaine, targetElement){
         var td, jour, creneau, div, divDialog, divModal, divBody, close, lecons, ajoutCode,
             nav, navCode, boutonCode, navConduite, boutonConduite, navGestion, boutonGestion, contentPopup;
@@ -60,6 +65,7 @@ popup = {
         boutonCode.focus();
     },
 
+    // Popup d'ajout de lecons par une moniteur
     ajoutByMoniteur : function(numSemaine, targetElement){
         var td, jour, creneau, div, divDialog, divModal, divBody, close, lecons, ajoutCode, ajoutConduite,
             nav, navCode, boutonCode, navConduite, boutonConduite, navGestion, boutonGestion, contentPopup;
@@ -132,6 +138,7 @@ popup = {
         boutonCode.focus();
     },
 
+    // Popup d'ajout d'une lecon de code par une secretaire
     contentAjoutCodeBySecretaire : function(div, numSemaine, jour, creneau){
         var form, divMoniteur, labelMoniteur, divInputMoniteur, selectMoniteur, optionMoniteur, button, aLecon, lecons, moniteur;
 
@@ -171,6 +178,7 @@ popup = {
         domHelp.addText(button, "Ajouter");
     },
 
+    // Popup d'ajout d'une lecon de code par un moniteur
     contentAjoutCodeByMoniteur : function(div, numSemaine, jour, creneau){
         var form, button;
 
@@ -187,6 +195,7 @@ popup = {
         domHelp.addText(button, "Ajouter une leçon de code");
     },
 
+    // Popup d'ajout d'une lecon de conduite par une secretaire
     contentAjoutConduiteBySecretaire : function(div, numSemaine, numJour, numCreneau){
         var form, divCheckBox, labelCheckBox, checkBoxClientDispo, divClient, labelClient, divInputClient, selectClient, clientsDispo, optionClient,
             divMoniteur, labelMoniteur, divInputMoniteur, selectMoniteur, aLecon, optionMoniteur, table, button, lecons, moniteur, client;
@@ -283,6 +292,7 @@ popup = {
         domHelp.addText(button, "Ajouter");
     },
 
+    // Popup d'ajout d'une lecon de conduite par un moniteur
     contentAjoutConduiteByMoniteur : function(div, numSemaine, numJour, numCreneau){
         var form, divCheckBox, labelCheckBox, checkBoxClientDispo, divClient, labelClient, divInputClient, selectClient,
             clientsDispo, optionClient, table, button, client;
@@ -353,6 +363,7 @@ popup = {
         domHelp.addText(button, "Ajouter");
     },
 
+    // Popup de gestion des lecons par une secretaire
     contentGestionLeconsBySecretaire : function(div, numSemaine, jour, creneau){
         var form, lecons, table, tbody, tr, td, th, span, select, option, moniteur, client;
 
@@ -482,6 +493,7 @@ popup = {
         }
     },
 
+    // Popup de gestion des lecons par un moniteur
     contentGestionLeconsByMoniteur : function(div, numSemaine, jour, creneau){
         var form, lecons, table, tbody, tr, td, th, span, select, option, moniteur, client;
 
@@ -509,9 +521,18 @@ popup = {
                 select =  domHelp.addElement(td, "select", {nomAttribut : "name", valeurAttribute : "moniteur"}, {nomAttribut : "class", valeurAttribute : "form-control"}, {nomAttribut : "idLecon", valeurAttribute : i});
                 for (var j=0; j<application.users.length; j++) {
                     if (application.users[j].role == "Moniteur") {
-                        option = domHelp.addElement(select, "option", {nomAttribut: "value", valeurAttribute: j});
-                        domHelp.addText(option, application.users[j].nom + " " + application.users[j].prenom);
-                        if(application.users[j] == lecons[i].moniteur) {
+                        aLecon = false;
+                        for(var k=0; k<lecons.length; k++){
+                            moniteur = tools.getUserIfExist(lecons[k].moniteur);
+                            if(lecons[k].moniteur == application.users[j].cle && i!=k){
+                                aLecon = true;
+                            }
+                        }
+                        if(!aLecon){
+                            option = domHelp.addElement(select, "option", {nomAttribut: "value", valeurAttribute: j});
+                            domHelp.addText(option, application.users[j].nom + " " + application.users[j].prenom);
+                        }
+                        if(application.users[j] == moniteur) {
                             option.setAttribute("selected", "selected");
                         }
                     }
@@ -544,8 +565,17 @@ popup = {
                 select =  domHelp.addElement(td, "select", {nomAttribut : "name", valeurAttribute : "moniteur"}, {nomAttribut : "class", valeurAttribute : "form-control"}, {nomAttribut : "idLecon", valeurAttribute : i});
                 for (var j=0; j<application.users.length; j++) {
                     if (application.users[j].role == "Moniteur") {
-                        option = domHelp.addElement(select, "option", {nomAttribut: "value", valeurAttribute: j});
-                        domHelp.addText(option, application.users[j].nom + " " + application.users[j].prenom);
+                        aLecon = false;
+                        for(var k=0; k<lecons.length; k++){
+                            moniteur = tools.getUserIfExist(lecons[k].moniteur);
+                            if(moniteur == application.users[j] && lecons[i]!=lecons[k]){
+                                aLecon = true;
+                            }
+                        }
+                        if(!aLecon){
+                            option = domHelp.addElement(select, "option", {nomAttribut: "value", valeurAttribute: j});
+                            domHelp.addText(option, application.users[j].nom + " " + application.users[j].prenom);
+                        }
                         if(application.users[j] == moniteur) {
                             option.setAttribute("selected", "selected");
                         }

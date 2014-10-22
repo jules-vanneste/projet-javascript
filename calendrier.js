@@ -1,10 +1,26 @@
+/*
+ Package calendrier
+ Contient les différentes classes permettant la création des lecons et des agendas :
+ - Creneau
+ - Lecon
+ - Lecon > LeconConduite
+ - Lecon > LeconCode
+ - Jour
+ - Semaine
+ */
+
+// Le nombre de jours dans une semaine
 var nbJours = 5;
+// Le nombre de creneaux dans une journee
 var nbCreneaux = 10;
+// Les horaires d'une journee
 var horaires = [9, 10, 11, 12, 13, 14, 15, 16, 17, 18];
 
 calendrier = {};
+// Le compteur des semaines pour la generation des cles
 calendrier.cptSemaines = 0;
 
+// Classe representant un creneau
 calendrier.Creneau = function(heure){
     var _heure = heure;
     var _clientsDisponibles = [];
@@ -18,6 +34,7 @@ calendrier.Creneau = function(heure){
     this.__defineSetter__("lecons", function(value){return _lecons = value;});
 };
 
+// Classe representant une Lecon
 calendrier.Lecon= function(moniteur){
     var _moniteur = moniteur;
 
@@ -25,6 +42,7 @@ calendrier.Lecon= function(moniteur){
     this.__defineSetter__("moniteur", function(value){return _moniteur = value;});
 };
 
+// Classe representant une Lecon de conduite
 calendrier.LeconConduite = function(moniteur, client){
     calendrier.Lecon.call(this, moniteur);
     var _client = client;
@@ -40,6 +58,7 @@ calendrier.LeconConduite.fromJSON = function(value) {
 };
 Reviver.constructors.LeconConduite = calendrier.LeconConduite;
 
+// Classe representant une Lecon de code
 calendrier.LeconCode = function(moniteur){
     calendrier.Lecon.call(this, moniteur);
 };
@@ -51,6 +70,7 @@ calendrier.LeconCode.fromJSON = function(value) {
 };
 Reviver.constructors.LeconCode = calendrier.LeconCode;
 
+// Classe representant un jour
 calendrier.Jour = function(date, creneaux, horaires){
     var _date = date;
     var _creneaux = creneaux;
@@ -61,6 +81,7 @@ calendrier.Jour = function(date, creneaux, horaires){
     this.__defineSetter__("creneaux", function(value){return _creneaux = value;});
 };
 
+// Classe representant une Semaine
 calendrier.Semaine = function(date){
     var _cle;
     var _dateDebut;

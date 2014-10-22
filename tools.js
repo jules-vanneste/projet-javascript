@@ -1,4 +1,8 @@
+/*
+ Contient les fonctions utilitaire pour le DOM.
+ */
 domHelp = {
+    // Ajoute un element DOM avec un ensemble d'attribut
     addElement: function (parentNode, element) {
         var elt = document.createElement(element);
         parentNode.appendChild(elt);
@@ -7,13 +11,13 @@ domHelp = {
         }
         return elt;
     },
-
+    // Ajoute du texte dans un element DOM.
     addText: function (parentNode, text) {
         var elt = document.createTextNode(text);
         parentNode.appendChild(elt);
         return elt;
     },
-
+    // cherche un utilisateur dans un input du DOM avec un role specifique et des proprietes specifiques
     searchUser : function (input, elements, role, proprietes) {
         var recherche = input.value;
         recherche = recherche.toLowerCase();
@@ -34,7 +38,11 @@ domHelp = {
     }
 };
 
+/*
+ Contient les différentes fonctions utilitaires
+ */
 tools = {
+    // Affiche la semaine suivante ou précedente d'une page
     changeSemaine : function(nomPage, numSemaine, suivante){
         var dateDebutSemaine = new Date(application.semaines[numSemaine].dateDebut.getFullYear(), application.semaines[numSemaine].dateDebut.getMonth(), application.semaines[numSemaine].dateDebut.getDate());
         if(suivante){
@@ -67,7 +75,7 @@ tools = {
             }
         }
     },
-
+    // Affiche le tableau des utilisateurs correspondants a une recherche avec des selecteur pour en choisir un dans la liste
     choiceClient : function(nbRes, input, conteneurRes, lecons, creneau, moniteur){
         conteneurRes.innerHTML = "";
         var tbody = domHelp.addElement(conteneurRes, "tbody");
@@ -127,7 +135,7 @@ tools = {
             }
         }
     },
-
+    // Retourne un utilisateur correspondant a une cle si celui-ci existe
     getUserIfExist : function (cle) {
         for (var i=0; i<application.users.length; i++) {
             if(application.users[i].cle == cle){
@@ -136,7 +144,7 @@ tools = {
         }
         return null;
     },
-
+    // Retourne l'index d'un utilisateur correspondant a une cle si celui-ci existe
     getIndexOfUserIfExist : function (cle) {
         for (var i=0; i<application.users.length; i++) {
             if(application.users[i].cle == cle){
@@ -145,7 +153,7 @@ tools = {
         }
         return null;
     },
-
+    // Affiche la légende des différents moniteurs de l'application avec la couleur qui leur est associée.
     printLegendeMoniteur : function(){
         var legende = domHelp.addElement(document.getElementById('content'), "div");
         for(var i=0; i<application.users.length; i++){
@@ -161,6 +169,7 @@ tools = {
     }
 }
 
+// fonction qui permet de mapper une classe a un format JSON
 function Reviver(key, value) {
     var ctor;
 
@@ -177,6 +186,7 @@ function Reviver(key, value) {
 }
 Reviver.constructors = {}; // A list of constructors the smart reviver should know about
 
+// Change la chaine JSON d'une classe avec un indicateur de sa classe dans la propriete ctor et les données dans la propiete data
 function Generic_toJSON(ctorName, obj, keys) {
     var data, index, key;
 
@@ -192,6 +202,7 @@ function Generic_toJSON(ctorName, obj, keys) {
     return {ctor: ctorName, data: data};
 }
 
+// Retourne l'objet generic d'un objet par rapport a ses propriete ctor et data
 function Generic_fromJSON(ctor, data) {
     var obj, name;
 

@@ -1,4 +1,8 @@
+/*
+ Les différentes vues et/ou fragments de vues des pages de l'application.
+ */
 view = {
+    // Affiche un tableau d'objets sous forme de tableau
     printObjectAsTable : function (objects, properties) {
         var table = domHelp.addElement(document.getElementById('content'), "table");
         var tr = domHelp.addElement(table,"tr");
@@ -17,6 +21,7 @@ view = {
         }
     },
 
+    // Affiche un tableau d'objets sous forme d'un select tableau
     printObjectAsSelect : function(objects, properties){
         var form = domHelp.addElement(document.getElementById('content'), "form");
         var input;
@@ -29,6 +34,7 @@ view = {
         }
     },
 
+    // Affiche les fleches pour changer de semaine pour une page
     printFlechesChgtSemaine : function(page, numSemaine){
         var conteneurFleches = domHelp.addElement(document.getElementById('content'), "div", {nomAttribut : "class", valeurAttribute : "btn-group float-right div-conteneur"});
         var flecheGauche = domHelp.addElement(conteneurFleches, "button", {nomAttribut : "class", valeurAttribute : "btn btn-default"});
@@ -43,6 +49,7 @@ view = {
         }, false);
     },
 
+    // Affiche le formulaire de connexion
     printFormLogin : function(objects, properties){
         var conteneurPlus = domHelp.addElement(document.getElementById('content'), "div", {nomAttribut : "style", valeurAttribute : "width:100%; text-align: right; margin-bottom: 10px;"});
         var plus = domHelp.addElement(conteneurPlus, "button", {nomAttribut : "class", valeurAttribute : "btn btn-default"});
@@ -98,12 +105,13 @@ view = {
         domHelp.addText(button, "Se connecter");
     },
 
+    // Affiche le formulaire d'ajout des utilisateurs
     printAjoutUtilisateur : function(){
         var form, divGroup, divInput, labelType, inputType, optionType, labelCiv, inputCiv, optionCiv, labelNom, inputNom, labelPrenom, inputPrenom,
             labelAdresse, inputAdresse, labelVille, inputVille, labelTel, inputTel, labelMail, inputMail,
             div, labelCouleur, inputCouleur, labelMoniteur, inputMoniteur, optionMoniteur, inputBouton;
 
-        form = domHelp.addElement(document.getElementById('content'), "form", {nomAttribut : "class", valeurAttribute: "form-horizontal"}, {nomAttribut : "onSubmit", valeurAttribute : "return false;"});
+        form = domHelp.addElement(document.getElementById('content'), "form", {nomAttribut : "class", valeurAttribute: "form-horizontal"}, {nomAttribut : "onSubmit", valeurAttribute : "return false;"}, {nomAttribut: "style", valeurAttribute: "width: 500px; margin:auto;"});
 
         divGroup = domHelp.addElement(form, "div", {nomAttribut : "class", valeurAttribute: "form-group"});
         labelType = domHelp.addElement(divGroup, "label", {nomAttribut : "class", valeurAttribute: "col-sm-2 control-label"}, {nomAttribut : "for", valeurAttribute: "type"});
@@ -215,7 +223,6 @@ view = {
             }
             else{
                 moniteur = inputMoniteur.value;
-                //alert("new utilisateur.Client(" + nom + "," +  prenom + "," + adresse + "," + ville + "," + tel + "," + mail +"," + moniteur + ")");
                 user = new utilisateur.Client(civ, nom, prenom, adresse, ville, tel, mail, moniteur);
             }
             dao.createUtilisateur(user);
@@ -225,6 +232,7 @@ view = {
         });
     },
 
+    // Affiche l'agenda d'un client
     printAgendaClient : function(numSemaine) {
         var table = domHelp.addElement(document.getElementById('content'), "table", {nomAttribut : "class", valeurAttribute : "table table-bordered"});
         var tbody = domHelp.addElement(table, "tbody");
@@ -317,6 +325,7 @@ view = {
         }
     },
 
+    // Affiche l'agenda d'un moniteur
     printAgendaMoniteur : function(numSemaine) {
         var table = domHelp.addElement(document.getElementById('content'), "table", {nomAttribut : "class", valeurAttribute : "table table-bordered"});
         var tbody = domHelp.addElement(table, "tbody");
@@ -373,6 +382,7 @@ view = {
         }
     },
 
+    // Affiche l'agenda d'une secretaire
     printAgendaSecretaire : function(numSemaine) {
         var table = domHelp.addElement(document.getElementById('content'), "table", {nomAttribut : "class", valeurAttribute : "table table-bordered"});
         var tbody = domHelp.addElement(table, "tbody");

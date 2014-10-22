@@ -1,3 +1,8 @@
+/*
+ Code appelé au lancement de l'application.
+ Il charges les différentes variables de l'application à partir de la BDD.
+ Il fini par charger la page d'accueil.
+ */
 window.onload = function () {
     var cle;
     application.semaines = [];
