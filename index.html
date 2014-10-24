@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Auto-Ecole Gestion</title>
+    <link href="bootstrap-3.2.0-dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="base.css" rel="stylesheet">
+    <script type="text/javascript" src="bootstrap-3.2.0-dist/js/jquery.js"></script>
+    <script type="text/javascript" src="bootstrap-3.2.0-dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="main.js"></script>
+    <script type="text/javascript" src="tools.js"></script>
+    <script type="text/javascript" src="application.js"></script>
+    <script type="text/javascript" src="utilisateur.js"></script>
+    <script type="text/javascript" src="popup.js"></script>
+    <script type="text/javascript" src="calendrier.js"></script>
+    <script type="text/javascript" src="views.js"></script>
+</head>
+<body>
+
+    <!-- Fixed navbar -->
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#" onclick="page.clear(); page.accueil();">Auto-Ecole Gestion</a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Options <span class="caret"></span></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a href="#" onclick="dao.init();">init</a></li>
+                            <li><a href="#" onclick="dao.clear();">clear</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <ul id="btnDeco" class="nav navbar-nav navbar-right"></ul>
+            </div>
+        </div>
+    </div>
+    <div class="jumbotron">
+    </div>
+    <div class="container">
+        <div id="content">
+
+        </div>
+        <div class="footer">
+            <p>&copy; Capolino & Vanneste 2014</p>
+        </div>
+    </div>
+</body>
+</html>

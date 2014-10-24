@@ -1,0 +1,53 @@
+A RENDRE LE 22/10/2014 :
+
+Contraintes :
+- Classes : Javascript
+- Heritage
+
+AUTO-ECOLE - Codes Rousseau
+
+Client :
+Liste Leçons
+___________________________
+|date|Heure|Duree|Moniteur|
+---------------------------
+| 23/09 | 18 h | 1h | JPS |
+–––––––––––––––––––––––––––
+
+Secretariat :
+Mardi 23/09
+|    |JPS| FN | Bourdieux |
+---------------------------
+| 9h |   |    |           |
+---------------------------
+| 10h |   |    |          |
+---------------------------
+|     |   |    |          |
+---------------------------
+| 17h |   |code|          |
+---------------------------
+| 18h |client| |          |
+–––––––––––––––––––––––––––
+
+HERITAGE :
+Personne : nom prenom adresse
+Personne -> Client
+Personne -> Moniteur
+
+Creneau
+Creneau -> Leçon de conduite
+Creneau -> Leçon de code
+
+Lecon
+Creneau => Lecon[]
+Lecon -> Leçon de conduite
+Lecon -> Leçon de code
+
+BDD : LocalStorage (fonction stockage dans la page en local)
+
+HEURES FIXES !!!
+
+SEANCE SUIVANTE :
+3 écrans => USER/MONITEUR/SECRETAIRE
+
+PROXY : git config --global http.proxy cache-etu.univ-lille1.fr:3128
