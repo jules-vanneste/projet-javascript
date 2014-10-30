@@ -483,7 +483,7 @@ popup = {
                     lecons[idLecon].moniteur = application.users[idMoniteur].cle;
                     dao.setSemaine(application.semaines[numSemaine].cle, application.semaines[numSemaine]);
                     div.innerHTML = "";
-                    popup.contentGestionLecons(div,numSemaine,jour,creneau);
+                    popup.contentGestionLeconsBySecretaire(div,numSemaine,jour,creneau);
                 });
 
                 td = domHelp.addElement(tr, "td");
