@@ -39,7 +39,7 @@ calendrier.Lecon= function(moniteur){
     var _moniteur = moniteur;
 
     this.__defineGetter__("moniteur", function(){return _moniteur;});
-    this.__defineSetter__("moniteur", function(value){return _moniteur = value;});
+    this.__defineSetter__("moniteur", function(){return _moniteur = value;});
 };
 
 // Classe representant une Lecon de conduite
@@ -48,7 +48,7 @@ calendrier.LeconConduite = function(moniteur, client){
     var _client = client;
 
     this.__defineGetter__("client", function(){return _client;});
-    this.__defineSetter__("client", function(value){return _client = value;});
+    this.__defineSetter__("client", function(){return _client = value;});
 };
 calendrier.LeconConduite.prototype.toJSON = function() {
     return Generic_toJSON("Con", this);
