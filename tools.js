@@ -90,7 +90,7 @@ tools = {
                     topush = false;
                 }
                 for (var j=0; j<lecons.length; j++) {
-                    if (lecons[j] instanceof calendrier.LeconConduite && application.users[i] == lecons[j].client){
+                    if (lecons[j] instanceof calendrier.LeconConduite && application.users[i].cle == lecons[j].client){
                         topush = false;
                     }
                 }

@@ -46,9 +46,11 @@ popup = {
         contentPopup = domHelp.addElement(divBody, "div");
         if(ajoutCode) {
             popup.contentAjoutCodeBySecretaire(contentPopup, numSemaine, jour, creneau);
+            boutonCode.focus();
         }
         else{
             popup.contentAjoutConduiteBySecretaire(contentPopup, numSemaine, jour, creneau);
+            boutonConduite.focus();
         }
         boutonCode.addEventListener("click", function () {
             contentPopup.innerHTML="";
@@ -62,7 +64,6 @@ popup = {
             contentPopup.innerHTML="";
             popup.contentGestionLeconsBySecretaire(contentPopup,numSemaine,jour,creneau);
         }, false);
-        boutonCode.focus();
     },
 
     // Popup d'ajout de lecons par une moniteur
@@ -257,8 +258,14 @@ popup = {
         }
 
         table = domHelp.addElement(form, "table", {nomAttribut : "class", valeurAttribute : "table table-striped"});
-        tools.choiceClient(3, selectClient, table, application.semaines[numSemaine].jours[numJour].creneaux[numCreneau].lecons, application.semaines[numSemaine].jours[numJour].creneaux[numCreneau], application.users[selectMoniteur.options[selectMoniteur.selectedIndex].value].cle);
-        selectClient.addEventListener("keyup", function(){tools.choiceClient(3, selectClient, table, application.semaines[numSemaine].jours[numJour].creneaux[numCreneau].lecons, application.semaines[numSemaine].jours[numJour].creneaux[numCreneau], application.users[selectMoniteur.options[selectMoniteur.selectedIndex].value].cle)});
+        if(selectMoniteur.options.length != 0) {
+            tools.choiceClient(3, selectClient, table, application.semaines[numSemaine].jours[numJour].creneaux[numCreneau].lecons, application.semaines[numSemaine].jours[numJour].creneaux[numCreneau], application.users[selectMoniteur.options[selectMoniteur.selectedIndex].value].cle);
+            selectClient.addEventListener("keyup", function(){tools.choiceClient(3, selectClient, table, application.semaines[numSemaine].jours[numJour].creneaux[numCreneau].lecons, application.semaines[numSemaine].jours[numJour].creneaux[numCreneau], application.users[selectMoniteur.options[selectMoniteur.selectedIndex].value].cle)});
+        }
+        else{
+            tools.choiceClient(3, selectClient, table, application.semaines[numSemaine].jours[numJour].creneaux[numCreneau].lecons, application.semaines[numSemaine].jours[numJour].creneaux[numCreneau], null);
+            selectClient.addEventListener("keyup", function(){tools.choiceClient(3, selectClient, table, application.semaines[numSemaine].jours[numJour].creneaux[numCreneau].lecons, application.semaines[numSemaine].jours[numJour].creneaux[numCreneau], null)});
+        }
 
         button = domHelp.addElement(form, "button", {nomAttribut : "type", valeurAttribute : "submit"}, {nomAttribut : "class", valeurAttribute : "btn btn-success col-sm-offset-5"}, {nomAttribut : "data-dismiss", valeurAttribute : "modal"});
         button.onclick = function() {
