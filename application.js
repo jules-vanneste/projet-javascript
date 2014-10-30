@@ -92,8 +92,8 @@ dao = {
         localStorage.setItem(semaine.cle,JSON.stringify(semaine));
     },
     // supprime un utilisateur dans la base.
-    deleteUtilisateur : function(cle,user) {
-        localStorage.removeItem(user);
+    deleteUtilisateur : function(cle) {
+        localStorage.removeItem(cle);
     },
     // supprime une semaine dans la base.
     deleteSemaine : function(cle) {
