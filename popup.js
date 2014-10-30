@@ -398,19 +398,23 @@ popup = {
                 select =  domHelp.addElement(td, "select", {nomAttribut : "name", valeurAttribute : "moniteur"}, {nomAttribut : "class", valeurAttribute : "form-control"}, {nomAttribut : "idLecon", valeurAttribute : i});
                 for (var j=0; j<application.users.length; j++) {
                     if (application.users[j].role == "Moniteur") {
-                        aLecon = false;
-                        for(var k=0; k<lecons.length; k++){
-                            moniteur = tools.getUserIfExist(lecons[k].moniteur);
-                            if(lecons[k].moniteur == application.users[j].cle && i!=k){
-                                aLecon = true;
-                            }
-                        }
-                        if(!aLecon){
+                        if(application.users[j].cle == lecons[i].moniteur){
                             option = domHelp.addElement(select, "option", {nomAttribut: "value", valeurAttribute: j});
                             domHelp.addText(option, application.users[j].nom + " " + application.users[j].prenom);
-                        }
-                        if(application.users[j] == moniteur) {
                             option.setAttribute("selected", "selected");
+                        }
+                        else{
+                            aLecon = false;
+                            for(var k=0; k<lecons.length; k++){
+                                moniteur = tools.getUserIfExist(lecons[k].moniteur);
+                                if(moniteur.cle == application.users[j].cle && i!=k){
+                                    aLecon = true;
+                                }
+                            }
+                            if(!aLecon){
+                                option = domHelp.addElement(select, "option", {nomAttribut: "value", valeurAttribute: j});
+                                domHelp.addText(option, application.users[j].nom + " " + application.users[j].prenom);
+                            }
                         }
                     }
                 }
@@ -444,19 +448,23 @@ popup = {
                 select =  domHelp.addElement(td, "select", {nomAttribut : "name", valeurAttribute : "moniteur"}, {nomAttribut : "class", valeurAttribute : "form-control"}, {nomAttribut : "idLecon", valeurAttribute : i});
                 for (var j=0; j<application.users.length; j++) {
                     if (application.users[j].role == "Moniteur") {
-                        aLecon = false;
-                        for(var k=0; k<lecons.length; k++){
-                            moniteur = tools.getUserIfExist(lecons[k].moniteur);
-                            if(moniteur == application.users[j] && lecons[i]!=lecons[k]){
-                                aLecon = true;
-                            }
-                        }
-                        if(!aLecon){
+                        if(application.users[j].cle == lecons[i].moniteur){
                             option = domHelp.addElement(select, "option", {nomAttribut: "value", valeurAttribute: j});
                             domHelp.addText(option, application.users[j].nom + " " + application.users[j].prenom);
-                        }
-                        if(application.users[j] == moniteur) {
                             option.setAttribute("selected", "selected");
+                        }
+                        else{
+                            aLecon = false;
+                            for(var k=0; k<lecons.length; k++){
+                                moniteur = tools.getUserIfExist(lecons[k].moniteur);
+                                if(moniteur.cle == application.users[j].cle && i!=k){
+                                    aLecon = true;
+                                }
+                            }
+                            if(!aLecon){
+                                option = domHelp.addElement(select, "option", {nomAttribut: "value", valeurAttribute: j});
+                                domHelp.addText(option, application.users[j].nom + " " + application.users[j].prenom);
+                            }
                         }
                     }
                 }
