@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="file:///home/m2eserv/vanneste/projet-javascript/src/index.html" />
+<title>ajoutUtilisateurSuccess</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">ajoutUtilisateurSuccess</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>file:///home/m2eserv/vanneste/projet-javascript/src/index.html</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>css=button.btn.btn-default</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>id=type</td>
+	<td>label=Client</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>id=civ</td>
+	<td>label=Mme.</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=nom</td>
+	<td>Thomas</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=prenom</td>
+	<td>Julie</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=adresse</td>
+	<td>175 Avenue de l'Europe</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=ville</td>
+	<td>Lille</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=tel</td>
+	<td>03.20.85.51.56</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=mail</td>
+	<td>julie.thomas@mail.fr</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>id=moniteur</td>
+	<td>label=Carpentier Thomas</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='content']/form/div[10]/div/button</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForText</td>
+	<td>//div[@id='content']/form/table/tbody/tr[8]/td[2]</td>
+	<td>Client</td>
+</tr>
+<tr>
+	<td>waitForText</td>
+	<td>//div[@id='content']/form/table/tbody/tr[8]/td[3]</td>
+	<td>Mme.</td>
+</tr>
+<tr>
+	<td>waitForText</td>
+	<td>//div[@id='content']/form/table/tbody/tr[8]/td[4]</td>
+	<td>Thomas</td>
+</tr>
+<tr>
+	<td>waitForText</td>
+	<td>//div[@id='content']/form/table/tbody/tr[8]/td[5]</td>
+	<td>Julie</td>
+</tr>
+
+</tbody></table>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="file:///home/m2eserv/vanneste/projet-javascript/src/index.html" />
+<title>ajoutUtilisateurFail</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">ajoutUtilisateurFail</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>file:///home/m2eserv/vanneste/projet-javascript/src/index.html</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>css=button.btn.btn-default</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=nom</td>
+	<td>Capolino</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=prenom</td>
+	<td>Maxime</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=ville</td>
+	<td>Annoeullin</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=tel</td>
+	<td>03.20.85.51.56</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=mail</td>
+	<td>maxime.capolino@live.fr</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='content']/form/div[10]/div/button</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertAlert</td>
+	<td>Veuillez remplir tous les champs du formulaire</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForText</td>
+	<td>css=h3</td>
+	<td>Ajouter un utilisateur</td>
+</tr>
+
+</tbody></table>
+</body>
+</html>

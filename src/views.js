@@ -74,7 +74,7 @@ view = {
         for (i=0; i<objects.length; i++) {
             tr = domHelp.addElement(tbody, "tr");
             td = domHelp.addElement(tr,"td");
-            input = domHelp.addElement(td, "input", {nomAttribut : "type", valeurAttribute : "radio"}, {nomAttribut : "name", valeurAttribute : "user"}, {nomAttribut : "value", valeurAttribute : i});
+            input = domHelp.addElement(td, "input", {nomAttribut : "type", valeurAttribute : "radio"}, {nomAttribut : "name", valeurAttribute : "user"}, {nomAttribut : "value", valeurAttribute : i}, {nomAttribut : "role", valeurAttribute : objects[i][properties[0]]});
             for (j=0; j<properties.length; j++) {
                 td = domHelp.addElement(tr,"td");
                 domHelp.addText(td, objects[i][properties[j]]);
@@ -216,6 +216,10 @@ view = {
             var ville = inputVille.value;
             var tel = inputTel.value;
             var mail = inputMail.value;
+            if(nom===""||prenom===""||adresse===""||ville===""||tel===""||mail===""){
+				alert("Veuillez remplir tous les champs du formulaire");
+				return ;
+			}
             if(idSelect === 0){
                 couleur = inputCouleur.value;
                 user = new utilisateur.Moniteur(civ, nom, prenom, adresse, ville, tel, mail, couleur);
