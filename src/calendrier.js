@@ -26,20 +26,36 @@ calendrier.Creneau = function(heure){
     var _clientsDisponibles = [];
     var _lecons = [];
 
-    this.__defineGetter__("heure", function(){return _heure;});
-    this.__defineSetter__("heure", function(value){return _heure = value;});
-    this.__defineGetter__("clientsDisponibles", function(){return _clientsDisponibles;});
-    this.__defineSetter__("clientsDisponibles", function(value){return _clientsDisponibles = value;});
-    this.__defineGetter__("lecons", function(){return _lecons;});
-    this.__defineSetter__("lecons", function(value){return _lecons = value;});
+    this.__defineGetter__("heure", function(){
+        return _heure;
+    });
+    this.__defineSetter__("heure", function(value){
+        _heure = value;
+    });
+    this.__defineGetter__("clientsDisponibles", function(){
+        return _clientsDisponibles;
+    });
+    this.__defineSetter__("clientsDisponibles", function(value){
+        _clientsDisponibles = value;
+    });
+    this.__defineGetter__("lecons", function(){
+        return _lecons;
+    });
+    this.__defineSetter__("lecons", function(value){
+        _lecons = value;
+    });
 };
 
 // Classe representant une Lecon
 calendrier.Lecon= function(moniteur){
     var _moniteur = moniteur;
 
-    this.__defineGetter__("moniteur", function(){return _moniteur;});
-    this.__defineSetter__("moniteur", function(){return _moniteur = value;});
+    this.__defineGetter__("moniteur", function(){
+        return _moniteur;
+    });
+    this.__defineSetter__("moniteur", function(value){
+        _moniteur = value;
+    });
 };
 
 // Classe representant une Lecon de conduite
@@ -47,38 +63,50 @@ calendrier.LeconConduite = function(moniteur, client){
     calendrier.Lecon.call(this, moniteur);
     var _client = client;
 
-    this.__defineGetter__("client", function(){return _client;});
-    this.__defineSetter__("client", function(){return _client = value;});
+    this.__defineGetter__("client", function(){
+        return _client;
+    });
+    this.__defineSetter__("client", function(value){
+        _client = value;
+    });
 };
 calendrier.LeconConduite.prototype.toJSON = function() {
-    return Generic_toJSON("Con", this);
+    return genericToJSON("Con", this);
 };
 calendrier.LeconConduite.fromJSON = function(value) {
-    return Generic_fromJSON(calendrier.LeconConduite, value.data);
+    return genericFromJSON(calendrier.LeconConduite, value.data);
 };
-Reviver.constructors.LeconConduite = calendrier.LeconConduite;
+reviver.constructors.LeconConduite = calendrier.LeconConduite;
 
 // Classe representant une Lecon de code
 calendrier.LeconCode = function(moniteur){
     calendrier.Lecon.call(this, moniteur);
 };
 calendrier.LeconCode.prototype.toJSON = function() {
-    return Generic_toJSON("Cod", this);
+    return genericToJSON("Cod", this);
 };
 calendrier.LeconCode.fromJSON = function(value) {
-    return Generic_fromJSON(calendrier.LeconCode, value.data);
+    return genericFromJSON(calendrier.LeconCode, value.data);
 };
-Reviver.constructors.LeconCode = calendrier.LeconCode;
+reviver.constructors.LeconCode = calendrier.LeconCode;
 
 // Classe representant un jour
-calendrier.Jour = function(date, creneaux, horaires){
+calendrier.Jour = function(date, creneaux){
     var _date = date;
     var _creneaux = creneaux;
 
-    this.__defineGetter__("date", function(){return _date;});
-    this.__defineSetter__("date", function(value){return _date = value;});
-    this.__defineGetter__("creneaux", function(){return _creneaux;});
-    this.__defineSetter__("creneaux", function(value){return _creneaux = value;});
+    this.__defineGetter__("date", function(){
+        return _date;
+    });
+    this.__defineSetter__("date", function(value){
+        _date = value;
+    });
+    this.__defineGetter__("creneaux", function(){
+        return _creneaux;
+    });
+    this.__defineSetter__("creneaux", function(value){
+        _creneaux = value;
+    });
 };
 
 // Classe representant une Semaine
@@ -95,22 +123,34 @@ calendrier.Semaine = function(date){
         for(var j=0; j<nbCreneaux; j++){
             creneaux.push(new calendrier.Creneau(horaires[j]));
         }
-        var date = new Date(_dateDebut);
-        date.setDate(date.getDate() + i);
-        _jours.push(new calendrier.Jour(date, creneaux, horaires));
+        var now = new Date(_dateDebut);
+        now.setDate(now.getDate() + i);
+        _jours.push(new calendrier.Jour(now, creneaux, horaires));
     }
 
-    this.__defineGetter__("cle", function(){return _cle;});
-    this.__defineSetter__("cle", function(value){return _cle = value;});
-    this.__defineGetter__("dateDebut", function(){return _dateDebut;});
-    this.__defineSetter__("dateDebut", function(value){return _dateDebut = value;});
-    this.__defineGetter__("jours", function(){return _jours;});
-    this.__defineSetter__("jours", function(value){return _jours = value;});
-}
+    this.__defineGetter__("cle", function(){
+        return _cle;
+    });
+    this.__defineSetter__("cle", function(value){
+        _cle = value;
+    });
+    this.__defineGetter__("dateDebut", function(){
+        return _dateDebut;
+    });
+    this.__defineSetter__("dateDebut", function(value){
+        _dateDebut = value;
+    });
+    this.__defineGetter__("jours", function(){
+        return _jours;
+    });
+    this.__defineSetter__("jours", function(value){
+        _jours = value;
+    });
+};
 calendrier.Semaine.prototype.toJSON = function() {
-    return Generic_toJSON("Sem", this);
+    return genericToJSON("Sem", this);
 };
 calendrier.Semaine.fromJSON = function(value) {
-    return Generic_fromJSON(calendrier.Semaine, value.data);
+    return genericFromJSON(calendrier.Semaine, value.data);
 };
-Reviver.constructors.Semaine = calendrier.Semaine;
+reviver.constructors.Semaine = calendrier.Semaine;

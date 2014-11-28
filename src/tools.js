@@ -1,6 +1,3 @@
-/*
- Contient les fonctions utilitaire pour le DOM.
- */
 domHelp = {
     // Ajoute un element DOM avec un ensemble d'attribut
     addElement: function (parentNode, element) {
@@ -23,13 +20,11 @@ domHelp = {
         recherche = recherche.toLowerCase();
         var res = [];
         for (var i=0; i<elements.length; i++) {
-            if(elements[i] != null){
-                if(elements[i].role == role) {
-                    for(var j=0; j<proprietes.length; j++) {
-                        if (elements[i][proprietes[j]].toLowerCase().indexOf(recherche) != -1) {
-                            res.push(i);
-                            break;
-                        }
+            if((elements[i] !== null) && (elements[i].role === role)){
+                for(var j=0; j<proprietes.length; j++) {
+                    if (elements[i][proprietes[j]].toLowerCase().indexOf(recherche) !== -1) {
+                        res.push(i);
+                        break;
                     }
                 }
             }
@@ -45,12 +40,13 @@ tools = {
     // Affiche la semaine suivante ou précedente d'une page
     changeSemaine : function(nomPage, numSemaine, suivante){
         var dateDebutSemaine = new Date(application.semaines[numSemaine].dateDebut.getFullYear(), application.semaines[numSemaine].dateDebut.getMonth(), application.semaines[numSemaine].dateDebut.getDate());
+        var i;
         if(suivante){
             dateDebutSemaine.setDate((dateDebutSemaine.getDate() - (dateDebutSemaine.getDay() - 1)) + 7);
-            for(var i=0; i<application.semaines.length; i++){
-                if((application.semaines[i].dateDebut.getDate() == dateDebutSemaine.getDate())
-                    && (application.semaines[i].dateDebut.getMonth() == dateDebutSemaine.getMonth())
-                    && (application.semaines[i].dateDebut.getFullYear() == dateDebutSemaine.getFullYear())) {
+            for(i=0; i<application.semaines.length; i++){
+                if((application.semaines[i].dateDebut.getDate() === dateDebutSemaine.getDate())
+                    && (application.semaines[i].dateDebut.getMonth() === dateDebutSemaine.getMonth())
+                    && (application.semaines[i].dateDebut.getFullYear() === dateDebutSemaine.getFullYear())) {
                     page.clear();
                     nomPage(i);
                     return;
@@ -59,15 +55,15 @@ tools = {
             var semaine = new calendrier.Semaine(dateDebutSemaine);
             application.semaines.push(semaine);
             dao.createSemaine(semaine);
-            page.clear()
+            page.clear();
             nomPage(application.semaines.length-1);
         }
         else{
             dateDebutSemaine.setDate((dateDebutSemaine.getDate() - (dateDebutSemaine.getDay() - 1)) - 7);
-            for(var i=0; i<application.semaines.length; i++){
-                if((application.semaines[i].dateDebut.getDate() == dateDebutSemaine.getDate())
-                    && (application.semaines[i].dateDebut.getMonth() == dateDebutSemaine.getMonth())
-                    && (application.semaines[i].dateDebut.getFullYear() == dateDebutSemaine.getFullYear())) {
+            for(i=0; i<application.semaines.length; i++){
+                if((application.semaines[i].dateDebut.getDate() === dateDebutSemaine.getDate())
+                    && (application.semaines[i].dateDebut.getMonth() === dateDebutSemaine.getMonth())
+                    && (application.semaines[i].dateDebut.getFullYear() === dateDebutSemaine.getFullYear())) {
                     page.clear();
                     nomPage(i);
                     return;
@@ -79,18 +75,17 @@ tools = {
     choiceClient : function(nbRes, input, conteneurRes, lecons, creneau, moniteur){
         conteneurRes.innerHTML = "";
         var tbody = domHelp.addElement(conteneurRes, "tbody");
-        var tr;
-        var td;
+        var tr, td, i, j, res;
 
-        if(lecons != null){
+        if(lecons !== null){
             var tab = [];
-            for (var i=0; i<application.users.length; i++) {
+            for (i=0; i<application.users.length; i++) {
                 var topush = true;
-                if(application.users[i].role != "Client"){
+                if(application.users[i].role !== "Client"){
                     topush = false;
                 }
-                for (var j=0; j<lecons.length; j++) {
-                    if (lecons[j] instanceof calendrier.LeconConduite && application.users[i].cle == lecons[j].client){
+                for (j=0; j<lecons.length; j++) {
+                    if (lecons[j] instanceof calendrier.LeconConduite && application.users[i].cle === lecons[j].client){
                         topush = false;
                     }
                 }
@@ -101,13 +96,13 @@ tools = {
                     tab.push(null);
                 }
             }
-            var res = domHelp.searchUser(input, tab, "Client", ["nom", "prenom"]);
+            res = domHelp.searchUser(input, tab, "Client", ["nom", "prenom"]);
         }
         else{
-            var res = domHelp.searchUser(input, application.users, "Client", ["nom", "prenom"]);
+            res = domHelp.searchUser(input, application.users, "Client", ["nom", "prenom"]);
         }
 
-        for (var i=0; i<nbRes && i<res.length; i++) {
+        for (i=0; i<nbRes && i<res.length; i++) {
             tr = domHelp.addElement(tbody,"tr");
             td = domHelp.addElement(tr, "td");
             domHelp.addElement(td, "input", {nomAttribut : "type", valeurAttribute : "radio"}, {nomAttribut : "name", valeurAttribute : "user"}, {nomAttribut : "value", valeurAttribute : res[i]});
@@ -119,12 +114,12 @@ tools = {
             domHelp.addText(td, application.users[res[i]].prenom);
             td = domHelp.addElement(tr, "td");
             var isDispo = false;
-            for(var j=0; j<creneau.clientsDisponibles.length; j++){
-                if(application.users[res[i]].cle == creneau.clientsDisponibles[j]){
+            for(j=0; j<creneau.clientsDisponibles.length; j++){
+                if(application.users[res[i]].cle === creneau.clientsDisponibles[j]){
                     isDispo = true;
                 }
             }
-            if(moniteur == application.users[res[i]].moniteur){
+            if(moniteur === application.users[res[i]].moniteur){
                 domHelp.addElement(td, "span", {nomAttribut : "class", valeurAttribute : "glyphicon glyphicon-star"}, {nomAttribut : "title", valeurAttribute : "Eleve du moniteur"});
             }
             if(isDispo){
@@ -138,7 +133,7 @@ tools = {
     // Retourne un utilisateur correspondant a une cle si celui-ci existe
     getUserIfExist : function (cle) {
         for (var i=0; i<application.users.length; i++) {
-            if(application.users[i].cle == cle){
+            if(application.users[i].cle === cle){
                 return application.users[i];
             }
         }
@@ -147,7 +142,7 @@ tools = {
     // Retourne l'index d'un utilisateur correspondant a une cle si celui-ci existe
     getIndexOfUserIfExist : function (cle) {
         for (var i=0; i<application.users.length; i++) {
-            if(application.users[i].cle == cle){
+            if(application.users[i].cle === cle){
                 return i;
             }
         }
@@ -161,22 +156,20 @@ tools = {
                 var div = domHelp.addElement(legende, "div", {nomAttribut : "class", valeurAttribute : "panel panel-default"}, {nomAttribut : "style", valeurAttribute : "display:inline-block;"});
                 domHelp.addElement(div, "div", {nomAttribut : "class", valeurAttribute : "panel-heading"}, {nomAttribut : "style", valeurAttribute : "background-color: " + application.users[i].couleur});
                 var texteMoniteur = domHelp.addElement(div, "div", {nomAttribut : "class", valeurAttribute : "panel-body"}, {nomAttribut : "style", valeurAttribute : "padding:5px;"});
-                //var divMoniteur = domHelp.addElement(legende, "div", {nomAttribut : "style", valeurAttribute : "border: 1px solid black; display: inline-block; width: 75px; height:30px; background-color: " + application.users[i].couleur});
-                //var texteMoniteur = domHelp.addElement(legende, "span", {nomAttribut : "style", valeurAttribute : "display: inline; margin-left: 5px; vertical-align: top; margin-right : 10px;"});
                 domHelp.addText(texteMoniteur, application.users[i].nom + " " + application.users[i].prenom);
             }
         }
     }
-}
+};
 
 // fonction qui permet de mapper une classe a un format JSON
-function Reviver(key, value) {
+function reviver(value) {
     var ctor;
 
     if (typeof value === "object" &&
         typeof value.ctor === "string" &&
         typeof value.data !== "undefined") {
-        ctor = Reviver.constructors[value.ctor] || window[value.ctor];
+        ctor = reviver.constructors[value.ctor] || window[value.ctor];
         if (typeof ctor === "function" &&
             typeof ctor.fromJSON === "function") {
             return ctor.fromJSON(value);
@@ -184,10 +177,10 @@ function Reviver(key, value) {
     }
     return value;
 }
-Reviver.constructors = {}; // A list of constructors the smart reviver should know about
+reviver.constructors = {}; // A list of constructors the smart reviver should know about
 
 // Change la chaine JSON d'une classe avec un indicateur de sa classe dans la propriete ctor et les données dans la propiete data
-function Generic_toJSON(ctorName, obj, keys) {
+function genericToJSON(ctorName, obj, keys) {
     var data, index, key;
 
     if (!keys) {
@@ -203,7 +196,7 @@ function Generic_toJSON(ctorName, obj, keys) {
 }
 
 // Retourne l'objet generic d'un objet par rapport a ses propriete ctor et data
-function Generic_fromJSON(ctor, data) {
+function genericFromJSON(ctor, data) {
     var obj, name;
 
     obj = new ctor();

@@ -72,7 +72,7 @@ popup = {
             nav, navCode, boutonCode, navConduite, boutonConduite, navGestion, boutonGestion, contentPopup;
 
         td = targetElement;
-        while(td.nodeName != "TD"){
+        while(td.nodeName !== "TD"){
             td = targetElement.parentNode;
         }
         jour = td.getAttribute("jour");
@@ -108,7 +108,7 @@ popup = {
                 boutonCode.setAttribute("disabled", "disabled");
                 ajoutCode = false;
             }
-            else if(lecons[i] instanceof calendrier.LeconConduite && lecons[i].moniteur == application.users[application.userConnected].cle){
+            else if(lecons[i] instanceof calendrier.LeconConduite && lecons[i].moniteur === application.users[application.userConnected].cle){
                 boutonConduite.setAttribute("disabled", "disabled");
                 ajoutConduite = false;
             }
@@ -149,14 +149,14 @@ popup = {
         labelMoniteur = domHelp.addElement(divMoniteur, "label", {nomAttribut : "for", valeurAttribute : "sMoniteur"}, {nomAttribut : "class", valeurAttribute : "col-sm-4 control-label"});
         domHelp.addText(labelMoniteur, "Nom du moniteur :");
         divInputMoniteur = domHelp.addElement(divMoniteur, "div", {nomAttribut : "class", valeurAttribute : "col-sm-8"});
-        selectMoniteur =  domHelp.addElement(divInputMoniteur, "select", {nomAttribut : "name", valeurAttribute : "moniteur", nomAttribut : "class", valeurAttribute : "form-control"});
+        selectMoniteur =  domHelp.addElement(divInputMoniteur, "select", {nomAttribut : "name", valeurAttribute : "moniteur"}, {nomAttribut : "class", valeurAttribute : "form-control"});
         for (var i=0; i<application.users.length; i++) {
-            if (application.users[i].role == "Moniteur") {
+            if (application.users[i].role === "Moniteur") {
                 aLecon = false;
                 lecons = application.semaines[numSemaine].jours[jour].creneaux[creneau].lecons;
                 for(var j=0; j<lecons.length; j++){
                     moniteur = tools.getUserIfExist(lecons[j].moniteur);
-                    if(moniteur == application.users[i]){
+                    if(moniteur === application.users[i]){
                         aLecon = true;
                     }
                 }
@@ -219,7 +219,9 @@ popup = {
             if(!checkBoxClientDispo.checked){
                 selectClient = domHelp.addElement(divInputClient, "input", {nomAttribut : "type", valeurAttribute : "search"}, {nomAttribut : "name", valeurAttribute : "sClient"}, {nomAttribut : "placeholder", valeurAttribute : "Nom client"}, {nomAttribut : "class", valeurAttribute : "form-control"});
                 tools.choiceClient(3, selectClient, table, application.semaines[numSemaine].jours[numJour].creneaux[numCreneau].lecons, application.semaines[numSemaine].jours[numJour].creneaux[numCreneau], application.users[selectMoniteur.options[selectMoniteur.selectedIndex].value].cle);
-                selectClient.addEventListener("keyup", function(){tools.choiceClient(3, selectClient, table, application.semaines[numSemaine].jours[numJour].creneaux[numCreneau].lecons, application.semaines[numSemaine].jours[numJour].creneaux[numCreneau], application.users[selectMoniteur.options[selectMoniteur.selectedIndex].value].cle)});
+                selectClient.addEventListener("keyup", function(){
+                    tools.choiceClient(3, selectClient, table, application.semaines[numSemaine].jours[numJour].creneaux[numCreneau].lecons, application.semaines[numSemaine].jours[numJour].creneaux[numCreneau], application.users[selectMoniteur.options[selectMoniteur.selectedIndex].value].cle);
+                });
             }
             else {
                 clientsDispo = application.semaines[numSemaine].jours[numJour].creneaux[numCreneau].clientsDisponibles;
@@ -236,17 +238,17 @@ popup = {
         labelMoniteur = domHelp.addElement(divMoniteur, "label", {nomAttribut : "for", valeurAttribute : "sMoniteur"}, {nomAttribut : "class", valeurAttribute : "col-sm-4 control-label"});
         domHelp.addText(labelMoniteur, "Nom du moniteur :");
         divInputMoniteur = domHelp.addElement(divMoniteur, "div", {nomAttribut : "class", valeurAttribute : "col-sm-8"});
-        selectMoniteur =  domHelp.addElement(divInputMoniteur, "select", {nomAttribut : "name", valeurAttribute : "moniteur", nomAttribut : "class", valeurAttribute : "form-control"});
+        selectMoniteur =  domHelp.addElement(divInputMoniteur, "select", {nomAttribut : "name", valeurAttribute : "moniteur"}, {nomAttribut : "class", valeurAttribute : "form-control"});
         selectMoniteur.addEventListener("change", function(){
             tools.choiceClient(3, selectClient, table, application.semaines[numSemaine].jours[numJour].creneaux[numCreneau].lecons, application.semaines[numSemaine].jours[numJour].creneaux[numCreneau], application.users[selectMoniteur.options[selectMoniteur.selectedIndex].value].cle);
         });
         for (var i=0; i<application.users.length; i++) {
-            if (application.users[i].role == "Moniteur") {
+            if (application.users[i].role === "Moniteur") {
                 aLecon = false;
                 lecons = application.semaines[numSemaine].jours[numJour].creneaux[numCreneau].lecons;
                 for(var j=0; j<lecons.length; j++){
                     moniteur = tools.getUserIfExist(lecons[j].moniteur);
-                    if(moniteur == application.users[i]){
+                    if(moniteur === application.users[i]){
                         aLecon = true;
                     }
                 }
@@ -258,18 +260,22 @@ popup = {
         }
 
         table = domHelp.addElement(form, "table", {nomAttribut : "class", valeurAttribute : "table table-striped"});
-        if(selectMoniteur.options.length != 0) {
+        if(selectMoniteur.options.length !== 0) {
             tools.choiceClient(3, selectClient, table, application.semaines[numSemaine].jours[numJour].creneaux[numCreneau].lecons, application.semaines[numSemaine].jours[numJour].creneaux[numCreneau], application.users[selectMoniteur.options[selectMoniteur.selectedIndex].value].cle);
-            selectClient.addEventListener("keyup", function(){tools.choiceClient(3, selectClient, table, application.semaines[numSemaine].jours[numJour].creneaux[numCreneau].lecons, application.semaines[numSemaine].jours[numJour].creneaux[numCreneau], application.users[selectMoniteur.options[selectMoniteur.selectedIndex].value].cle)});
+            selectClient.addEventListener("keyup", function(){
+                tools.choiceClient(3, selectClient, table, application.semaines[numSemaine].jours[numJour].creneaux[numCreneau].lecons, application.semaines[numSemaine].jours[numJour].creneaux[numCreneau], application.users[selectMoniteur.options[selectMoniteur.selectedIndex].value].cle);
+            });
         }
         else{
             tools.choiceClient(3, selectClient, table, application.semaines[numSemaine].jours[numJour].creneaux[numCreneau].lecons, application.semaines[numSemaine].jours[numJour].creneaux[numCreneau], null);
-            selectClient.addEventListener("keyup", function(){tools.choiceClient(3, selectClient, table, application.semaines[numSemaine].jours[numJour].creneaux[numCreneau].lecons, application.semaines[numSemaine].jours[numJour].creneaux[numCreneau], null)});
+            selectClient.addEventListener("keyup", function(){
+                tools.choiceClient(3, selectClient, table, application.semaines[numSemaine].jours[numJour].creneaux[numCreneau].lecons, application.semaines[numSemaine].jours[numJour].creneaux[numCreneau], null);
+            });
         }
 
         button = domHelp.addElement(form, "button", {nomAttribut : "type", valeurAttribute : "submit"}, {nomAttribut : "class", valeurAttribute : "btn btn-success col-sm-offset-5"}, {nomAttribut : "data-dismiss", valeurAttribute : "modal"});
         button.onclick = function() {
-            var radios, idUser, idMoniteur, creneau, idSelect, idUser;
+            var radios, idUser, idSelect;
 
             radios = document.getElementsByName('user');
             idUser = -1;
@@ -288,7 +294,7 @@ popup = {
                     }
                 }
             }
-            if(idUser != -1){
+            if(idUser !== -1){
                 creneau.lecons.push(new calendrier.LeconConduite(application.users[idMoniteur].cle, application.users[idUser].cle));
                 dao.setSemaine(application.semaines[numSemaine].cle, application.semaines[numSemaine]);
             }
@@ -322,13 +328,15 @@ popup = {
             if(!checkBoxClientDispo.checked){
                 selectClient = domHelp.addElement(divInputClient, "input", {nomAttribut : "type", valeurAttribute : "search"}, {nomAttribut : "name", valeurAttribute : "sClient"}, {nomAttribut : "placeholder", valeurAttribute : "Nom client"}, {nomAttribut : "class", valeurAttribute : "form-control"});
                 tools.choiceClient(3, selectClient, table, application.semaines[numSemaine].jours[numJour].creneaux[numCreneau].lecons, application.semaines[numSemaine].jours[numJour].creneaux[numCreneau], application.users[application.userConnected].cle);
-                selectClient.addEventListener("keyup", function(){tools.choiceClient(3, selectClient, table, application.semaines[numSemaine].jours[numJour].creneaux[numCreneau].lecons, application.semaines[numSemaine].jours[numJour].creneaux[numCreneau], application.users[application.userConnected].cle)});
+                selectClient.addEventListener("keyup", function(){
+                    tools.choiceClient(3, selectClient, table, application.semaines[numSemaine].jours[numJour].creneaux[numCreneau].lecons, application.semaines[numSemaine].jours[numJour].creneaux[numCreneau], application.users[application.userConnected].cle);
+                });
             }
             else {
                 clientsDispo = application.semaines[numSemaine].jours[numJour].creneaux[numCreneau].clientsDisponibles;
                 selectClient = domHelp.addElement(divInputClient, "select", {nomAttribut : "type", valeurAttribute : "search"}, {nomAttribut : "name", valeurAttribute : "sClient"}, {nomAttribut : "id", valeurAttribute : "user"}, {nomAttribut : "placeholder", valeurAttribute : "Nom client"}, {nomAttribut : "class", valeurAttribute : "form-control"});
                 for(var i=0; i<clientsDispo.length; i++){
-                    client = tools.getUserIfExist(clientsDispo[i])
+                    client = tools.getUserIfExist(clientsDispo[i]);
                     optionClient = domHelp.addElement(selectClient, "option", {nomAttribut: "value", valeurAttribute: i});
                     domHelp.addText(optionClient, client.nom + " " + client.prenom);
                 }
@@ -336,12 +344,14 @@ popup = {
         }, false);
 
         table = domHelp.addElement(form, "table", {nomAttribut : "class", valeurAttribute : "table table-striped"});
-        selectClient.addEventListener("keyup", function(){tools.choiceClient(3, selectClient, table, application.semaines[numSemaine].jours[numJour].creneaux[numCreneau].lecons, application.semaines[numSemaine].jours[numJour].creneaux[numCreneau], application.users[application.userConnected].cle)});
+        selectClient.addEventListener("keyup", function(){
+            tools.choiceClient(3, selectClient, table, application.semaines[numSemaine].jours[numJour].creneaux[numCreneau].lecons, application.semaines[numSemaine].jours[numJour].creneaux[numCreneau], application.users[application.userConnected].cle);
+        });
         tools.choiceClient(3, selectClient, table, application.semaines[numSemaine].jours[numJour].creneaux[numCreneau].lecons, application.semaines[numSemaine].jours[numJour].creneaux[numCreneau], application.users[application.userConnected].cle);
 
         button = domHelp.addElement(form, "button", {nomAttribut : "type", valeurAttribute : "submit"}, {nomAttribut : "class", valeurAttribute : "btn btn-success col-sm-offset-5"}, {nomAttribut : "data-dismiss", valeurAttribute : "modal"});
         button.onclick = function() {
-            var radios, idUser, creneau, creneau, idSelect;
+            var radios, idUser, creneau, idSelect;
 
             radios = document.getElementsByName('user');
             idUser = -1;
@@ -359,7 +369,7 @@ popup = {
                     }
                 }
             }
-            if(idUser != -1){
+            if(idUser !== -1){
                 creneau.lecons.push(new calendrier.LeconConduite(application.users[application.userConnected].cle, application.users[idUser].cle));
                 dao.setSemaine(application.semaines[numSemaine].cle, application.semaines[numSemaine]);
             }
@@ -372,7 +382,7 @@ popup = {
 
     // Popup de gestion des lecons par une secretaire
     contentGestionLeconsBySecretaire : function(div, numSemaine, jour, creneau){
-        var form, lecons, table, tbody, tr, td, th, span, select, option, moniteur, client;
+        var form, table, tr, td, th, select, option, client, j, k;
 
         form = domHelp.addElement(div, "form", {nomAttribut : "class", valeurAttribute : "form-horizontal"}, {nomAttribut : "onSubmit", valeurAttribute : "return false;"});
         lecons = application.semaines[numSemaine].jours[jour].creneaux[creneau].lecons;
@@ -396,18 +406,18 @@ popup = {
                 domHelp.addText(td, "Leçon de conduite");
                 td = domHelp.addElement(tr, "td");
                 select =  domHelp.addElement(td, "select", {nomAttribut : "name", valeurAttribute : "moniteur"}, {nomAttribut : "class", valeurAttribute : "form-control"}, {nomAttribut : "idLecon", valeurAttribute : i});
-                for (var j=0; j<application.users.length; j++) {
-                    if (application.users[j].role == "Moniteur") {
-                        if(application.users[j].cle == lecons[i].moniteur){
+                for (j=0; j<application.users.length; j++) {
+                    if (application.users[j].role === "Moniteur") {
+                        if(application.users[j].cle === lecons[i].moniteur){
                             option = domHelp.addElement(select, "option", {nomAttribut: "value", valeurAttribute: j});
                             domHelp.addText(option, application.users[j].nom + " " + application.users[j].prenom);
                             option.setAttribute("selected", "selected");
                         }
                         else{
                             aLecon = false;
-                            for(var k=0; k<lecons.length; k++){
+                            for(k=0; k<lecons.length; k++){
                                 moniteur = tools.getUserIfExist(lecons[k].moniteur);
-                                if(moniteur.cle == application.users[j].cle && i!=k){
+                                if(moniteur.cle === application.users[j].cle && i!==k){
                                     aLecon = true;
                                 }
                             }
@@ -419,21 +429,8 @@ popup = {
                     }
                 }
 
-                select.addEventListener("change", function(e){
-                    var targetElement, nodeSelect, idMoniteur, idLecon;
-
-                    targetElement = e.target || e.srcElement;
-                    var nodeSelect = targetElement;
-                    while(nodeSelect.nodeName != "SELECT"){
-                        nodeSelect = targetElement.parentNode;
-                    }
-
-                    idMoniteur = nodeSelect.options[nodeSelect.selectedIndex].value;
-                    idLecon = nodeSelect.getAttribute("idLecon");
-                    lecons[idLecon].moniteur = application.users[idMoniteur].cle;
-                    dao.setSemaine(application.semaines[numSemaine].cle, application.semaines[numSemaine]);
-                    div.innerHTML = "";
-                    popup.contentGestionLeconsBySecretaire(div,numSemaine,jour,creneau);
+                select.addEventListener("change", function (e){
+                    selectAddListenerSecretaire(e, lecons, div, numSemaine, jour, creneau);
                 });
 
                 td = domHelp.addElement(tr, "td");
@@ -443,21 +440,21 @@ popup = {
             }
             else{
                 td = domHelp.addElement(tr, "td");
-                domHelp.addText(td, "Leçon de code")
+                domHelp.addText(td, "Leçon de code");
                 td = domHelp.addElement(tr, "td");
                 select =  domHelp.addElement(td, "select", {nomAttribut : "name", valeurAttribute : "moniteur"}, {nomAttribut : "class", valeurAttribute : "form-control"}, {nomAttribut : "idLecon", valeurAttribute : i});
-                for (var j=0; j<application.users.length; j++) {
-                    if (application.users[j].role == "Moniteur") {
-                        if(application.users[j].cle == lecons[i].moniteur){
+                for (j=0; j<application.users.length; j++) {
+                    if (application.users[j].role === "Moniteur") {
+                        if(application.users[j].cle === lecons[i].moniteur){
                             option = domHelp.addElement(select, "option", {nomAttribut: "value", valeurAttribute: j});
                             domHelp.addText(option, application.users[j].nom + " " + application.users[j].prenom);
                             option.setAttribute("selected", "selected");
                         }
                         else{
                             aLecon = false;
-                            for(var k=0; k<lecons.length; k++){
+                            for(k=0; k<lecons.length; k++){
                                 moniteur = tools.getUserIfExist(lecons[k].moniteur);
-                                if(moniteur.cle == application.users[j].cle && i!=k){
+                                if(moniteur.cle === application.users[j].cle && i!==k){
                                     aLecon = true;
                                 }
                             }
@@ -469,21 +466,8 @@ popup = {
                     }
                 }
 
-                select.addEventListener("change", function(e){
-                    var targetElement, nodeSelect, idMoniteur, idLecon;
-
-                    var targetElement = e.target || e.srcElement;
-                    var nodeSelect = targetElement;
-                    while(nodeSelect.nodeName != "SELECT"){
-                        nodeSelect = targetElement.parentNode;
-                    }
-
-                    idMoniteur = nodeSelect.options[nodeSelect.selectedIndex].value;
-                    idLecon = nodeSelect.getAttribute("idLecon");
-                    lecons[idLecon].moniteur = application.users[idMoniteur].cle;
-                    dao.setSemaine(application.semaines[numSemaine].cle, application.semaines[numSemaine]);
-                    div.innerHTML = "";
-                    popup.contentGestionLeconsBySecretaire(div,numSemaine,jour,creneau);
+                select.addEventListener("change", function (e){
+                    selectAddListenerSecretaire(e, lecons, div, numSemaine, jour, creneau);
                 });
 
                 td = domHelp.addElement(tr, "td");
@@ -491,26 +475,15 @@ popup = {
                 td = domHelp.addElement(tr, "td", {nomAttribut : "class", valeurAttribute : "elt-clickable"}, {nomAttribut : "idLecon", valeurAttribute : i});
                 domHelp.addElement(td, "span", {nomAttribut : "class", valeurAttribute : "glyphicon glyphicon-remove-sign"});
             }
-            td.addEventListener("click", function(e){
-                var targetElement, td;
-
-                targetElement = e.target || e.srcElement;
-                td = targetElement;
-                while(td.nodeName != "TD"){
-                    td = targetElement.parentNode;
-                }
-
-                lecons.splice(td.getAttribute("idLecon"), 1);
-                dao.setSemaine(application.semaines[numSemaine].cle, application.semaines[numSemaine]);
-                div.innerHTML = "";
-                popup.contentGestionLeconsBySecretaire(div,numSemaine,jour,creneau);
+            td.addEventListener("click", function (e){
+                tdAddListener(e, lecons, div, numSemaine, jour, creneau);
             }, false);
         }
     },
 
     // Popup de gestion des lecons par un moniteur
     contentGestionLeconsByMoniteur : function(div, numSemaine, jour, creneau){
-        var form, lecons, table, tbody, tr, td, th, span, select, option, moniteur, client;
+        var form, table, tr, td, th, select, option, client, j, k;
 
         form = domHelp.addElement(div, "form", {nomAttribut : "class", valeurAttribute : "form-horizontal"}, {nomAttribut : "onSubmit", valeurAttribute : "return false;"});
         lecons = application.semaines[numSemaine].jours[jour].creneaux[creneau].lecons;
@@ -534,18 +507,18 @@ popup = {
                 domHelp.addText(td, "Leçon de conduite");
                 td = domHelp.addElement(tr, "td");
                 select =  domHelp.addElement(td, "select", {nomAttribut : "name", valeurAttribute : "moniteur"}, {nomAttribut : "class", valeurAttribute : "form-control"}, {nomAttribut : "idLecon", valeurAttribute : i});
-                for (var j=0; j<application.users.length; j++) {
-                    if (application.users[j].role == "Moniteur") {
-                        if(application.users[j].cle == lecons[i].moniteur){
+                for (j=0; j<application.users.length; j++) {
+                    if (application.users[j].role === "Moniteur") {
+                        if(application.users[j].cle === lecons[i].moniteur){
                             option = domHelp.addElement(select, "option", {nomAttribut: "value", valeurAttribute: j});
                             domHelp.addText(option, application.users[j].nom + " " + application.users[j].prenom);
                             option.setAttribute("selected", "selected");
                         }
                         else{
                             aLecon = false;
-                            for(var k=0; k<lecons.length; k++){
+                            for(k=0; k<lecons.length; k++){
                                 moniteur = tools.getUserIfExist(lecons[k].moniteur);
-                                if(moniteur.cle == application.users[j].cle && i!=k){
+                                if(moniteur.cle === application.users[j].cle && i!==k){
                                     aLecon = true;
                                 }
                             }
@@ -556,21 +529,8 @@ popup = {
                         }
                     }
                 }
-                select.addEventListener("change", function(e){
-                    var targetElement, nodeSelect, idMoniteur, idLecon;
-
-                    targetElement = e.target || e.srcElement;
-                    nodeSelect = targetElement;
-                    while(nodeSelect.nodeName != "SELECT"){
-                        nodeSelect = targetElement.parentNode;
-                    }
-
-                    idMoniteur = nodeSelect.options[nodeSelect.selectedIndex].value;
-                    idLecon = nodeSelect.getAttribute("idLecon");
-                    lecons[idLecon].moniteur = application.users[idMoniteur].cle;
-                    dao.setSemaine(application.semaines[numSemaine].cle, application.semaines[numSemaine]);
-                    div.innerHTML = "";
-                    popup.contentGestionLeconsByMoniteur(div,numSemaine,jour,creneau);
+                select.addEventListener("change", function (e){
+                    selectAddListenerMoniteur(e, lecons, div, numSemaine, jour, creneau);
                 });
                 td = domHelp.addElement(tr, "td");
                 domHelp.addText(td, client.nom + " " + client.prenom);
@@ -579,21 +539,21 @@ popup = {
             }
             else if(lecons[i] instanceof calendrier.LeconCode){
                 td = domHelp.addElement(tr, "td");
-                domHelp.addText(td, "Leçon de code")
+                domHelp.addText(td, "Leçon de code");
                 td = domHelp.addElement(tr, "td");
                 select =  domHelp.addElement(td, "select", {nomAttribut : "name", valeurAttribute : "moniteur"}, {nomAttribut : "class", valeurAttribute : "form-control"}, {nomAttribut : "idLecon", valeurAttribute : i});
-                for (var j=0; j<application.users.length; j++) {
-                    if (application.users[j].role == "Moniteur") {
-                        if(application.users[j].cle == lecons[i].moniteur){
+                for (j=0; j<application.users.length; j++) {
+                    if (application.users[j].role === "Moniteur") {
+                        if(application.users[j].cle === lecons[i].moniteur){
                             option = domHelp.addElement(select, "option", {nomAttribut: "value", valeurAttribute: j});
                             domHelp.addText(option, application.users[j].nom + " " + application.users[j].prenom);
                             option.setAttribute("selected", "selected");
                         }
                         else{
                             aLecon = false;
-                            for(var k=0; k<lecons.length; k++){
+                            for(k=0; k<lecons.length; k++){
                                 moniteur = tools.getUserIfExist(lecons[k].moniteur);
-                                if(moniteur == application.users[j] && lecons[i]!=lecons[k]){
+                                if(moniteur === application.users[j] && lecons[i]!==lecons[k]){
                                     aLecon = true;
                                 }
                             }
@@ -605,39 +565,65 @@ popup = {
                     }
                 }
                 select.addEventListener("change", function(e){
-                    var targetElement, nodeSelect, idMoniteur, idLecon;
-
-                    targetElement = e.target || e.srcElement;
-                    nodeSelect = targetElement;
-                    while(nodeSelect.nodeName != "SELECT"){
-                        nodeSelect = targetElement.parentNode;
-                    }
-
-                    idMoniteur = nodeSelect.options[nodeSelect.selectedIndex].value;
-                    idLecon = nodeSelect.getAttribute("idLecon");
-                    lecons[idLecon].moniteur = application.users[idMoniteur].cle;
-                    dao.setSemaine(application.semaines[numSemaine].cle, application.semaines[numSemaine]);
-                    div.innerHTML = "";
-                    popup.contentGestionLeconsByMoniteur(div,numSemaine,jour,creneau);
+                    selectAddListenerMoniteur(e, lecons, div, numSemaine, jour, creneau);
                 });
                 td = domHelp.addElement(tr, "td");
                 domHelp.addText(td, "");
                 td = domHelp.addElement(tr, "td", {nomAttribut : "class", valeurAttribute : "elt-clickable"}, {nomAttribut : "idLecon", valeurAttribute : i});
                 domHelp.addElement(td, "span", {nomAttribut : "class", valeurAttribute : "glyphicon glyphicon-remove-sign"});
             }
-            td.addEventListener("click", function(e){
-                var targetElement, td;
-
-                targetElement = e.target || e.srcElement;
-                td = targetElement;
-                while(td.nodeName != "TD"){
-                    td = targetElement.parentNode;
-                }
-                lecons.splice(td.getAttribute("idLecon"), 1);
-                dao.setSemaine(application.semaines[numSemaine].cle, application.semaines[numSemaine]);
-                div.innerHTML = "";
-                popup.contentGestionLeconsByMoniteur(div,numSemaine,jour,creneau);
+            td.addEventListener("click", function (e) {
+                tdAddListener(e, lecons, div, numSemaine, jour, creneau);
             }, false);
         }
     }
-}
+};
+
+function selectAddListenerSecretaire(e,lecons, div,numSemaine,jour,creneau){
+    var targetElement, nodeSelect, idMoniteur, idLecon;
+
+    targetElement = e.target || e.srcElement;
+    nodeSelect = targetElement;
+    while(nodeSelect.nodeName !== "SELECT"){
+        nodeSelect = targetElement.parentNode;
+    }
+
+    idMoniteur = nodeSelect.options[nodeSelect.selectedIndex].value;
+    idLecon = nodeSelect.getAttribute("idLecon");
+    lecons[idLecon].moniteur = application.users[idMoniteur].cle;
+    dao.setSemaine(application.semaines[numSemaine].cle, application.semaines[numSemaine]);
+    div.innerHTML = "";
+    popup.contentGestionLeconsBySecretaire(div,numSemaine,jour,creneau);
+};
+
+function selectAddListenerMoniteur(e,lecons, div,numSemaine,jour,creneau){
+    var targetElement, nodeSelect, idMoniteur, idLecon;
+
+    targetElement = e.target || e.srcElement;
+    nodeSelect = targetElement;
+    while(nodeSelect.nodeName !== "SELECT"){
+        nodeSelect = targetElement.parentNode;
+    }
+
+    idMoniteur = nodeSelect.options[nodeSelect.selectedIndex].value;
+    idLecon = nodeSelect.getAttribute("idLecon");
+    lecons[idLecon].moniteur = application.users[idMoniteur].cle;
+    dao.setSemaine(application.semaines[numSemaine].cle, application.semaines[numSemaine]);
+    div.innerHTML = "";
+    popup.contentGestionLeconsByMoniteur(div,numSemaine,jour,creneau);
+};
+
+function tdAddListener(e, lecons, div, numSemaine, jour, creneau){
+    var targetElement, td;
+
+    targetElement = e.target || e.srcElement;
+    td = targetElement;
+    while(td.nodeName !== "TD"){
+        td = targetElement.parentNode;
+    }
+
+    lecons.splice(td.getAttribute("idLecon"), 1);
+    dao.setSemaine(application.semaines[numSemaine].cle, application.semaines[numSemaine]);
+    div.innerHTML = "";
+    popup.contentGestionLeconsBySecretaire(div,numSemaine,jour,creneau);
+};

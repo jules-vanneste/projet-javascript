@@ -1,0 +1,116 @@
+1er coup de sonar-runner :
+
+Exclusions dans le fichier sonar-project.properties: "sonar.exclusions=bootstrap-3.2.0-dist/**/*.js"
+
+Erreurs critiques :
+* popup.js - ligne 152
+avant : {nomAttribut : "name", valeurAttribute : "moniteur", nomAttribut : "class", valeurAttribute : "form-control"}
+apres : {nomAttribut : "name", valeurAttribute : "moniteur"}, {nomAttribut : "class", valeurAttribute : "form-control"}
+--------------------------------------------------------------------------------------------------------------------------
+* popup.js - ligne 239
+avant : {nomAttribut : "name", valeurAttribute : "moniteur", nomAttribut : "class", valeurAttribute : "form-control"}
+apres : {nomAttribut : "name", valeurAttribute : "moniteur"}, {nomAttribut : "class", valeurAttribute : "form-control"}
+
+Erreurs majeurs :
+* application.js - ligne 55, 114 - Ajout en fin de fichier ";"
+avant : }
+après : };
+--------------------------------------------------------------------------------------------------------------------------
+* calendrier.js - ligne 30, 32, 34, 42, 51, 79, 81, 104, 106, 108 - suppression du return dans le setter
+avant : this.__defineSetter__("heure", function(value){return _heure = value;});
+apres : this.__defineSetter__("heure", function(value){_heure = value;});
+--------------------------------------------------------------------------------------------------------------------------
+* calendrier.js - ligne 34, 42, 51 - Ajout du parametre value dans le setter
+avant : this.__defineSetter__("client", function(){return _client = value;});
+apres : this.__defineSetter__("client", function(value){return _client = value;});
+--------------------------------------------------------------------------------------------------------------------------
+* calendrier.js - Mise en place d'une indentation correcte (une instruction par ligne) sur chaque getter et setter
+avant : this.__defineGetter__("heure", function(){return _heure;});
+apres : this.__defineGetter__("heure", function(){
+        	return _heure;
+    		});
+--------------------------------------------------------------------------------------------------------------------------
+* calendrier.js - ligne 113 - Ajout en fin de fichier ";"
+avant : }
+après : };
+--------------------------------------------------------------------------------------------------------------------------
+* calendrier.js - ligne 126 - Déclaration d'une variable déjà déclarée
+avant : var date = new Date(_dateDebut);
+après : var now = new Date(_dateDebut);
+--------------------------------------------------------------------------------------------------------------------------
+* calendrier.js - ligne 94 - Paramètre non utilisé par la fonction 
+avant : calendrier.Jour = function(date, creneaux, horaires){
+après : calendrier.Jour = function(date, creneaux){
+--------------------------------------------------------------------------------------------------------------------------
+* main.js - ligne 82, 83, 84 - Remplacement de "==" par "==="
+--------------------------------------------------------------------------------------------------------------------------
+* main.js - ligne 10, 15, 38, 67, 70 - Remplacement de "!=" par "!=="
+--------------------------------------------------------------------------------------------------------------------------
+* main.js - ligne 45, 50, 60, 63, 69, 85 - Double allocation d'une même variable
+avant : for(var k=0; 
+après : var k;
+        for(k=0; 
+--------------------------------------------------------------------------------------------------------------------------
+* main.js - ligne 33, 39, 40, 44, 63, 69 - Double allocation d'une même variable
+avant : var objet;
+après : objet = JSON.parse
+--------------------------------------------------------------------------------------------------------------------------
+* main.js - ligne 6, 26 - Déclaration des fonctions en dehors des boucles
+avant : JSON.parse(localStorage.getItem(cle), function(){
+après : JSON.parse(localStorage.getItem(cle), getUserByType(cle));
+				function getUserByType(cle) {
+--------------------------------------------------------------------------------------------------------------------------
+* main.js - ligne 80 - Suppression des alert
+--------------------------------------------------------------------------------------------------------------------------
+* popup.js - ligne 460, 596, 111, 159, 586, 587, 244, 400, 451, 538, 456, 401, 154, 539, 249, 548, 410 - Remplacement de "==" par "==="
+--------------------------------------------------------------------------------------------------------------------------
+* popup.js - ligne 362, 564, 596, 477, 75, 633, 548, 410, 460, 291, 427, 499, 612 - Remplacement de "!=" par "!=="
+--------------------------------------------------------------------------------------------------------------------------
+* popup.js - ligne 643 - Ajout en fin de fichier ";"
+--------------------------------------------------------------------------------------------------------------------------
+* popup.js - ligne 375, 479, 513 - Déclarations de variables non utilisés ou deja declaré
+--------------------------------------------------------------------------------------------------------------------------
+* main.js - ligne 274, 354, 414, 434, 449, 464, 550, 587 - Double allocation d'une même variable
+--------------------------------------------------------------------------------------------------------------------------
+* popup.js - 222, 263 - 325 - 339 - 269 - Mise en place d'une indentation correcte (une instruction par ligne) sur addEventListener
+--------------------------------------------------------------------------------------------------------------------------
+* popup.js - ligne 223, 264, 270, 332, 335, 344, 441, 588 - Ajout en fin d'instruction ";"
+--------------------------------------------------------------------------------------------------------------------------
+* popup.js - ligne 432, 500, 537, 572, 621 - Déclaration des fonctions en dehors des boucles
+--------------------------------------------------------------------------------------------------------------------------
+* tools.js - ligne 27, 51, 52, 53, 68, 69, 70, 93, 123, 127, 141, 150, 176, 177, 178, 180, 181 - Remplacement de "==" par "==="
+--------------------------------------------------------------------------------------------------------------------------
+* utilisateur.js - ligne 27, 29, 31, 33, 35, 37, 39, 41, 43, 52, 68  - suppression du return dans le setter
+avant : this.__defineSetter__("nom", function(value){return _nom = value;});
+apres : this.__defineSetter__("nom", function(value){_nom = value;});
+--------------------------------------------------------------------------------------------------------------------------
+* utilisateur.js - Mise en place d'une indentation correcte (une instruction par ligne) sur chaque getter et setter
+avant : this.__defineGetter__("nom", function(){return _nom;});
+apres : this.__defineGetter__("nom", function(){
+        	return _nom;
+    		});
+--------------------------------------------------------------------------------------------------------------------------
+* views.js - ligne 92, 95, 98, 188, 220, 262, 270, 283, 310, 356, 365, 371 - Remplacement de "==" par "==="
+--------------------------------------------------------------------------------------------------------------------------
+* views.js - ligne 301, 381, 436 - Remplacement de "!=" par "!=="
+--------------------------------------------------------------------------------------------------------------------------
+* views.js - ligne 15, 278 , 333, 408 - Déclarations de variables non utilisés ou deja declaré
+--------------------------------------------------------------------------------------------------------------------------
+* views.js - ligne 296, 377, 433 - Déclaration des fonctions en dehors des boucles
+--------------------------------------------------------------------------------------------------------------------------
+* tools.js - ligne 23, 26, 82, 86  - Remplacement de "!=" par "!=="
+--------------------------------------------------------------------------------------------------------------------------
+* tools.js - ligne 64, 104, 108, 119 - Déclarations de variables non utilisés ou deja declaré
+--------------------------------------------------------------------------------------------------------------------------
+* tools.js - ligne 41, 60 - Ajout en fin d'instruction ";"
+--------------------------------------------------------------------------------------------------------------------------
+* tools.js - ligne 168, 185, 201 - Renommage des fonctions "Reviver", "Generic_toJSON", "Generic_fromJSON"
+en "reviver", "genericToJSON", "genericFromJSON" pour respecter le pattern
+--------------------------------------------------------------------------------------------------------------------------
+* tools.js - ligne 23 - Merge de 2 if en 1
+
+modification des regles :
+Avoid too complex function : 10 to 18
+Avoid function with too many parameters : 7 to 10
+Functions should not have too many lines : 100 to 125
+"for...in" loops should filter properties before acting on them : To minor

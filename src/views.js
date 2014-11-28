@@ -6,13 +6,12 @@ view = {
     printObjectAsTable : function (objects, properties) {
         var table = domHelp.addElement(document.getElementById('content'), "table");
         var tr = domHelp.addElement(table,"tr");
-        var th;
-        var td;
-        for (var i=0; i<properties.length; i++) {
+        var th, td, i;
+        for (i=0; i<properties.length; i++) {
             th = domHelp.addElement(tr,"th");
             domHelp.addText(th, properties[i]);
         }
-        for (var i=0; i<objects.length; i++) {
+        for (i=0; i<objects.length; i++) {
             tr = domHelp.addElement(table, "tr");
             for (var j=0; j<properties.length; j++) {
                 td = domHelp.addElement(tr,"td");
@@ -89,13 +88,13 @@ view = {
                     application.userConnected = radios[i].value;
                     document.getElementById("btnDeco").innerHTML = "<li><a href=\"#\" onclick=\"page.clear(); page.accueil(); document.getElementById('btnDeco').innerHTML='';\"><span class=\"nameUserConnected\">" + application.users[application.userConnected].prenom + " " + application.users[application.userConnected].nom + " " + "</span><span class=\"glyphicon glyphicon-off btn-deco\"></span></a></li>";
                     page.clear();
-                    if(application.users[application.userConnected].role == "Client"){
+                    if(application.users[application.userConnected].role === "Client"){
                         page.client(application.semaineCourante);
                     }
-                    else if(application.users[application.userConnected].role == "Moniteur"){
+                    else if(application.users[application.userConnected].role === "Moniteur"){
                         page.moniteur(application.semaineCourante);
                     }
-                    else if(application.users[application.userConnected].role == "Secrétaire"){
+                    else if(application.users[application.userConnected].role === "Secrétaire"){
                         page.secretaire(application.semaineCourante);
                     }
                     break;
@@ -185,7 +184,7 @@ view = {
             var idSelect;
             idSelect = inputType.value;
             div.innerHTML = "";
-            if(idSelect == 0){
+            if(idSelect === 0){
                 divGroup = domHelp.addElement(div, "div", {nomAttribut : "class", valeurAttribute: "form-group"});
                 labelCouleur = domHelp.addElement(divGroup, "label", {nomAttribut : "class", valeurAttribute: "col-sm-2 control-label"}, {nomAttribut : "for", valeurAttribute: "couleur"});
                 domHelp.addText(labelCouleur, "Couleur");
@@ -217,7 +216,7 @@ view = {
             var ville = inputVille.value;
             var tel = inputTel.value;
             var mail = inputMail.value;
-            if(idSelect == 0){
+            if(idSelect === 0){
                 couleur = inputCouleur.value;
                 user = new utilisateur.Moniteur(civ, nom, prenom, adresse, ville, tel, mail, couleur);
             }
@@ -237,37 +236,37 @@ view = {
         var table = domHelp.addElement(document.getElementById('content'), "table", {nomAttribut : "class", valeurAttribute : "table table-bordered"});
         var tbody = domHelp.addElement(table, "tbody");
         var tr = domHelp.addElement(tbody,"tr");
-        var th, td, semaine, creneau, lecon, nbLecon, aLecon, largeur, divLecon, moniteur;
+        var th, td, semaine, creneau, lecon, nbLecon, aLecon, largeur, divLecon, moniteur, i, j, k;
 
         th = domHelp.addElement(tr,"th");
         domHelp.addText(th, "");
 
         semaine = application.semaines[numSemaine];
-        for (var i=0; i<semaine.jours.length; i++) {
+        for (i=0; i<semaine.jours.length; i++) {
             th = domHelp.addElement(tr,"th");
             var date = new Date(semaine.jours[i].date);
             domHelp.addText(th, date.getDate() + "/" + (date.getMonth()+1) + "/" + date.getFullYear());
         }
-        for (var i=0; i<semaine.jours[0].creneaux.length; i++) {
+        for (i=0; i<semaine.jours[0].creneaux.length; i++) {
             tr = domHelp.addElement(tbody, "tr");
             td = domHelp.addElement(tr,"td");
             domHelp.addText(td, application.semaines[numSemaine].jours[0].creneaux[i].heure + "h");
-            for (var j=0; j<semaine.jours.length; j++) {
+            for (j=0; j<semaine.jours.length; j++) {
                 aLecon = false;
                 td = domHelp.addElement(tr, "td", {nomAttribut: "jour", valeurAttribute: j}, {nomAttribut: "creneau", valeurAttribute: i}, {nomAttribut: "class", valeurAttribute: "elt-clickable"});
                 creneau = semaine.jours[j].creneaux[i];
                 nbLecon = 0;
-                for (var k = 0; k < creneau.lecons.length; k++) {
+                for (k = 0; k < creneau.lecons.length; k++) {
                     lecon = creneau.lecons[k];
-                    if(lecon instanceof calendrier.LeconConduite && lecon.client == application.users[application.userConnected].cle) {
+                    if(lecon instanceof calendrier.LeconConduite && lecon.client === application.users[application.userConnected].cle) {
                         nbLecon = nbLecon+1;
                     }
                     else if(lecon instanceof calendrier.LeconCode){
                         nbLecon = nbLecon+1;
                     }
                 }
-                for (var k = 0; k < creneau.clientsDisponibles.length; k++) {
-                    if(creneau.clientsDisponibles[k] == application.users[application.userConnected].cle){
+                for (k = 0; k < creneau.clientsDisponibles.length; k++) {
+                    if(creneau.clientsDisponibles[k] === application.users[application.userConnected].cle){
                         nbLecon = nbLecon+1;
                         largeur = (100 / nbLecon);
                         divLecon = domHelp.addElement(td, "div");
@@ -275,12 +274,12 @@ view = {
                         divLecon.setAttribute("style", "width: " + largeur + "%; height:100%; line-height:35px; display: inline; background-color: #D9EDF7; float:left;");
                     }
                 }
-                for (var k = 0; k < creneau.lecons.length; k++) {
+                for (k = 0; k < creneau.lecons.length; k++) {
                     lecon = creneau.lecons[k];
                     largeur = (100 / nbLecon);
                     divLecon = domHelp.addElement(td, "div");
                     moniteur = tools.getUserIfExist(lecon.moniteur);
-                    if (lecon instanceof calendrier.LeconConduite && lecon.client == application.users[application.userConnected].cle) {
+                    if (lecon instanceof calendrier.LeconConduite && lecon.client === application.users[application.userConnected].cle) {
                         aLecon = true;
                         divLecon.setAttribute("style", "width: " + largeur + "%; height:100%; display: inline; background-color: #FCF8E3; float:left;");
                         domHelp.addElement(divLecon, "span", { nomAttribut : "class", valeurAttribute : "glyphicon glyphicon-road"});
@@ -293,32 +292,8 @@ view = {
                     }
                 }
                 if(!aLecon) {
-                    td.addEventListener("click", function (e) {
-                        var targetElement, idCreneau, jour, creneau, clientPresent;
-
-                        targetElement = e.target || e.srcElement;
-                        var tdElement = targetElement;
-                        while (tdElement.nodeName != "TD") {
-                            tdElement = tdElement.parentNode;
-                        }
-
-                        jour = tdElement.getAttribute("jour");
-                        idCreneau = tdElement.getAttribute("creneau");
-                        creneau = application.semaines[numSemaine].jours[jour].creneaux[idCreneau];
-                        clientPresent = false;
-                        for (var i = 0; i < creneau.clientsDisponibles.length; i++) {
-                            if (creneau.clientsDisponibles[i] == application.users[application.userConnected].cle) {
-                                creneau.clientsDisponibles.splice(i, 1);
-                                clientPresent = true;
-                            }
-                        }
-                        if (!clientPresent) {
-                            creneau.clientsDisponibles.push(application.users[application.userConnected].cle);
-                        }
-
-                        dao.setSemaine(application.semaines[numSemaine].cle, application.semaines[numSemaine]);
-                        page.clear();
-                        page.client(numSemaine);
+                    td.addEventListener("click", function (e){
+                        clickAddListener(e, numSemaine);
                     }, false);
                 }
             }
@@ -330,59 +305,52 @@ view = {
         var table = domHelp.addElement(document.getElementById('content'), "table", {nomAttribut : "class", valeurAttribute : "table table-bordered"});
         var tbody = domHelp.addElement(table, "tbody");
         var tr = domHelp.addElement(tbody,"tr");
-        var th, td, date, jour, creneau, lecon, largeur, divLecon, moniteur, client, nbLecon;
+        var th, td, date, jour, creneau, lecon, largeur, divLecon, moniteur, client, nbLecon, i, j, k;
 
         th = domHelp.addElement(tr,"th");
         domHelp.addText(th, "");
 
         var semaine = application.semaines[numSemaine];
-        for (var i=0; i<semaine.jours.length; i++) {
+        for (i=0; i<semaine.jours.length; i++) {
             th = domHelp.addElement(tr,"th");
             date = new Date(semaine.jours[i].date);
             domHelp.addText(th, date.getDate() + "/" + (date.getMonth()+1) + "/" + date.getFullYear());
         }
         jour = semaine.jours[0];
-        for (var i=0; i<jour.creneaux.length; i++) {
+        for (i=0; i<jour.creneaux.length; i++) {
             tr = domHelp.addElement(tbody, "tr");
             td = domHelp.addElement(tr,"td");
             domHelp.addText(td, jour.creneaux[i].heure + "h");
-            for (var j=0; j<semaine.jours.length; j++) {
+            for (j=0; j<semaine.jours.length; j++) {
                 td = domHelp.addElement(tr, "td", {nomAttribut: "jour", valeurAttribute: j}, {nomAttribut: "creneau", valeurAttribute: i}, {nomAttribut: "class", valeurAttribute: "elt-clickable"}, {nomAttribut: "data-toggle", valeurAttribute: "modal"}, {nomAttribut: "data-target", valeurAttribute: "#myPopUp"});
                 creneau = semaine.jours[j].creneaux[i];
                 nbLecon = 0;
-                for (var k = 0; k < creneau.lecons.length; k++) {
+                for (k = 0; k < creneau.lecons.length; k++) {
                     lecon = creneau.lecons[k];
                     moniteur = tools.getUserIfExist(lecon.moniteur);
-                    if (moniteur == application.users[application.userConnected]) {
+                    if (moniteur === application.users[application.userConnected]) {
                         nbLecon = nbLecon + 1;
                     }
                 }
-                for (var k = 0; k < creneau.lecons.length; k++) {
+                for (k = 0; k < creneau.lecons.length; k++) {
                     lecon = creneau.lecons[k];
                     largeur = (100 / nbLecon);
                     divLecon = domHelp.addElement(td, "div");
                     moniteur = tools.getUserIfExist(lecon.moniteur);
-                    if (lecon instanceof calendrier.LeconConduite && moniteur == application.users[application.userConnected]) {
+                    if (lecon instanceof calendrier.LeconConduite && moniteur === application.users[application.userConnected]) {
                         client = tools.getUserIfExist(lecon.client);
                         divLecon.setAttribute("style", "width: " + largeur + "%; height:100%; line-height:35px; display: inline; background-color: #FCF8E3; float:left;");
                         domHelp.addElement(divLecon, "span", { nomAttribut : "class", valeurAttribute : "glyphicon glyphicon-road"});
                         td.setAttribute("title", "Leçon de conduite avec : " + client.nom + " " + client.prenom);
                     }
-                    else if (lecon instanceof calendrier.LeconCode && moniteur == application.users[application.userConnected]) {
+                    else if (lecon instanceof calendrier.LeconCode && moniteur === application.users[application.userConnected]) {
                         divLecon.setAttribute("style", "width: " + largeur + "%; height:100%; line-height:35px; display: inline; background-color : #DFF0D8; float:left;");
                         domHelp.addElement(divLecon, "span", { nomAttribut : "class", valeurAttribute : "glyphicon glyphicon-pencil"});
                         td.setAttribute("title", "Leçon de code");
                     }
                 }
-                td.addEventListener("click", function (e) {
-                    var targetElement = e.target || e.srcElement;
-
-                    var tdElement = targetElement;
-                    while(tdElement.nodeName != "TD"){
-                        tdElement = tdElement.parentNode;
-                    }
-
-                    popup.ajoutByMoniteur(numSemaine, tdElement);
+                td.addEventListener("click", function(e){
+                    tdAddListenerMoniteur(e, numSemaine);
                 }, false);
             }
         }
@@ -393,19 +361,19 @@ view = {
         var table = domHelp.addElement(document.getElementById('content'), "table", {nomAttribut : "class", valeurAttribute : "table table-bordered"});
         var tbody = domHelp.addElement(table, "tbody");
         var tr = domHelp.addElement(tbody,"tr");
-        var th, td, semaine, date, jour, creneau, lecon, largeur, divLecon, moniteur, client;
+        var th, td, semaine, date, jour, creneau, lecon, largeur, divLecon, moniteur, client, i;
 
         th = domHelp.addElement(tr,"th");
         domHelp.addText(th, "");
 
         semaine = application.semaines[numSemaine];
-        for (var i=0; i<semaine.jours.length; i++) {
+        for (i=0; i<semaine.jours.length; i++) {
             th = domHelp.addElement(tr,"th");
             date = new Date(semaine.jours[i].date);
             domHelp.addText(th, date.getDate() + "/" + (date.getMonth()+1) + "/" + date.getFullYear());
         }
         jour = semaine.jours[0];
-        for (var i=0; i<jour.creneaux.length; i++) {
+        for (i=0; i<jour.creneaux.length; i++) {
             tr = domHelp.addElement(tbody, "tr");
             td = domHelp.addElement(tr,"td");
             domHelp.addText(td, jour.creneaux[i].heure + "h");
@@ -430,16 +398,57 @@ view = {
                         divLecon.setAttribute("title", "Lecon de code tenue par " + moniteur.nom + " " + moniteur.prenom);
                     }
                 }
-                td.addEventListener("click", function (e) {
-                    var targetElement = e.target || e.srcElement;
-                    var tdElement = targetElement;
-                    while(tdElement.nodeName != "TD"){
-                        tdElement = tdElement.parentNode;
-                    }
-
-                    popup.ajoutBySecretaire(numSemaine, tdElement);
-                }, false);
+                td.addEventListener("click", function (e){
+                    tdAddListenerSecretaire(e,numSemaine);
+                },false);
             }
         }
     }
 };
+
+function tdAddListenerSecretaire(e, numSemaine) {
+    var targetElement = e.target || e.srcElement;
+    var tdElement = targetElement;
+    while(tdElement.nodeName !== "TD"){
+        tdElement = tdElement.parentNode;
+    }
+    popup.ajoutBySecretaire(numSemaine, tdElement);
+}
+
+function tdAddListenerMoniteur(e, numSemaine) {
+    var targetElement = e.target || e.srcElement;
+
+    var tdElement = targetElement;
+    while(tdElement.nodeName !== "TD"){
+        tdElement = tdElement.parentNode;
+    }
+    popup.ajoutByMoniteur(numSemaine, tdElement);
+}
+
+function clickAddListener(e, numSemaine) {
+    var targetElement, idCreneau, jour, creneau, clientPresent;
+
+    targetElement = e.target || e.srcElement;
+    var tdElement = targetElement;
+    while (tdElement.nodeName !== "TD") {
+        tdElement = tdElement.parentNode;
+    }
+
+    jour = tdElement.getAttribute("jour");
+    idCreneau = tdElement.getAttribute("creneau");
+    creneau = application.semaines[numSemaine].jours[jour].creneaux[idCreneau];
+    clientPresent = false;
+    for (var i = 0; i < creneau.clientsDisponibles.length; i++) {
+        if (creneau.clientsDisponibles[i] === application.users[application.userConnected].cle) {
+            creneau.clientsDisponibles.splice(i, 1);
+            clientPresent = true;
+        }
+    }
+    if (!clientPresent) {
+        creneau.clientsDisponibles.push(application.users[application.userConnected].cle);
+    }
+
+    dao.setSemaine(application.semaines[numSemaine].cle, application.semaines[numSemaine]);
+    page.clear();
+    page.client(numSemaine);
+}

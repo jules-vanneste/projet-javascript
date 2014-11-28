@@ -52,7 +52,7 @@ page = {
     clear : function() {
         this.body=document.getElementById('content').innerHTML = "";
     }
-}
+};
 
 /*
  Data Access Object : Contient toutes les méthodes d'accès à la BDD.
@@ -111,4 +111,4 @@ dao = {
     clear : function(){
         localStorage.clear();
     }
-}
+};
