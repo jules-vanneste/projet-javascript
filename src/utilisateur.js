@@ -97,7 +97,7 @@ utilisateur.Client.prototype.toJSON = function() {
 utilisateur.Client.fromJSON = function(value) {
     return genericFromJSON(utilisateur.Client, value.data);
 };
-reviver.constructors.Client = utilisateur.Client;
+//reviver.constructors.Client = utilisateur.Client;
 
 // Classe representant un Moniteur
 utilisateur.Moniteur = function (civilite, nom, prenom, adresse, ville, telephone, mail, couleur){
@@ -117,7 +117,7 @@ utilisateur.Moniteur.prototype.toJSON = function() {
 utilisateur.Moniteur.fromJSON = function(value) {
     return genericFromJSON(utilisateur.Moniteur, value.data);
 };
-reviver.constructors.Moniteur = utilisateur.Moniteur;
+//reviver.constructors.Moniteur = utilisateur.Moniteur;
 
 // Classe representant une Secretaire
 utilisateur.Secretaire = function (civilite, nom, prenom, adresse, ville, telephone, mail){
@@ -129,4 +129,4 @@ utilisateur.Secretaire.prototype.toJSON = function() {
 utilisateur.Secretaire.fromJSON = function(value) {
     return genericFromJSON(utilisateur.Secretaire, value.data);
 };
-reviver.constructors.Secretaire = utilisateur.Secretaire;
+//reviver.constructors.Secretaire = utilisateur.Secretaire;
