@@ -105,7 +105,7 @@ tools = {
         for (i=0; i<nbRes && i<res.length; i++) {
             tr = domHelp.addElement(tbody,"tr");
             td = domHelp.addElement(tr, "td");
-            domHelp.addElement(td, "input", {nomAttribut : "type", valeurAttribute : "radio"}, {nomAttribut : "name", valeurAttribute : "user"}, {nomAttribut : "value", valeurAttribute : res[i]});
+            domHelp.addElement(td, "input", {nomAttribut : "type", valeurAttribute : "radio"}, {nomAttribut : "name", valeurAttribute : "user"}, {nomAttribut : "value", valeurAttribute : res[i]},{nomAttribut : "id", valeurAttribute: application.users[res[i]].nom});
             td = domHelp.addElement(tr, "td");
             domHelp.addText(td, application.users[res[i]].civilite);
             td = domHelp.addElement(tr, "td");

@@ -74,7 +74,7 @@ view = {
         for (i=0; i<objects.length; i++) {
             tr = domHelp.addElement(tbody, "tr");
             td = domHelp.addElement(tr,"td");
-            input = domHelp.addElement(td, "input", {nomAttribut : "type", valeurAttribute : "radio"}, {nomAttribut : "name", valeurAttribute : "user"}, {nomAttribut : "value", valeurAttribute : i}, {nomAttribut : "role", valeurAttribute : objects[i][properties[0]]});
+            input = domHelp.addElement(td, "input", {nomAttribut : "type", valeurAttribute : "radio"}, {nomAttribut : "name", valeurAttribute : "user"}, {nomAttribut : "value", valeurAttribute : i}, {nomAttribut : "role", valeurAttribute : objects[i][properties[0]]},{nomAttribut : "id", valeurAttribute : objects[i][properties[2]]});
             for (j=0; j<properties.length; j++) {
                 td = domHelp.addElement(tr,"td");
                 domHelp.addText(td, objects[i][properties[j]]);
@@ -273,7 +273,7 @@ view = {
                     if(creneau.clientsDisponibles[k] === application.users[application.userConnected].cle){
                         nbLecon = nbLecon+1;
                         largeur = (100 / nbLecon);
-                        divLecon = domHelp.addElement(td, "div");
+                        divLecon = domHelp.addElement(td, "div",{nomAttribut: "title", valeurAttribute: "Disponible"});
                         domHelp.addElement(divLecon, "span", { nomAttribut : "class", valeurAttribute : "glyphicon glyphicon-ok"});
                         divLecon.setAttribute("style", "width: " + largeur + "%; height:100%; line-height:35px; display: inline; background-color: #D9EDF7; float:left;");
                     }

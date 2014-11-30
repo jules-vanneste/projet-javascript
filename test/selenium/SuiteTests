@@ -12,10 +12,27 @@
 <tr><td><a href="ajoutUtilisateur">ajoutUtilisateurSuccess</a></td></tr>
 <tr><td><a href="ajoutUtilisateurFail">ajoutUtilisateurFail</a></td></tr>
 <tr><td><a href="logSecretaire">logSecretaire</a></td></tr>
-<tr><td><a href="ajoutLeconCodeBySecretaire">ajoutLeconCodeBySecretaire</a></td></tr>
 <tr><td><a href="ajoutLeconConduiteBySecretaire">ajoutLeconConduiteBySecretaire</a></td></tr>
-<tr><td><a href="supprimerLeconCodeBySecretaire">supprimerLeconCodeBySecretaire</a></td></tr>
+<tr><td><a href="changerMoniteurPourLeconConduite">changerMoniteurPourLeconConduite</a></td></tr>
 <tr><td><a href="supprimerLeconConduiteBySecretaire">supprimerLeconConduiteBySecretaire</a></td></tr>
+<tr><td><a href="ajoutLeconCodeBySecretaire">ajoutLeconCodeBySecretaire</a></td></tr>
+<tr><td><a href="changerMoniteurPourLeconCodeBySecretaire">changerMoniteurPourLeconCodeBySecretaire</a></td></tr>
+<tr><td><a href="supprimerLeconCodeBySecretaire">supprimerLeconCodeBySecretaire</a></td></tr>
+<tr><td><a href="ajoutLeconCodeBySecretaire">ajoutLeconCodeBySecretaire</a></td></tr>
+<tr><td><a href="seDeconnecterBySecretaire">seDeconnecterBySecretaire</a></td></tr>
+<tr><td><a href="logMoniteur">logMoniteur</a></td></tr>
+<tr><td><a href="ajoutLeconConduiteByMoniteur">ajoutLeconConduiteByMoniteur</a></td></tr>
+<tr><td><a href="changerMoniteurPourLeconConduiteByMoniteur">changerMoniteurPourLeconConduiteByMoniteur</a></td></tr>
+<tr><td><a href="supprimerLeconConduiteByMoniteur">supprimerLeconConduiteByMoniteur</a></td></tr>
+<tr><td><a href="ajoutLeconCodeByMoniteur">ajoutLeconCodeByMoniteur</a></td></tr>
+<tr><td><a href="changerMoniteurPourLeconCodeByMoniteur">changerMoniteurPourLeconCodeByMoniteur</a></td></tr>
+<tr><td><a href="supprimerLeconCodeByMoniteur">supprimerLeconCodeByMoniteur</a></td></tr>
+<tr><td><a href="seDeconnecterByMoniteur">seDeconnecterByMoniteur</a></td></tr>
+<tr><td><a href="logClient">logClient</a></td></tr>
+<tr><td><a href="verifierLeconCodeByClient">verifierLeconCodeByClient</a></td></tr>
+<tr><td><a href="verifierLeconConduiteByClient">verifierLeconConduiteByClient</a></td></tr>
+<tr><td><a href="ajouterDispoByClient">ajouterDispoByClient</a></td></tr>
+<tr><td><a href="seDeconnecterByClient">seDeconnecterByClient</a></td></tr>
 </tbody></table>
 </body>
 </html>

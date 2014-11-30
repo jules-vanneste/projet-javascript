@@ -4,16 +4,16 @@
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="selenium.base" href="file:///C:/Users/Maxime/Documents/OTI/projet-javascript/src/" />
-<title>supprimerLeconConduiteBySecretaire</title>
+<title>supprimerLeconCodeBySecretaire</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">supprimerLeconConduiteBySecretaire</td></tr>
+<tr><td rowspan="1" colspan="3">supprimerLeconCodeBySecretaire</td></tr>
 </thead><tbody>
 <tr>
 	<td>click</td>
-	<td>xpath=(//table/tbody/tr[2]/td[3])</td>
+	<td>xpath=(//table/tbody/tr[2]/td[2])</td>
 	<td></td>
 </tr>
 <tr>
@@ -38,7 +38,7 @@
 </tr>
 <tr>
 	<td>waitForText</td>
-	<td>//div[@id='content']/table/tbody/tr[2]/td[3]</td>
+	<td>//div[@id='content']/table/tbody/tr[2]/td[2]</td>
 	<td></td>
 </tr>
 </tbody></table>

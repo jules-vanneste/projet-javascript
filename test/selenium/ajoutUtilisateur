@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<link rel="selenium.base" href="file:///home/m2eserv/vanneste/projet-javascript/src/index.html" />
+<link rel="selenium.base" href="file:///C:/Users/Maxime/Documents/OTI/projet-javascript/src/" />
 <title>ajoutUtilisateurSuccess</title>
 </head>
 <body>
@@ -11,11 +11,6 @@
 <thead>
 <tr><td rowspan="1" colspan="3">ajoutUtilisateurSuccess</td></tr>
 </thead><tbody>
-<tr>
-	<td>open</td>
-	<td>file:///home/m2eserv/vanneste/projet-javascript/src/index.html</td>
-	<td></td>
-</tr>
 <tr>
 	<td>click</td>
 	<td>css=button.btn.btn-default</td>
@@ -91,7 +86,6 @@
 	<td>//div[@id='content']/form/table/tbody/tr[8]/td[5]</td>
 	<td>Julie</td>
 </tr>
-
 </tbody></table>
 </body>
 </html>
