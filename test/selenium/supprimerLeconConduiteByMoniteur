@@ -13,7 +13,7 @@
 </thead><tbody>
 <tr>
 	<td>click</td>
-	<td>xpath=(//table/tbody/tr[2]/td[3])</td>
+	<td>xpath=(//table/tbody/tr[4]/td[3])</td>
 	<td></td>
 </tr>
 <tr>
@@ -38,7 +38,7 @@
 </tr>
 <tr>
 	<td>waitForText</td>
-	<td>//div[@id='content']/table/tbody/tr[2]/td[3]</td>
+	<td>//div[@id='content']/table/tbody/tr[4]/td[3]</td>
 	<td></td>
 </tr>
 </tbody></table>

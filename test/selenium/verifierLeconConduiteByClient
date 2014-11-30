@@ -13,7 +13,7 @@
 </thead><tbody>
 <tr>
 	<td>assertAttribute</td>
-	<td>//table/tbody/tr[3]/td[3]/div@title</td>
+	<td>//table/tbody/tr[4]/td[3]/div@title</td>
 	<td>Leçon de conduite avec : Jocelyne Jacquart</td>
 </tr>
 </tbody></table>
