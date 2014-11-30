@@ -1,0 +1,43 @@
+/**** Modifications du code pour réaliser des tests correctes avec Selenium ****/
+
+* tools.js - ligne 108 - Ajout ID aux bouton radio pour effectuer des tests précis avec Selenium
+avant : domHelp.addElement(td, "input", 
+			{nomAttribut : "type", valeurAttribute : "radio"}, 
+			{nomAttribut : "name", valeurAttribute : "user"}, 
+			{nomAttribut : "value", valeurAttribute : res[i]}
+		);
+apres : domHelp.addElement(td, "input", 
+			{nomAttribut : "type", valeurAttribute : "radio"}, 
+			{nomAttribut : "name", valeurAttribute : "user"}, 
+			{nomAttribut : "value", valeurAttribute : res[i]},
+			{nomAttribut : "id", valeurAttribute: application.users[res[i]].nom}
+		);
+--------------------------------------------------------------------------------------------------------------------------
+* views.js - ligne 77 - Ajout Role et ID aux bouton radio pour effectuer des tests précis avec Selenium
+avant : 
+input = domHelp.addElement(td, "input", 
+			{nomAttribut : "type", valeurAttribute : "radio"}, 
+			{nomAttribut : "name", valeurAttribute : "user"}, 
+			{nomAttribut : "value", valeurAttribute : i}, 
+			{nomAttribut : "role", valeurAttribute : objects[i][properties[0]]}
+		);
+apres : 
+input = domHelp.addElement(td, "input", 
+			{nomAttribut : "type", valeurAttribute : "radio"}, 
+			{nomAttribut : "name", valeurAttribute : "user"}, 
+			{nomAttribut : "value", valeurAttribute : i}, 
+			{nomAttribut : "role", valeurAttribute : objects[i][properties[0]]},
+			{nomAttribut : "id", valeurAttribute : objects[i][properties[2]]}
+		);
+--------------------------------------------------------------------------------------------------------------------------
+* views.js - ligne 276 - Ajout attribut "title" aux div correspondant à une disponibilité pour un client afin de vérifier sa présence par les tests avec Selenium
+avant : divLecon = domHelp.addElement(td, "div");
+apres : divLecon = domHelp.addElement(td, "div",{nomAttribut: "title", valeurAttribute: "Disponible"});
+
+/**** Modifications apportés au code pour corriger d'éventuelle erreurs avec Selenium ****/
+
+*views.js - ligne 219 - Ajout code pour réaliser que les champs soient tous bien rempli pour le formulaire d'ajout d'un utilisateur sinon une alert apparaît
+if(nom===""||prenom===""||adresse===""||ville===""||tel===""||mail===""){
+	alert("Veuillez remplir tous les champs du formulaire");
+ 	return ;
+}
