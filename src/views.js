@@ -72,7 +72,7 @@ view = {
             domHelp.addText(th, properties[i]);
         }
         for (i=0; i<objects.length; i++) {
-            tr = domHelp.addElement(tbody, "tr");
+            tr = domHelp.addElement(tbody, "tr", {nomAttribut : "id", valeurAttribute : (objects[i][properties[2]] + objects[i][properties[3]])});
             td = domHelp.addElement(tr,"td");
             input = domHelp.addElement(td, "input", {nomAttribut : "type", valeurAttribute : "radio"}, {nomAttribut : "name", valeurAttribute : "user"}, {nomAttribut : "value", valeurAttribute : i}, {nomAttribut : "role", valeurAttribute : objects[i][properties[0]]},{nomAttribut : "id", valeurAttribute : objects[i][properties[2]]});
             for (j=0; j<properties.length; j++) {
@@ -80,7 +80,7 @@ view = {
                 domHelp.addText(td, objects[i][properties[j]]);
             }
         }
-        var button = domHelp.addElement(form, "button", {nomAttribut : "type", valeurAttribute : "submit"}, {nomAttribut : "class", valeurAttribute : "btn btn-success col-sm-offset-5"});
+        var button = domHelp.addElement(form, "button", {nomAttribut : "type", valeurAttribute : "submit"}, {nomAttribut : "class", valeurAttribute : "btn btn-success col-sm-offset-5"}, {nomAttribut : "id", valeurAttribute : "submit"});
         button.onclick = function(){
             var radios = document.getElementsByName('user');
             for (var i=0; i<radios.length; i++) {
@@ -177,7 +177,7 @@ view = {
 
         divGroup = domHelp.addElement(form, "div", {nomAttribut : "class", valeurAttribute: "form-group"});
         divInput = domHelp.addElement(divGroup, "div", {nomAttribut : "class", valeurAttribute: ""});
-        inputBouton = domHelp.addElement(divInput, "button", {nomAttribut : "class", valeurAttribute: "btn btn-default col-sm-offset-6"});
+        inputBouton = domHelp.addElement(divInput, "button", {nomAttribut : "class", valeurAttribute: "btn btn-default col-sm-offset-6"}, {nomAttribut : "id", valeurAttribute: "submit"});
         domHelp.addText(inputBouton, "Ajouter");
 
         inputType.addEventListener("change", function(){
@@ -220,7 +220,7 @@ view = {
 				alert("Veuillez remplir tous les champs du formulaire");
 				return ;
 			}
-            if(idSelect === 0){
+            if(idSelect === "0"){
                 couleur = inputCouleur.value;
                 user = new utilisateur.Moniteur(civ, nom, prenom, adresse, ville, tel, mail, couleur);
             }

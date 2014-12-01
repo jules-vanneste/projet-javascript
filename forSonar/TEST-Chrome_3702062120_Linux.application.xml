@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="Chrome_3702062120_Linux.application" errors="0" failures="1" tests="2" time="0.033">
+<testcase classname="Chrome_3702062120_Linux.application" name="test test print form login" time="0.016">
+<failure type="failed" message="[{&quot;message&quot;:&quot; expected true but was false&quot;,&quot;name&quot;:&quot;AssertError&quot;,&quot;stack&quot;:&quot;Error:  expected true but was false\n    at fail (http://localhost:9876/static/runner.js:682:13)\n    at assertTrue (http://localhost:9876/static/runner.js:792:45)\n    at window.ok (http://localhost:9876/test/JSTDQUA/QUnitAdapter.js:60:53)\n    at window.equal (http://localhost:9876/test/JSTDQUA/QUnitAdapter.js:64:31)\n    at Object.&lt;anonymous&gt; (http://localhost:9876/test/test/qunit/application_test.js:16:70)\n    at QUnitTestCase.(anonymous function) [as test test print form login] (http://localhost:9876/test/JSTDQUA/QUnitAdapter.js:47:37)\n    at jstestdriver.plugins.TestRunnerPlugin.runTest (http://localhost:9876/static/runner.js:5403:33)\n    at TestResultIterator.runTest (http://localhost:9876/test/com/google/jstestdriver/coverage/javascript/LCOV.js:201:28)\n    at TestResultIterator.runNext (http://localhost:9876/test/com/google/jstestdriver/coverage/javascript/LCOV.js:292:10)\n    at InstrumentedTestCaseRunner.run (http://localhost:9876/test/com/google/jstestdriver/coverage/javascript/LCOV.js:250:27)&quot;}]">Error:  expected true but was false
+    at window.ok (http://localhost:9876/test/JSTDQUA/QUnitAdapter.js:60:53)
+    at window.equal (http://localhost:9876/test/JSTDQUA/QUnitAdapter.js:64:31)
+    at Object.&lt;anonymous&gt; (http://localhost:9876/test/test/qunit/application_test.js:16:70)
+    at QUnitTestCase.(anonymous function) [as test test print form login] (http://localhost:9876/test/JSTDQUA/QUnitAdapter.js:47:37)
+    at TestResultIterator.runTest (http://localhost:9876/test/com/google/jstestdriver/coverage/javascript/LCOV.js:201:28)
+    at TestResultIterator.runNext (http://localhost:9876/test/com/google/jstestdriver/coverage/javascript/LCOV.js:292:10)
+    at InstrumentedTestCaseRunner.run (http://localhost:9876/test/com/google/jstestdriver/coverage/javascript/LCOV.js:250:27)
+
+</failure>
+</testcase>
+<testcase classname="Chrome_3702062120_Linux.application" name="test test print ajout utilisateur" time="0.017"/>
+</testsuite>

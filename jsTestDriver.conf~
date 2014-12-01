@@ -1,0 +1,30 @@
+server: http://localhost:9876
+
+basepath: "."
+
+plugin:
+ - name: "coverage"
+   jar: "coverage-1.3.5.jar"
+   module: "com.google.jstestdriver.coverage.CoverageModule"
+ 
+load:
+
+  # Add these lines to load qunit, the equiv function and adapter in order, before the tests
+  - JSTDQUA/equiv.js
+  - JSTDQUA/QUnitAdapter.js
+
+  # And this loads the source files we are testing
+  - src/application.js
+  - src/calendrier.js
+  - src/main.js
+  - src/popup.js
+  - src/tools.js
+  - src/utilisateur.js
+  - src/views.js
+
+ 
+  # This is where we load the qunit tests
+  - test/qunit/utilisateur_test.js
+  - test/qunit/calendrier_test.js
+  - test/qunit/main_test.js
+	- test/qunit/application_test.js

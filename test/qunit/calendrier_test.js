@@ -3,51 +3,78 @@ module("calendrier", {
 //	teardown:function(){alert("teardown calendrier individual test");}
 });
 
-
-test("test construct Creneau",3,function()
-{
-	var creneau = new calendrier.Creneau(8);
-	var moniteur = new utilisateur.Moniteur("M.", "Carpentier", "Thomas", "15 Avenue de l'Europe", "Seclin", "06.74.16.27.89", "thomas.carpentier@mail.fr", "#D9EDF7");
-	var client = new utilisateur.Client("Mr.", "Vanneste", "Jules", "15 rue des ecoles", "Plouvain", "0321597694", "jules.vanneste@mail.fr", moniteur);
-
-	equal(creneau.heure,8);
-	equal(creneau.clientsDisponibles.length,0);
-	equal(creneau.lecons.length,0);
-}
-);
-
-
 test("test construct Lecon",1,function()
-{
-	var moniteur = new utilisateur.Moniteur("M.", "Carpentier", "Thomas", "15 Avenue de l'Europe", "Seclin", "06.74.16.27.89", "thomas.carpentier@mail.fr", "#D9EDF7");
-	var lecon = new calendrier.Lecon(moniteur);
+    {
+        var moniteur = new utilisateur.Moniteur("M.", "Carpentier", "Thomas", "15 Avenue de l'Europe", "Seclin", "06.74.16.27.89", "thomas.carpentier@mail.fr", "#D9EDF7");
+        var lecon = new calendrier.Lecon(moniteur);
 
-	equal(lecon.moniteur,moniteur);
-}
+        equal(lecon.moniteur,moniteur);
+    }
 );
-
 
 test("test construct LeconConduite",2,function()
-{
-	var moniteur = new utilisateur.Moniteur("M.", "Carpentier", "Thomas", "15 Avenue de l'Europe", "Seclin", "06.74.16.27.89", "thomas.carpentier@mail.fr", "#D9EDF7");
-	var client = new utilisateur.Client("Mr.", "Vanneste", "Jules", "15 rue des ecoles", "Plouvain", "0321597694", "jules.vanneste@mail.fr", moniteur);
-	var leconConduite = new calendrier.LeconConduite(moniteur, client);
+    {
+        var moniteur = new utilisateur.Moniteur("M.", "Carpentier", "Thomas", "15 Avenue de l'Europe", "Seclin", "06.74.16.27.89", "thomas.carpentier@mail.fr", "#D9EDF7");
+        var client = new utilisateur.Client("Mr.", "Vanneste", "Jules", "15 rue des ecoles", "Plouvain", "0321597694", "jules.vanneste@mail.fr", moniteur);
+        var leconConduite = new calendrier.LeconConduite(moniteur, client);
 
-	equal(leconConduite.moniteur,moniteur);
-	equal(leconConduite.client,client);
-}
+        equal(leconConduite.moniteur,moniteur);
+        equal(leconConduite.client,client);
+    }
 );
-
 
 test("test construct LeconCode",1,function()
-{
-	var moniteur = new utilisateur.Moniteur("M.", "Carpentier", "Thomas", "15 Avenue de l'Europe", "Seclin", "06.74.16.27.89", "thomas.carpentier@mail.fr", "#D9EDF7");
-	var leconCode = new calendrier.LeconCode(moniteur);
+    {
+        var moniteur = new utilisateur.Moniteur("M.", "Carpentier", "Thomas", "15 Avenue de l'Europe", "Seclin", "06.74.16.27.89", "thomas.carpentier@mail.fr", "#D9EDF7");
+        var leconCode = new calendrier.LeconCode(moniteur);
 
-	equal(leconCode.moniteur,moniteur);
-}
+        equal(leconCode.moniteur,moniteur);
+    }
 );
 
+test("test construct Creneau",3,function()
+    {
+        var creneau = new calendrier.Creneau(8);
+
+        equal(creneau.heure,8);
+        equal(creneau.clientsDisponibles.length,0);
+        equal(creneau.lecons.length,0);
+    }
+);
+
+test("test construct Creneau with client dispo & lecon code",3,function()
+    {
+        var creneau = new calendrier.Creneau(8);
+        var moniteur = new utilisateur.Moniteur("M.", "Carpentier", "Thomas", "15 Avenue de l'Europe", "Seclin", "06.74.16.27.89", "thomas.carpentier@mail.fr", "#D9EDF7");
+        var client = new utilisateur.Client("Mr.", "Vanneste", "Jules", "15 rue des ecoles", "Plouvain", "0321597694", "jules.vanneste@mail.fr", moniteur);
+
+        var lecon = new calendrier.LeconCode(moniteur);
+
+        creneau.clientsDisponibles.push(client);
+        creneau.lecons.push(lecon);
+
+        equal(creneau.heure,8);
+        equal(creneau.clientsDisponibles[0],client);
+        equal(creneau.lecons[0],lecon);
+    }
+);
+
+test("test construct Creneau with client dispo & lecon conduite",3,function()
+    {
+        var creneau = new calendrier.Creneau(8);
+        var moniteur = new utilisateur.Moniteur("M.", "Carpentier", "Thomas", "15 Avenue de l'Europe", "Seclin", "06.74.16.27.89", "thomas.carpentier@mail.fr", "#D9EDF7");
+        var client = new utilisateur.Client("Mr.", "Vanneste", "Jules", "15 rue des ecoles", "Plouvain", "0321597694", "jules.vanneste@mail.fr", moniteur);
+
+        var lecon = new calendrier.LeconConduite(moniteur, client);
+
+        creneau.clientsDisponibles.push(client);
+        creneau.lecons.push(lecon);
+
+        equal(creneau.heure,8);
+        equal(creneau.clientsDisponibles[0],client);
+        equal(creneau.lecons[0],lecon);
+    }
+);
 
 test("test construct Jour",2,function()
 {

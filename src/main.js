@@ -31,18 +31,18 @@ function getSemaineByType(cle) {
         for(var j=0; j<value.data.jours[i].creneaux.length; j++) {
             var k, client, moniteur;
             for(k=0; k<value.data.jours[i].creneaux[j].clientsDisponibles.length; k++){
-                client = value.data.jours[i].creneaux[j].clientsDisponibles[k];
+                client = getUserByType(value.data.jours[i].creneaux[j].clientsDisponibles[k].data.cle);
                 semaine.jours[i].creneaux[j].clientsDisponibles.push(client);
             }
             for(k=0; k<value.data.jours[i].creneaux[j].lecons.length; k++){
                 var lecon = value.data.jours[i].creneaux[j].lecons[k];
                 if(value.data.jours[i].creneaux[j].lecons[k].ctor === "Con") {
-                    moniteur = lecon.data.moniteur;
-                    client = lecon.data.client;
+                    moniteur = getUserByType(lecon.data.moniteur.data.cle);
+                    client = getUserByType(lecon.data.client.data.cle);
                     semaine.jours[i].creneaux[j].lecons.push(new calendrier.LeconConduite(moniteur, client));
                 }
                 else if(value.data.jours[i].creneaux[j].lecons[k].ctor === "Cod"){
-                    moniteur = lecon.data.moniteur;
+                    moniteur = getUserByType(lecon.data.moniteur.data.cle);
                     semaine.jours[i].creneaux[j].lecons.push(new calendrier.LeconCode(moniteur));
                 }
             }
@@ -51,7 +51,7 @@ function getSemaineByType(cle) {
     return semaine;
 };
 
-window.onload = function () {
+function init(){
     var cle, i;
     application.semaines = [];
     application.users = [];
@@ -100,6 +100,9 @@ window.onload = function () {
         dao.createSemaine(semaine);
         application.semaineCourante = (application.semaines.length - 1);
     }
+}
 
+window.onload = function () {
+    init();
     page.accueil();
 };

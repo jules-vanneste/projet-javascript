@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="Chrome_3702062120_Linux.utilisateur" errors="0" failures="0" tests="5" time="0.007">
+<testcase classname="Chrome_3702062120_Linux.utilisateur" name="test test construct Personne" time="0.003"/>
+<testcase classname="Chrome_3702062120_Linux.utilisateur" name="test test construct Moniteur" time="0.001"/>
+<testcase classname="Chrome_3702062120_Linux.utilisateur" name="test test construct Client" time="0.002"/>
+<testcase classname="Chrome_3702062120_Linux.utilisateur" name="test test construct Secretaire" time="0.001"/>
+<testcase classname="Chrome_3702062120_Linux.utilisateur" name="test test compteur" time="0.0"/>
+</testsuite>
