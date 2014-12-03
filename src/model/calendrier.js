@@ -73,10 +73,6 @@ calendrier.LeconConduite = function(moniteur, client){
 calendrier.LeconConduite.prototype.toJSON = function() {
     return genericToJSON("Con", this);
 };
-calendrier.LeconConduite.fromJSON = function(value) {
-    return genericFromJSON(calendrier.LeconConduite, value.data);
-};
-//reviver.constructors.LeconConduite = calendrier.LeconConduite;
 
 // Classe representant une Lecon de code
 calendrier.LeconCode = function(moniteur){
@@ -85,10 +81,6 @@ calendrier.LeconCode = function(moniteur){
 calendrier.LeconCode.prototype.toJSON = function() {
     return genericToJSON("Cod", this);
 };
-calendrier.LeconCode.fromJSON = function(value) {
-    return genericFromJSON(calendrier.LeconCode, value.data);
-};
-//reviver.constructors.LeconCode = calendrier.LeconCode;
 
 // Classe representant un jour
 calendrier.Jour = function(date, creneaux){
@@ -150,7 +142,3 @@ calendrier.Semaine = function(date){
 calendrier.Semaine.prototype.toJSON = function() {
     return genericToJSON("Sem", this);
 };
-calendrier.Semaine.fromJSON = function(value) {
-    return genericFromJSON(calendrier.Semaine, value.data);
-};
-//reviver.constructors.Semaine = calendrier.Semaine;

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?><testsuite name="Chrome_3702062120_Linux.application_test" errors="0" failures="0" tests="5" time="4.246">
+<testcase classname="Chrome_3702062120_Linux.application_test" name="test test delete semaine" time="1.219"/>
+<testcase classname="Chrome_3702062120_Linux.application_test" name="test test delete user" time="0.624"/>
+<testcase classname="Chrome_3702062120_Linux.application_test" name="test test set semaine" time="1.753"/>
+<testcase classname="Chrome_3702062120_Linux.application_test" name="test test set user" time="0.637"/>
+<testcase classname="Chrome_3702062120_Linux.application_test" name="test test clear" time="0.013"/>
+</testsuite>

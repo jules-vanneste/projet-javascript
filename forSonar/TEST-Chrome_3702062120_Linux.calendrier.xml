@@ -1,12 +1,17 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="Chrome_3702062120_Linux.calendrier" errors="0" failures="0" tests="9" time="0.016">
-<testcase classname="Chrome_3702062120_Linux.calendrier" name="test test construct Lecon" time="0.001"/>
-<testcase classname="Chrome_3702062120_Linux.calendrier" name="test test construct LeconConduite" time="0.002"/>
-<testcase classname="Chrome_3702062120_Linux.calendrier" name="test test construct LeconCode" time="0.001"/>
-<testcase classname="Chrome_3702062120_Linux.calendrier" name="test test construct Creneau" time="0.001"/>
-<testcase classname="Chrome_3702062120_Linux.calendrier" name="test test construct Creneau with client dispo &amp; lecon code" time="0.001"/>
-<testcase classname="Chrome_3702062120_Linux.calendrier" name="test test construct Creneau with client dispo &amp; lecon conduite" time="0.001"/>
-<testcase classname="Chrome_3702062120_Linux.calendrier" name="test test construct Jour" time="0.002"/>
-<testcase classname="Chrome_3702062120_Linux.calendrier" name="test test construct Semaine" time="0.006"/>
+<?xml version="1.0" encoding="UTF-8"?><testsuite name="Chrome_3702062120_Linux.calendrier" errors="0" failures="0" tests="15" time="0.032">
+<testcase classname="Chrome_3702062120_Linux.calendrier" name="test test construct &amp; getters Lecon" time="0.001"/>
+<testcase classname="Chrome_3702062120_Linux.calendrier" name="test test construct &amp; getters LeconConduite" time="0.002"/>
+<testcase classname="Chrome_3702062120_Linux.calendrier" name="test test construct &amp; getters LeconCode" time="0.001"/>
+<testcase classname="Chrome_3702062120_Linux.calendrier" name="test test construct &amp; getters Creneau" time="0.0"/>
+<testcase classname="Chrome_3702062120_Linux.calendrier" name="test test construct &amp; getters Creneau with client dispo &amp; lecon code" time="0.001"/>
+<testcase classname="Chrome_3702062120_Linux.calendrier" name="test test construct &amp; getters Creneau with client dispo &amp; lecon conduite" time="0.002"/>
+<testcase classname="Chrome_3702062120_Linux.calendrier" name="test test &amp; getters construct Jour" time="0.002"/>
+<testcase classname="Chrome_3702062120_Linux.calendrier" name="test test construct &amp; getters Semaine" time="0.006"/>
 <testcase classname="Chrome_3702062120_Linux.calendrier" name="test test compteur" time="0.001"/>
+<testcase classname="Chrome_3702062120_Linux.calendrier" name="test test setters Lecon" time="0.001"/>
+<testcase classname="Chrome_3702062120_Linux.calendrier" name="test test setters LeconConduite" time="0.002"/>
+<testcase classname="Chrome_3702062120_Linux.calendrier" name="test test setters LeconCode" time="0.002"/>
+<testcase classname="Chrome_3702062120_Linux.calendrier" name="test test setters Creneau" time="0.002"/>
+<testcase classname="Chrome_3702062120_Linux.calendrier" name="test test setters Jour" time="0.002"/>
+<testcase classname="Chrome_3702062120_Linux.calendrier" name="test test setters Semaine" time="0.007"/>
 </testsuite>

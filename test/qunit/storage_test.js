@@ -1,6 +1,6 @@
-module("main_test", {
-//	setup:function(){alert("setup main_test individual test");},
-//	teardown:function(){alert("teardown main_test individual test");}
+module("storage_test", {
+//	setup:function(){alert("setup storage_test individual test");},
+//	teardown:function(){alert("teardown storage_test individual test");}
 });
 
 test("test get moniteur by type",1,function()
@@ -59,21 +59,21 @@ test("test get semaine by type",1,function()
         moniteur.cle = "mon1";
         var client = new utilisateur.Client("M.", "Capolino", "Maxime", "150 Rue de Paris", "Annoeullin", "06.92.75.40.42", "maxime.capolino@mail.fr", moniteur.cle);
         client.cle = "client1";
-        var lecon1 = new calendrier.LeconConduite(moniteur, client);
-        var lecon2 = new calendrier.LeconCode(moniteur);
+        var lecon1 = new calendrier.LeconConduite(moniteur.cle, client.cle);
+        var lecon2 = new calendrier.LeconCode(moniteur.cle);
 
-        semaine.jours[0].creneaux[0].clientsDisponibles.push(client);
+        semaine.jours[0].creneaux[0].clientsDisponibles.push(client.cle);
         semaine.jours[0].creneaux[0].lecons.push(lecon1);
         semaine.jours[0].creneaux[1].lecons.push(lecon2);
 
-        semaine.cle = "semaine1";
+        semaine.cle = "semaine10";
 
-        localStorage.setItem(moniteur.cle,JSON.stringify(moniteur));
-        localStorage.setItem(client.cle,JSON.stringify(client));
-        localStorage.setItem(semaine.cle,JSON.stringify(semaine));
+        dao.addUtilisateur(moniteur);
+        dao.addUtilisateur(client);
+        dao.addSemaine(semaine);
+        init();
 
-        var cle = localStorage.key(2);
-        var res = getSemaineByType(cle);
+        var res = getSemaineByType(semaine.cle);
 
         deepEqual(res, semaine, "Creation correcte de la Semaine");
     }
@@ -84,7 +84,7 @@ test("test init",2,function()
         localStorage.clear();
         var semaine = new calendrier.Semaine(new Date(2014, 10, 29));
         semaine.cle = "semaine1";
-        localStorage.setItem(semaine.cle,JSON.stringify(semaine));
+        dao.addSemaine(semaine);
 
         dao.init();
         init();

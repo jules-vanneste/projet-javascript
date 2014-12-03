@@ -31,19 +31,19 @@ function getSemaineByType(cle) {
         for(var j=0; j<value.data.jours[i].creneaux.length; j++) {
             var k, client, moniteur;
             for(k=0; k<value.data.jours[i].creneaux[j].clientsDisponibles.length; k++){
-                client = getUserByType(value.data.jours[i].creneaux[j].clientsDisponibles[k].data.cle);
+                client = value.data.jours[i].creneaux[j].clientsDisponibles[k];
                 semaine.jours[i].creneaux[j].clientsDisponibles.push(client);
             }
             for(k=0; k<value.data.jours[i].creneaux[j].lecons.length; k++){
                 var lecon = value.data.jours[i].creneaux[j].lecons[k];
                 if(value.data.jours[i].creneaux[j].lecons[k].ctor === "Con") {
-                    moniteur = getUserByType(lecon.data.moniteur.data.cle);
-                    client = getUserByType(lecon.data.client.data.cle);
-                    semaine.jours[i].creneaux[j].lecons.push(new calendrier.LeconConduite(moniteur, client));
+                    moniteur = getUserByType(lecon.data.moniteur);
+                    client = getUserByType(lecon.data.client);
+                    semaine.jours[i].creneaux[j].lecons.push(new calendrier.LeconConduite(moniteur.cle, client.cle));
                 }
                 else if(value.data.jours[i].creneaux[j].lecons[k].ctor === "Cod"){
-                    moniteur = getUserByType(lecon.data.moniteur.data.cle);
-                    semaine.jours[i].creneaux[j].lecons.push(new calendrier.LeconCode(moniteur));
+                    moniteur = getUserByType(lecon.data.moniteur);
+                    semaine.jours[i].creneaux[j].lecons.push(new calendrier.LeconCode(moniteur.cle));
                 }
             }
         }
@@ -101,8 +101,3 @@ function init(){
         application.semaineCourante = (application.semaines.length - 1);
     }
 }
-
-window.onload = function () {
-    init();
-    page.accueil();
-};

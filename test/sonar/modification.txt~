@@ -114,8 +114,6 @@ Avoid too complex function : 10 to 18
 Avoid function with too many parameters : 7 to 10
 Functions should not have too many lines : 100 to 130
 "for...in" loops should filter properties before acting on them : To minor
-"alert(...)" should not be used : minor
-Expressions should not be too complex : 3 to 5
 
 
 2ème coup de sonar-runner après les modifications des erreurs détectés dans les tests qUnit:

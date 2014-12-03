@@ -1,70 +1,89 @@
-module("application", {
-//	setup:function(){alert("setup application individual test");},
-//	teardown:function(){alert("teardown application individual test");}
+module("application_test", {
+//	setup:function(){alert("setup application_test individual test");},
+//	teardown:function(){alert("teardown application_test individual test");}
 });
 
-test("test print form login",1,function()
-{
-    localStorage.clear();
-    dao.init();
-    init();
-
-    domHelp.addElement(document.getElementById("qunit-fixture"), "div", {nomAttribut : "id", valeurAttribute : "content"});
-    page.accueil();
-    var result ="<td><input type=\"radio\" name=\"user\" value=\"0\" role=\"Moniteur\" id=\"Carpentier\"></td><td>Moniteur</td><td>M.</td><td>Carpentier</td><td>Thomas</td>";
-
-    equal(document.getElementById("CarpentierThomas").innerHTML,result);
-}
-);
-
-test("test print ajout utilisateur",1,function()
+test("test delete semaine",2,function()
     {
         localStorage.clear();
-        dao.init();
+        var semaine = new calendrier.Semaine(new Date(2014,10,10));
+        semaine.cle = "semaine1";
+        dao.addSemaine(semaine);
         init();
 
-        domHelp.addElement(document.getElementById("qunit-fixture"), "div", {nomAttribut : "id", valeurAttribute : "content"});
-        page.ajoutUtilisateur();
+        equal(application.semaines.length, 2);
 
-        document.getElementById("type").value = "0";
-        document.getElementById("civ").value = "M.";
-        document.getElementById("nom").value = "Dupont";
-        document.getElementById("prenom").value = "Jean";
-        document.getElementById("adresse").value = "20 rue nationale";
-        document.getElementById("ville").value = "Lille";
-        document.getElementById("tel").value = "06.26.21.45.84"
-        document.getElementById("mail").value = "jean.dupond@mail.fr";
-        document.getElementById("couleur").value = "#FAD345";
-        document.getElementById("submit").click();
+        dao.deleteSemaine(semaine.cle);
+        init();
 
-        domHelp.addElement(document.getElementById("qunit-fixture"), "div", {nomAttribut : "id", valeurAttribute : "content"});
-
-        var result ="<td><input type=\"radio\" name=\"user\" value=\"6\" role=\"Moniteur\" id=\"Dupont\"></td><td>Moniteur</td><td>M.</td><td>Dupont</td><td>Jean</td>";
-
-        page.accueil();
-
-        equal(document.getElementById("DupontJean").innerHTML,result);
+        equal(application.semaines.length, 1);
     }
 );
 
-test("test print client",1,function()
-{
-    localStorage.clear();
-    dao.init();
-    init();
+test("test delete user",2,function()
+    {
+        localStorage.clear();
+        var user = new utilisateur.Moniteur("M.", "Carpentier", "Thomas", "15 Avenue de l'Europe", "Seclin", "06.74.16.27.89", "thomas.carpentier@mail.fr", "#D9EDF7");
+        user.cle = "user1";
+        dao.addUtilisateur(user);
+        init();
 
-    domHelp.addElement(document.getElementById("qunit-fixture"), "div", {nomAttribut : "id", valeurAttribute : "content"});
-    page.accueil();
+        equal(application.users.length, 1);
 
-    var input = document.getElementById("Capolino").click();
-    document.getElementById("submit").click();
+        dao.deleteUtilisateur(user.cle);
+        init();
 
-    domHelp.addElement(document.getElementById("qunit-fixture"), "div", {nomAttribut : "id", valeurAttribute : "content"});
-    domHelp.addElement(document.getElementById("qunit-fixture"), "div", {nomAttribut : "id", valeurAttribute : "btnDeco"});
-    page.client(0);
-
-    var string = document.getElementsByTagName("h3")[0].innerHTML;
-
-    equal(string,"Client");
-}
+        equal(application.users.length, 0);
+    }
 );
+
+test("test set semaine",1,function()
+    {
+        localStorage.clear();
+        var semaine = new calendrier.Semaine(new Date(2014,10,3));
+        semaine.cle = "semaine10";
+        dao.addSemaine(semaine);
+        init();
+
+        var date = new Date(2014,10,15);
+        semaine.dateDebut = date;
+
+        dao.setSemaine(semaine.cle, semaine);
+        init();
+
+        var date2 = new Date(2014,10,10);
+        ok(application.semaines[1].dateDebut, date2);
+    }
+);
+
+test("test set user",1,function()
+    {
+        localStorage.clear();
+        var user = new utilisateur.Moniteur("M.", "Carpentier", "Thomas", "15 Avenue de l'Europe", "Seclin", "06.74.16.27.89", "thomas.carpentier@mail.fr", "#D9EDF7");
+        user.cle = "user1";
+        dao.addUtilisateur(user);
+        init();
+
+        user.nom = "Charpentier";
+
+        dao.setUtilisateur(user.cle,user);
+        init();
+
+        equal(application.users[0].nom, "Charpentier");
+    }
+);
+
+test("test clear",1,function()
+    {
+        localStorage.clear();
+        var user = new utilisateur.Moniteur("M.", "Carpentier", "Thomas", "15 Avenue de l'Europe", "Seclin", "06.74.16.27.89", "thomas.carpentier@mail.fr", "#D9EDF7");
+        user.cle = "user1";
+        dao.addUtilisateur(user);
+        init();
+
+        dao.clear();
+        init();
+        equal(application.users.length, 0);
+    }
+);
+

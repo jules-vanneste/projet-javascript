@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="Firefox_330_Linux.utilisateur" errors="0" failures="0" tests="5" time="0.003">
-<testcase classname="Firefox_330_Linux.utilisateur" name="test test construct Personne" time="0.001"/>
-<testcase classname="Firefox_330_Linux.utilisateur" name="test test construct Moniteur" time="0.001"/>
-<testcase classname="Firefox_330_Linux.utilisateur" name="test test construct Client" time="0.0"/>
-<testcase classname="Firefox_330_Linux.utilisateur" name="test test construct Secretaire" time="0.0"/>
-<testcase classname="Firefox_330_Linux.utilisateur" name="test test compteur" time="0.001"/>
-</testsuite>

@@ -8,8 +8,8 @@ sonar.projectVersion=1.0
 sonar.projectDescription=DESCRIPTION PROJET
 
 # chemin vers les répertoires contenant les sources et les tests
-sonar.sources=src
-sonar.tests=test
+sonar.sources=src/model
+sonar.tests=test/qunit
 
 # indication du langage utilisé dans le projet
 sonar.language=js
@@ -18,3 +18,6 @@ sonar.language=js
 sonar.sourceEncoding=UTF-8
 
 sonar.exclusions=bootstrap-3.2.0-dist/**/*.js
+
+# integration des données de couverture issues de JsTestDriver
+sonar.javascript.lcov.reportPath=forSonar/jsTestDriver.conf-coverage.dat
