@@ -30,6 +30,10 @@ Resultat final des rules compliance : voir fichier Resultat_Rules_compliance.png
 				- Modification de l'arborescence du projet en 2 parties :
 						- Partie 1 : model
 						- Partie 2 : vue
+				- Suppression de parties de codes non utilisés
+						- Fonction genericFromJSON
+						- Reviver
+
 
 /****	Sonar-Runner ***/
 
